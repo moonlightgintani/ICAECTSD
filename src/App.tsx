@@ -40,6 +40,8 @@ import acLogo from './assets/ac.png';
 import srecLogo from './assets/srec-logo.png';
 import chatbotIcon from './assets/chatbot.gif';
 import heroBg from './assets/hero.png';
+import narendranImg from './assets/narendran.png';
+import principalImg from './assets/principal.png';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 import ExplorePage from './ExplorePage';
 import AdminPage from './AdminPage';
@@ -131,12 +133,6 @@ interface Coordinator {
   image_url?: string;
 }
 
-const getMemberImage = (name: string, imageUrl?: string) => {
-  if (name.includes('Narendran')) return narendranImg;
-  if (name.includes('Soundarrajan')) return principalImg;
-  if (name.includes('Karpagam')) return 'https://srec.ac.in/uploads/Faculty/jan240816094910.png';
-  return imageUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=0f52ba,06b6d4,f58220`;
-};
 
 const parseDateDisplay = (dateStr: string) => {
   const cleaned = dateStr.trim();
