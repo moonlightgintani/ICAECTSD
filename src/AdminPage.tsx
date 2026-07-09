@@ -1809,7 +1809,17 @@ export default function AdminPage({
                                 {r.screenshot_name && r.screenshot_name !== 'no_file' ? (
                                   <button
                                     type="button"
-                                    onClick={() => setPreviewImage(r.screenshot_name)}
+                                    onClick={() => {
+                                      // If it's already a full URL, show directly; otherwise get public URL from bucket
+                                      if (r.screenshot_name.startsWith('http')) {
+                                        setPreviewImage(r.screenshot_name);
+                                      } else if (isSupabaseConfigured && supabase) {
+                                        const { data } = supabase.storage.from('payment-proofs').getPublicUrl(r.screenshot_name);
+                                        setPreviewImage(data?.publicUrl || r.screenshot_name);
+                                      } else {
+                                        setPreviewImage(r.screenshot_name);
+                                      }
+                                    }}
                                     style={{
                                       background: 'none',
                                       border: 'none',
@@ -1897,7 +1907,16 @@ export default function AdminPage({
                               {r.screenshot_name && r.screenshot_name !== 'no_file' ? (
                                 <button
                                   type="button"
-                                  onClick={() => setPreviewImage(r.screenshot_name)}
+                                  onClick={() => {
+                                    if (r.screenshot_name.startsWith('http')) {
+                                      setPreviewImage(r.screenshot_name);
+                                    } else if (isSupabaseConfigured && supabase) {
+                                      const { data } = supabase.storage.from('payment-proofs').getPublicUrl(r.screenshot_name);
+                                      setPreviewImage(data?.publicUrl || r.screenshot_name);
+                                    } else {
+                                      setPreviewImage(r.screenshot_name);
+                                    }
+                                  }}
                                   style={{
                                     background: 'none',
                                     border: 'none',
@@ -3194,13 +3213,18 @@ export default function AdminPage({
               <X size={16} />
             </button>
             {(() => {
-              const reg = submittedRegistrations.find(r => r.screenshot_name === previewImage);
               const isUrl = previewImage.startsWith('http') || previewImage.startsWith('data:');
-              if (isUrl) {
+              // If it's just a filename, try to get the public URL from the payment-proofs bucket
+              const imageUrl = isUrl
+                ? previewImage
+                : (isSupabaseConfigured && supabase
+                    ? supabase.storage.from('payment-proofs').getPublicUrl(previewImage).data?.publicUrl
+                    : null);
+              if (imageUrl && imageUrl.startsWith('http')) {
                 return (
                   <>
                     <img 
-                      src={previewImage} 
+                      src={imageUrl} 
                       alt="Payment Proof Receipt" 
                       style={{
                         maxWidth: '100%',
@@ -3212,7 +3236,7 @@ export default function AdminPage({
                     />
                     <div style={{ display: 'flex', gap: '0.75rem', width: '100%', justifyContent: 'center', marginTop: '1rem' }}>
                       <a 
-                        href={previewImage} 
+                        href={imageUrl} 
                         target="_blank" 
                         rel="noopener noreferrer" 
                         style={{ 
