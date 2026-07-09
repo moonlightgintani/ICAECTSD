@@ -131,8 +131,111 @@ interface Coordinator {
   image_url?: string;
 }
 
+const getCommitteeMemberEmail = (member: CommitteeMember) => {
+  if (member.image_url && member.image_url.includes('mailto:')) {
+    return member.image_url.split('mailto:')[1];
+  }
+  let cleanName = member.name.replace(/^(Dr\.|Thiru\.|Mr\.|Mrs\.|Prof\.)\s+/i, '');
+  cleanName = cleanName.toLowerCase().trim().replace(/[\s&()\/]+/g, '.').replace(/\.+/g, '.');
+  const isSnr = member.desc && member.desc.toLowerCase().includes('snr');
+  const domain = isSnr ? 'snrst.org' : 'srec.ac.in';
+  return `${cleanName}@${domain}`;
+};
 
+const renderCommitteeMemberCard = (member: CommitteeMember, idx: number) => {
+  const initials = member.name
+    .split(' ')
+    .filter(n => n && !/^(dr\.|thiru\.|mr\.|mrs\.|prof\.)/i.test(n))
+    .map(n => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase() || 'CM';
+  const bgColors = ['#0f52ba', '#0d9488', '#7c3aed', '#b45309', '#0369a1', '#be185d'];
+  const bg = bgColors[idx % bgColors.length];
+  const email = getCommitteeMemberEmail(member);
 
+  return (
+    <div 
+      key={idx} 
+      className="member-profile-card-rect" 
+      style={{
+        background: '#ffffff',
+        border: '1px solid #cbd5e1',
+        borderRadius: '0.75rem',
+        overflow: 'hidden',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        position: 'relative'
+      }}
+    >
+      {/* Box Image Area */}
+      <div style={{ position: 'relative', width: '100%', aspectRatio: '1/1', overflow: 'hidden', flexShrink: 0 }}>
+        {member.image_url ? (
+          <img
+            src={member.image_url}
+            alt={member.name}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+          />
+        ) : (
+          <div style={{ width: '100%', height: '100%', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '3rem', fontWeight: 800, color: 'white', letterSpacing: '0.05em' }}>{initials}</span>
+          </div>
+        )}
+        
+        {/* Role badge pinned at bottom of image overlapping it */}
+        <div style={{
+          position: 'absolute',
+          bottom: '0px',
+          left: '50%',
+          transform: 'translate(-50%, 50%)',
+          zIndex: 2
+        }}>
+          <span style={{
+            fontSize: '0.65rem',
+            color: '#1e3a8a',
+            background: '#ffffff',
+            fontWeight: 800,
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            padding: '0.3rem 0.8rem',
+            borderRadius: '999px',
+            border: '2.5px solid #3b82f6',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.15)',
+            whiteSpace: 'nowrap',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.25rem'
+          }}>
+            <Award size={11} style={{ color: '#3b82f6' }} />
+            {member.role || 'Member'}
+          </span>
+        </div>
+      </div>
+      
+      {/* Space placeholder to offset the overlapping badge */}
+      <div style={{ height: '18px' }}></div>
+
+      {/* Info */}
+      <div style={{ padding: '1rem 1.25rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.4rem', flexGrow: 1 }}>
+        <h4 style={{ fontSize: '1.05rem', color: '#0f172a', margin: 0, fontWeight: 700, textAlign: 'left' }}>{member.name}</h4>
+        <p style={{ fontSize: '0.82rem', color: '#475569', margin: '0 0 0.5rem 0', lineHeight: '1.4', textAlign: 'left' }}>{member.desc}</p>
+        
+        {/* Contact Info (Email) */}
+        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.25rem', borderTop: '1px solid #f1f5f9', paddingTop: '0.6rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8rem' }}>
+            <Mail size={12} style={{ color: '#2563eb', flexShrink: 0 }} />
+            <a href={`mailto:${email}`} style={{ color: '#2563eb', textDecoration: 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }}>
+              {email}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const parseDateDisplay = (dateStr: string) => {
   const cleaned = dateStr.trim();
@@ -339,7 +442,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<'main' | 'explore' | 'admin'>('main');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [committeeTab, setCommitteeTab] = useState<'steering' | 'organizing' | 'advisory'>('organizing');
-  const [activeSubcommittee, setActiveSubcommittee] = useState<string>('leadership');
+  const [activeSubcommittee, setActiveSubcommittee] = useState<string>('patrons');
   const [submissionTab, setSubmissionTab] = useState<'initial' | 'camera-ready'>('initial');
   
   // Database content states
@@ -2155,7 +2258,8 @@ export default function App() {
                       {/* Row 1 */}
                       <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', width: '100%' }}>
                         {[
-                          { id: 'leadership', label: 'Leadership' },
+                          { id: 'patrons', label: 'Patrons' },
+                          { id: 'general-chairs', label: 'General Chairs' },
                           { id: 'executive', label: 'Executive Committee' },
                           { id: 'finance', label: 'Finance' },
                           { id: 'publication', label: 'Publication' },
@@ -2203,8 +2307,10 @@ export default function App() {
                       .filter((member) => {
                         if (member.category !== 'organizing') return false;
                         switch (activeSubcommittee) {
-                          case 'leadership':
-                            return member.role === 'Chief Patron' || member.role === 'Patron' || member.role === 'General Chair';
+                          case 'patrons':
+                            return member.role === 'Chief Patron' || member.role === 'Patron';
+                          case 'general-chairs':
+                            return member.role === 'General Chair';
                           case 'executive':
                             return member.role === 'Conference Chair' || member.role === 'Conference Chair & Organizing Secretary' || member.role === 'Session Chair';
                           case 'finance':
@@ -2232,7 +2338,7 @@ export default function App() {
                         }
                       })
                       .map((member, mIdx) => {
-                        const showAvatar = activeSubcommittee === 'leadership';
+                        const showAvatar = activeSubcommittee === 'patrons' || activeSubcommittee === 'general-chairs';
                         if (showAvatar) {
                           return (
                             <div key={mIdx} className="member-profile-card">
