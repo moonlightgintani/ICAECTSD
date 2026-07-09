@@ -1712,6 +1712,8 @@ h2, h3, h4, h5, h6, td {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
+  width: 100%;
+  max-width: 320px;
 }
 
 .member-profile-card:hover {

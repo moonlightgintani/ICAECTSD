@@ -38,6 +38,8 @@ import { SrecLogo } from './components/SrecLogo';
 import Footer from './components/Footer';
 import acLogo from './assets/ac.png';
 import srecLogo from './assets/srec-logo.png';
+import narendranImg from './assets/narendran.png';
+import principalImg from './assets/principal.png';
 import chatbotIcon from './assets/chatbot.gif';
 import heroBg from './assets/hero.png';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
@@ -2106,24 +2108,26 @@ export default function App() {
                     </motion.div>
                   )}
 
-                  <div className="grid-3-col">
+                  <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2rem', width: '100%' }}>
                     {committeeMembers
                       .filter((member) => member.category === 'steering')
                       .map((member, mIdx) => (
-                        <div 
-                          key={mIdx} 
-                          className="member-profile-card" 
-                          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '1.75rem 1.5rem', borderLeft: '4px solid #8b5cf6', justifyContent: 'center' }}
-                        >
-                          <span className="member-role-badge" style={{ marginBottom: '0.75rem', alignSelf: 'center' }}>
+                        <div key={mIdx} className="member-profile-card">
+                          <div className="member-avatar-wrapper">
+                            <img 
+                              src={member.name.includes('Narendran') ? narendranImg : member.name.includes('Soundarrajan') ? principalImg : member.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0f52ba,06b6d4,f58220`}
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0f52ba,06b6d4,f58220`;
+                              }}
+                              alt={member.name}
+                              className="member-avatar-img"
+                            />
+                          </div>
+                          <span className="member-role-badge">
                             {member.role || 'Steering Committee Member'}
                           </span>
-                          <h4 className="member-name" style={{ fontSize: '1.15rem', fontWeight: 700, color: 'white', marginBottom: '0.5rem', marginTop: 0 }}>
-                            {member.name}
-                          </h4>
-                          <p className="member-desc" style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.5' }}>
-                            {member.desc}
-                          </p>
+                          <h4 className="member-name">{member.name}</h4>
+                          <p className="member-desc">{member.desc}</p>
                         </div>
                       ))}
                   </div>
@@ -2198,7 +2202,7 @@ export default function App() {
                     </div>
 
                     {/* Active Panel Members Grid */}
-                    <div className="grid-3-col">
+                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '2rem', width: '100%', margin: '0 auto' }}>
                     {committeeMembers
                       .filter((member) => {
                         if (member.category !== 'organizing') return false;
@@ -2234,13 +2238,11 @@ export default function App() {
                         }
                       })
                       .map((member, mIdx) => {
-                        const showAvatar = activeSubcommittee === 'patrons' || activeSubcommittee === 'general-chairs';
-                        if (showAvatar) {
                           return (
                             <div key={mIdx} className="member-profile-card">
                               <div className="member-avatar-wrapper">
                                 <img 
-                                  src={member.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0f52ba,06b6d4,f58220`}
+                                  src={member.name.includes('Narendran') ? narendranImg : member.name.includes('Soundarrajan') ? principalImg : member.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0f52ba,06b6d4,f58220`}
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0f52ba,06b6d4,f58220`;
                                   }}
@@ -2255,17 +2257,6 @@ export default function App() {
                               <p className="member-desc">{member.desc}</p>
                             </div>
                           );
-                        } else {
-                          return (
-                            <div key={mIdx} className="member-profile-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '1.75rem 1.5rem', borderLeft: '4px solid #3b82f6', justifyContent: 'center' }}>
-                              <span className="member-role-badge" style={{ marginBottom: '0.75rem', alignSelf: 'center' }}>
-                                {member.role && member.role !== 'Member' ? member.role : 'Organizing Member'}
-                              </span>
-                              <h4 className="member-name" style={{ fontSize: '1.15rem', fontWeight: 700, color: 'white', marginBottom: '0.5rem', marginTop: 0 }}>{member.name}</h4>
-                              <p className="member-desc" style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.5' }}>{member.desc}</p>
-                            </div>
-                          );
-                        }
                       })}
                   </div>
                 </div>
@@ -2290,12 +2281,22 @@ export default function App() {
                     </motion.div>
                   )}
                   
-                  <div className="grid-3-col">
+                  <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2rem', width: '100%' }}>
                     {committeeMembers.filter(m => m.category === 'advisory').map((adviser, index) => (
-                      <div key={index} className="member-profile-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '1.75rem 1.5rem', borderLeft: '4px solid #3b82f6', justifyContent: 'center' }}>
-                        <span className="member-role-badge" style={{ marginBottom: '0.75rem', alignSelf: 'center' }}>{adviser.role || 'Advisory Member'}</span>
-                        <h4 className="member-name" style={{ fontSize: '1.15rem', fontWeight: 700, color: 'white', marginBottom: '0.5rem', marginTop: 0 }}>{adviser.name}</h4>
-                        <p className="member-desc" style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.5' }}>{adviser.desc}</p>
+                      <div key={index} className="member-profile-card">
+                        <div className="member-avatar-wrapper">
+                          <img 
+                            src={adviser.name.includes('Narendran') ? narendranImg : adviser.name.includes('Soundarrajan') ? principalImg : adviser.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(adviser.name)}&backgroundColor=0f52ba,06b6d4,f58220`}
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(adviser.name)}&backgroundColor=0f52ba,06b6d4,f58220`;
+                            }}
+                            alt={adviser.name}
+                            className="member-avatar-img"
+                          />
+                        </div>
+                        <span className="member-role-badge">{adviser.role || 'Advisory Member'}</span>
+                        <h4 className="member-name">{adviser.name}</h4>
+                        <p className="member-desc">{adviser.desc}</p>
                       </div>
                     ))}
                   </div>
