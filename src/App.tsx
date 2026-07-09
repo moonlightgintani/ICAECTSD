@@ -2108,7 +2108,7 @@ export default function App() {
                     </motion.div>
                   )}
 
-                  <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2rem', width: '100%' }}>
+                  <div className="centered-flex-grid">
                     {committeeMembers
                       .filter((member) => member.category === 'steering')
                       .map((member, mIdx) => (
@@ -2202,7 +2202,7 @@ export default function App() {
                     </div>
 
                     {/* Active Panel Members Grid */}
-                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '2rem', width: '100%', margin: '0 auto' }}>
+                    <div className="centered-flex-grid">
                     {committeeMembers
                       .filter((member) => {
                         if (member.category !== 'organizing') return false;
@@ -2281,7 +2281,7 @@ export default function App() {
                     </motion.div>
                   )}
                   
-                  <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2rem', width: '100%' }}>
+                  <div className="centered-flex-grid">
                     {committeeMembers.filter(m => m.category === 'advisory').map((adviser, index) => (
                       <div key={index} className="member-profile-card">
                         <div className="member-avatar-wrapper">

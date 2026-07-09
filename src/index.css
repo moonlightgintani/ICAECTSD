@@ -1700,6 +1700,16 @@ h2, h3, h4, h5, h6, td {
 }
 
 /* Premium Member Profile Cards */
+.centered-flex-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
 .member-profile-card {
   background: #ffffff;
   border: 1px solid #cbd5e1;
