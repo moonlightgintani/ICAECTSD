@@ -1523,8 +1523,9 @@ export default function App() {
     return text;
   };
 
-  function getMemberImage(_name: string, _image_url: string): string {
-    throw new Error('Function not implemented.');
+  function getMemberImage(name: string, imageUrl?: string): string {
+    if (name.includes('Karpagam')) return 'https://srec.ac.in/uploads/Faculty/whatsappimage2023-08-05at9.46.42am(1)230816083910.jpeg';
+    return imageUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=0f52ba,06b6d4,f58220`;
   }
 
   return (
