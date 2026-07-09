@@ -2474,277 +2474,87 @@ export default function App() {
             <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
           </motion.div>
 
-          {/* Horizontal Winding Timeline Roadmap Infographic */}
-          <div style={{ 
-            position: 'relative', 
-            width: '100%', 
-            overflowX: 'hidden', 
-            padding: '2rem 0', 
-            margin: '1.5rem 0'
-          }}>
-            <div style={{ width: '100%', position: 'relative', height: '600px' }}>
-              {(() => {
-                const isPassedArray = importantDates.map(evt => {
-                  try {
-                    // Remove late additions or range indicator extensions to get a clean base date
-                    const cleanDateStr = evt.event_date.replace(/-[0-9]+/g, '').trim(); 
-                    const dateVal = new Date(cleanDateStr);
-                    if (isNaN(dateVal.getTime())) return false;
-                    return dateVal <= new Date();
-                  } catch (e) {
-                    return false;
-                  }
-                });
-                const lastPassedIndex = isPassedArray.reduce((acc, passed, idx) => passed ? idx : acc, -1);
+          {/* Blocks Layout with Green Checkmarks and Active Highlights */}
+          <div className="grid-3-col" style={{ marginTop: '2rem', gap: '2rem' }}>
+            {(() => {
+              const isPassedArray = importantDates.map(evt => {
+                try {
+                  const cleanDateStr = evt.event_date.replace(/-[0-9]+/g, '').trim(); 
+                  const dateVal = new Date(cleanDateStr);
+                  if (isNaN(dateVal.getTime())) return false;
+                  return dateVal <= new Date();
+                } catch (e) {
+                  return false;
+                }
+              });
+
+              return importantDates.map((evt, idx) => {
+                const { month, day, year } = parseDateDisplay(evt.event_date);
+                const isPassed = isPassedArray[idx];
 
                 return (
-                  <>
-                    {/* Background Winding SVG Road */}
-                    <svg 
-                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}
-                      viewBox="0 0 1200 600"
-                      preserveAspectRatio="none"
-                    >
-                      {/* Winding Asphalt Road (Dark Gray Base for Inactive) */}
-                      <path
-                        d={(() => {
-                          const N = importantDates.length;
-                          if (N <= 1) return "";
-                          let p = "M 100 110"; 
-                          for (let i = 0; i < N; i++) {
-                            const x = (i / (N - 1)) * 1000 + 100;
-                            const y = i % 2 === 0 ? 230 : 350; 
-                            if (i === 0) {
-                              p = `M ${x} ${y}`;
-                            } else {
-                              const prevX = ((i - 1) / (N - 1)) * 1000 + 100;
-                              const prevY = (i - 1) % 2 === 0 ? 230 : 350;
-                              const midX = (prevX + x) / 2;
-                              p += ` C ${midX} ${prevY}, ${midX} ${y}, ${x} ${y}`;
-                            }
-                          }
-                          return p;
-                        })()}
-                        stroke="#334155"
-                        strokeWidth="32"
-                        strokeLinecap="round"
-                        fill="none"
-                        style={{ filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.15))' }}
-                      />
-
-                      {/* Active Progress Highway Overlay (Emerald Green) */}
-                      <path
-                        d={(() => {
-                          const N = importantDates.length;
-                          if (N <= 1 || lastPassedIndex < 0) return "";
-                          let p = "M 100 110"; 
-                          for (let i = 0; i <= lastPassedIndex; i++) {
-                            const x = (i / (N - 1)) * 1000 + 100;
-                            const y = i % 2 === 0 ? 230 : 350; 
-                            if (i === 0) {
-                              p = `M ${x} ${y}`;
-                            } else {
-                              const prevX = ((i - 1) / (N - 1)) * 1000 + 100;
-                              const prevY = (i - 1) % 2 === 0 ? 230 : 350;
-                              const midX = (prevX + x) / 2;
-                              p += ` C ${midX} ${prevY}, ${midX} ${y}, ${x} ${y}`;
-                            }
-                          }
-                          return p;
-                        })()}
-                        stroke="#10b981"
-                        strokeWidth="32"
-                        strokeLinecap="round"
-                        fill="none"
-                        style={{ filter: 'drop-shadow(0 0 10px rgba(16, 185, 129, 0.85))' }}
-                      />
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: idx * 0.05 }}
+                    style={{
+                      background: isPassed ? 'rgba(240, 253, 244, 0.95)' : '#ffffff',
+                      border: isPassed ? '2px solid #10b981' : '1px solid #e2e8f0',
+                      borderRadius: '1.25rem',
+                      padding: '2rem',
+                      boxShadow: isPassed 
+                        ? '0 10px 15px -3px rgba(16, 185, 129, 0.1), 0 4px 6px -4px rgba(16, 185, 129, 0.1)' 
+                        : '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      position: 'relative',
+                      transition: 'all 0.3s ease',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                      <span style={{
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        color: '#ffffff',
+                        background: isPassed ? '#10b981' : '#64748b',
+                        padding: '0.35rem 0.85rem',
+                        borderRadius: '2rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                      }}>
+                        {month} {day}, {year}
+                      </span>
                       
-                      {/* Road center dash markings - Inactive (White with opacity) */}
-                      <path
-                        d={(() => {
-                          const N = importantDates.length;
-                          if (N <= 1) return "";
-                          let p = "M 100 110";
-                          for (let i = 0; i < N; i++) {
-                            const x = (i / (N - 1)) * 1000 + 100;
-                            const y = i % 2 === 0 ? 230 : 350;
-                            if (i === 0) {
-                              p = `M ${x} ${y}`;
-                            } else {
-                              const prevX = ((i - 1) / (N - 1)) * 1000 + 100;
-                              const prevY = (i - 1) % 2 === 0 ? 230 : 350;
-                              const midX = (prevX + x) / 2;
-                              p += ` C ${midX} ${prevY}, ${midX} ${y}, ${x} ${y}`;
-                            }
-                          }
-                          return p;
-                        })()}
-                        stroke="rgba(255, 255, 255, 0.4)"
-                        strokeWidth="2.5"
-                        strokeDasharray="8,8"
-                        strokeLinecap="round"
-                        fill="none"
-                      />
+                      {isPassed ? (
+                        <CheckCircle size={24} style={{ color: '#10b981', flexShrink: 0 }} />
+                      ) : (
+                        <Clock size={24} style={{ color: '#94a3b8', flexShrink: 0 }} />
+                      )}
+                    </div>
 
-                      {/* Road center dash markings - Active (Solid White) */}
-                      <path
-                        d={(() => {
-                          const N = importantDates.length;
-                          if (N <= 1 || lastPassedIndex < 0) return "";
-                          let p = "M 100 110";
-                          for (let i = 0; i <= lastPassedIndex; i++) {
-                            const x = (i / (N - 1)) * 1000 + 100;
-                            const y = i % 2 === 0 ? 230 : 350;
-                            if (i === 0) {
-                              p = `M ${x} ${y}`;
-                            } else {
-                              const prevX = ((i - 1) / (N - 1)) * 1000 + 100;
-                              const prevY = (i - 1) % 2 === 0 ? 230 : 350;
-                              const midX = (prevX + x) / 2;
-                              p += ` C ${midX} ${prevY}, ${midX} ${y}, ${x} ${y}`;
-                            }
-                          }
-                          return p;
-                        })()}
-                        stroke="#ffffff"
-                        strokeWidth="2.5"
-                        strokeDasharray="8,8"
-                        strokeLinecap="round"
-                        fill="none"
-                        style={{ filter: 'drop-shadow(0 0 5px rgba(255, 255, 255, 0.95))' }}
-                      />
-                    </svg>
+                    <h4 style={{
+                      fontSize: '1.2rem',
+                      fontWeight: 800,
+                      color: isPassed ? '#065f46' : '#0f172a',
+                      marginBottom: '0.75rem',
+                      lineHeight: 1.3
+                    }}>
+                      {evt.title}
+                    </h4>
 
-                    {/* Timeline Nodes & Alternating Cards */}
-                    {importantDates.map((evt, idx) => {
-                      const { month, day, year } = parseDateDisplay(evt.event_date);
-                      const isEven = idx % 2 === 0;
-                      const isPassed = isPassedArray[idx];
-                      
-                      const xPercent = (idx / (importantDates.length - 1)) * 83.33 + 8.33; 
-                      const yPos = isEven ? 230 : 350; 
-
-                      const nodeColors = [
-                        '#0ea5e9', // Sky Blue
-                        '#ec4899', // Pink/Rose
-                        '#8b5cf6', // Purple
-                        '#0d9488', // Teal
-                        '#f59e0b', // Amber/Orange
-                        '#3b82f6', // Royal Blue
-                        '#ef4444'  // Red
-                      ];
-                      const activeColor = isPassed ? '#10b981' : nodeColors[idx % nodeColors.length];
-
-                      return (
-                        <div
-                          key={idx}
-                          style={{
-                            position: 'absolute',
-                            left: `${xPercent}%`,
-                            top: `${yPos}px`,
-                            transform: 'translate(-50%, -50%)',
-                            zIndex: 10,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center'
-                          }}
-                        >
-                          {/* Circle Pin Node on the Highway curve (vibrant colored circles) */}
-                          <motion.div
-                            whileHover={{ scale: 1.2 }}
-                            style={{
-                              width: '38px',
-                              height: '38px',
-                              borderRadius: '50%',
-                              background: activeColor,
-                              border: '3px solid #ffffff',
-                              boxShadow: isPassed 
-                                ? '0 0 15px rgba(16, 185, 129, 0.8), 0 4px 10px rgba(0,0,0,0.25)' 
-                                : '0 4px 10px rgba(0,0,0,0.25)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              color: '#ffffff',
-                              fontWeight: 800,
-                              fontSize: '0.95rem',
-                              cursor: 'pointer',
-                              zIndex: 11
-                            }}
-                            title={`${evt.title} - ${evt.event_date}`}
-                          >
-                            {idx + 1}
-                          </motion.div>
-
-                          {/* Vertical Connector line to its detail card */}
-                          <div style={{
-                            position: 'absolute',
-                            left: '50%',
-                            top: isEven ? '20px' : '-62px',
-                            width: '2.5px',
-                            height: '62px',
-                            background: `linear-gradient(${isEven ? 'to bottom' : 'to top'}, ${activeColor}, rgba(255, 255, 255, 0.05))`,
-                            transform: 'translateX(-50%)',
-                            zIndex: 2
-                          }} />
-
-                          {/* Milestone Card above or below the road */}
-                          <div style={{
-                            position: 'absolute',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            [isEven ? 'bottom' : 'top']: '76px', 
-                            width: '210px',
-                            background: 'rgba(255, 255, 255, 0.98)',
-                            backdropFilter: 'blur(12px)',
-                            border: `2px solid ${activeColor}`,
-                            borderRadius: '0.88rem',
-                            padding: '0.9rem',
-                            boxShadow: '0 10px 25px rgba(0,0,0,0.06)',
-                            textAlign: 'center'
-                          }}>
-                            {/* Calendar mini badge */}
-                            <span style={{
-                              fontSize: '0.7rem',
-                              fontWeight: 800,
-                              color: '#ffffff',
-                              background: activeColor,
-                              padding: '0.25rem 0.65rem',
-                              borderRadius: '1rem',
-                              display: 'inline-block',
-                              marginBottom: '0.45rem',
-                              textTransform: 'uppercase',
-                              letterSpacing: '0.05em'
-                            }}>
-                              {month} {day}, {year}
-                            </span>
-                            
-                            <h4 style={{
-                              fontSize: '0.92rem',
-                              fontWeight: 800,
-                              color: '#0f172a',
-                              margin: '0 0 0.3rem',
-                              lineHeight: 1.3
-                            }}>
-                              {evt.title}
-                            </h4>
-                            
-                            <p style={{
-                              fontSize: '0.75rem',
-                              color: '#64748b',
-                              lineHeight: 1.45,
-                              margin: 0
-                            }}>
-                              {evt.desc}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </>
+                    <p style={{
+                      fontSize: '0.9rem',
+                      color: isPassed ? '#15803d' : '#64748b',
+                      lineHeight: 1.5,
+                      margin: 0
+                    }}>
+                      {evt.desc}
+                    </p>
+                  </motion.div>
                 );
-              })()}
-
-            </div>
+            })()}
           </div>
         </div>
       </section>
