@@ -44,7 +44,7 @@ import heroBg from './assets/hero.png';
 import karpagamImg from './assets/karpagam.png';
 import jansiImg from './assets/jansi.png';
 import balamurgunImg from './assets/balamurugan.jpg';
-import narendranImg from './assets/Narendran.png';
+import narendranImg from './assets/narendran.png';
 import logo2 from './assets/logo2.png';
 import principalImg from './assets/principal.jpeg';
 import sakthivelImg from './assets/Sakthivel.png';
