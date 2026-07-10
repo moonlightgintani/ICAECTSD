@@ -173,6 +173,7 @@ export default function AdminPage({
   const [editingMilestone, setEditingMilestone] = useState<any | null>(null);
   const [editingCoordinator, setEditingCoordinator] = useState<any | null>(null);
   const [editingStat, setEditingStat] = useState<any | null>(null);
+  const [uploadingSpeakerImage, setUploadingSpeakerImage] = useState<boolean>(false);
 
   // Refresh helper
   const handleRefresh = async () => {
@@ -184,6 +185,68 @@ export default function AdminPage({
       alert('Error fetching data: ' + err.message);
     } finally {
       setAdminLoading(false);
+    }
+  };
+
+  const handleExportCSV = () => {
+    if (submittedRegistrations.length === 0) return;
+    const headers = ['Date', 'Author Name', 'Email', 'Phone', 'Paper ID', 'Paper Title', 'Tour Requested', 'Tour Destination', 'Screenshot Name'];
+    const rows = submittedRegistrations.map(r => [
+      new Date(r.created_at || Date.now()).toLocaleString(),
+      r.author_name || 'N/A',
+      r.email || 'N/A',
+      r.phone || 'N/A',
+      r.paper_id || 'N/A',
+      r.paper_title ? `"${r.paper_title.replace(/"/g, '""')}"` : 'N/A',
+      r.register_for_tour ? 'Yes' : 'No',
+      r.preferred_tour_place || 'N/A',
+      r.screenshot_name || 'N/A'
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `AECTSD_2027_Registrations_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleSpeakerImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingSpeakerImage(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `speaker_${Date.now()}.${fileExt}`;
+      
+      if (isSupabaseConfigured && supabase) {
+        const { error } = await supabase.storage
+          .from('payment-proofs')
+          .upload(fileName, file, { cacheControl: '3600', upsert: true });
+
+        if (error) throw error;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('payment-proofs')
+          .getPublicUrl(fileName);
+
+        setEditingSpeaker((prev: any) => ({ ...prev, image_url: publicUrl }));
+        alert('Speaker photo uploaded successfully!');
+      } else {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setEditingSpeaker((prev: any) => ({ ...prev, image_url: reader.result as string }));
+          alert('Speaker photo loaded successfully (offline mode)!');
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (err: any) {
+      alert('Upload failed: ' + err.message);
+    } finally {
+      setUploadingSpeakerImage(false);
     }
   };
 
@@ -408,10 +471,9 @@ export default function AdminPage({
     try {
       const payload = {
         name: editingCommittee.name,
-        designation: editingCommittee.designation || '',
-        institution: editingCommittee.institution || '',
+        role: editingCommittee.role || '',
+        desc: editingCommittee.desc || '',
         category: editingCommittee.category,
-        subgroup: editingCommittee.subgroup || '',
         sort_order: Number(editingCommittee.sort_order || 1)
       };
 
@@ -1090,14 +1152,40 @@ export default function AdminPage({
                   </div>
                   <div>
                     <label htmlFor="spk_img" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Photo / Image URL</label>
-                    <input
-                      id="spk_img"
-                      type="text"
-                      value={editingSpeaker.image_url || ''}
-                      onChange={(e) => setEditingSpeaker({ ...editingSpeaker, image_url: e.target.value })}
-                      placeholder="https://example.com/avatar.jpg"
-                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                    />
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
+                      <input
+                        id="spk_img"
+                        type="text"
+                        value={editingSpeaker.image_url || ''}
+                        onChange={(e) => setEditingSpeaker({ ...editingSpeaker, image_url: e.target.value })}
+                        placeholder="https://example.com/avatar.jpg"
+                        style={{ flex: 1, padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem' }}
+                      />
+                      <div style={{ position: 'relative', overflow: 'hidden' }}>
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          style={{ padding: '0.5rem 1rem', height: '100%', fontSize: '0.8rem', whiteSpace: 'nowrap' }}
+                        >
+                          {uploadingSpeakerImage ? 'Uploading...' : 'Upload'}
+                        </button>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleSpeakerImageUpload}
+                          disabled={uploadingSpeakerImage}
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0,
+                            opacity: 0,
+                            cursor: 'pointer'
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
@@ -1242,35 +1330,55 @@ export default function AdminPage({
                     />
                   </div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                   <div>
-                    <label htmlFor="mem_des" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Designation (e.g. Professor)</label>
-                    <input
-                      id="mem_des"
-                      type="text"
-                      value={editingCommittee.designation || ''}
-                      onChange={(e) => setEditingCommittee({ ...editingCommittee, designation: e.target.value })}
-                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                    />
+                    {editingCommittee.category === 'organizing' ? (
+                      <>
+                        <label htmlFor="mem_sub" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Subgroup Title (For Organizing Committee)</label>
+                        <select
+                          id="mem_sub"
+                          value={editingCommittee.role || ''}
+                          onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', background: '#ffffff' }}
+                        >
+                          <option value="">Select Subgroup...</option>
+                          <option value="Executive Committee">Executive Committee</option>
+                          <option value="Patrons">Patrons</option>
+                          <option value="General Chairs">General Chairs</option>
+                          <option value="Finance">Finance</option>
+                          <option value="Publication">Publication</option>
+                          <option value="Arrangements">Arrangements</option>
+                          <option value="Registration">Registration</option>
+                          <option value="Tutorials & Workshops">Tutorials & Workshops</option>
+                          <option value="Technical Review">Technical Review</option>
+                          <option value="Outreach & Promotion">Outreach & Promotion</option>
+                          <option value="Website & Media">Website & Media</option>
+                          <option value="Hospitality">Hospitality</option>
+                          <option value="General Members">General Members</option>
+                        </select>
+                      </>
+                    ) : (
+                      <>
+                        <label htmlFor="mem_role" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Role / Designation</label>
+                        <input
+                          id="mem_role"
+                          type="text"
+                          placeholder="e.g. Advisory Chair, Reviewer, etc."
+                          value={editingCommittee.role || ''}
+                          onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </>
+                    )}
                   </div>
                   <div>
-                    <label htmlFor="mem_inst" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Institution / University</label>
+                    <label htmlFor="mem_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Affiliation / Description</label>
                     <input
-                      id="mem_inst"
+                      id="mem_desc"
                       type="text"
-                      value={editingCommittee.institution || ''}
-                      onChange={(e) => setEditingCommittee({ ...editingCommittee, institution: e.target.value })}
-                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="mem_sub" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Subgroup Title (For Organizing Committee)</label>
-                    <input
-                      id="mem_sub"
-                      type="text"
-                      placeholder="e.g. Finance, Registration, etc."
-                      value={editingCommittee.subgroup || ''}
-                      onChange={(e) => setEditingCommittee({ ...editingCommittee, subgroup: e.target.value })}
+                      placeholder="e.g. Professor, IIT Bombay"
+                      value={editingCommittee.desc || ''}
+                      onChange={(e) => setEditingCommittee({ ...editingCommittee, desc: e.target.value })}
                       style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
                     />
                   </div>
@@ -1588,6 +1696,29 @@ export default function AdminPage({
           </div>
         </div>
 
+        {/* Supabase Status Indicator */}
+        <div style={{
+          padding: '0.5rem 1.5rem',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          fontSize: '0.75rem',
+          background: 'rgba(6, 11, 20, 0.4)'
+        }}>
+          <span style={{
+            width: '8px',
+            height: '8px',
+            borderRadius: '50%',
+            background: isSupabaseConfigured ? '#10b981' : '#f59e0b',
+            display: 'inline-block',
+            boxShadow: isSupabaseConfigured ? '0 0 8px #10b981' : '0 0 8px #f59e0b'
+          }} />
+          <span style={{ color: '#cbd5e1', fontWeight: 600 }}>
+            {isSupabaseConfigured ? 'Database Connected' : 'Offline Mode (Local Storage)'}
+          </span>
+        </div>
+
         {/* User Session Info */}
         <div style={{
           padding: '1rem 1.5rem',
@@ -1727,26 +1858,52 @@ export default function AdminPage({
           <div className="admin-glass-card" style={{ padding: '1.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
               <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>Submitted Forms ({submittedRegistrations.length})</h3>
-              {submittedRegistrations.length > 0 && (
-                <button
-                  onClick={handleClearAllRegistrations}
-                  style={{
-                    background: 'rgba(239, 68, 68, 0.08)',
-                    color: '#dc2626',
-                    border: '1px solid rgba(239, 68, 68, 0.2)',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '0.375rem',
-                    fontSize: '0.8rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)')}
-                  onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.08)')}
-                >
-                  Clear All Logs
-                </button>
-              )}
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                {submittedRegistrations.length > 0 && (
+                  <>
+                    <button
+                      onClick={handleExportCSV}
+                      style={{
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                        color: '#ffffff',
+                        border: 'none',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '0.375rem',
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        boxShadow: '0 4px 10px rgba(59, 130, 246, 0.25)',
+                        transition: 'all 0.2s'
+                      }}
+                      onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
+                      onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                    >
+                      <Download size={14} /> Export CSV
+                    </button>
+                    <button
+                      onClick={handleClearAllRegistrations}
+                      style={{
+                        background: 'rgba(239, 68, 68, 0.08)',
+                        color: '#dc2626',
+                        border: '1px solid rgba(239, 68, 68, 0.2)',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '0.375rem',
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                      }}
+                      onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)')}
+                      onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.08)')}
+                    >
+                      Clear All Logs
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
 
             {/* Stats Row */}
@@ -1781,6 +1938,78 @@ export default function AdminPage({
                 </div>
               </div>
             </div>
+
+            {/* Visual Analytics Section */}
+            {submittedRegistrations.length > 0 && (
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '1.5rem',
+                marginBottom: '2rem'
+              }}>
+                {/* Tour Attendance Ratio Chart */}
+                <div style={{
+                  background: '#ffffff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '0.75rem',
+                  padding: '1.25rem',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.015)'
+                }}>
+                  <h4 style={{ margin: '0 0 1rem 0', fontSize: '0.85rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tour Request Ratio</h4>
+                  {(() => {
+                    const total = submittedRegistrations.length;
+                    const tour = submittedRegistrations.filter(r => r.register_for_tour).length;
+                    const pct = total > 0 ? Math.round((tour / total) * 100) : 0;
+                    return (
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 700 }}>
+                          <span style={{ color: '#059669' }}>Tour Requested ({tour})</span>
+                          <span style={{ color: '#64748b' }}>No Tour ({total - tour})</span>
+                        </div>
+                        <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden', display: 'flex' }}>
+                          <div style={{ width: `${pct}%`, background: '#10b981', transition: 'width 0.5s ease-in-out' }} />
+                          <div style={{ width: `${100 - pct}%`, background: '#cbd5e1' }} />
+                        </div>
+                        <div style={{ marginTop: '0.75rem', fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>
+                          {pct}% of registered participants have opted for the Coimbatore tour.
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                {/* Data Verification Status */}
+                <div style={{
+                  background: '#ffffff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '0.75rem',
+                  padding: '1.25rem',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.015)'
+                }}>
+                  <h4 style={{ margin: '0 0 1rem 0', fontSize: '0.85rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Proof Verification Progress</h4>
+                  {(() => {
+                    const total = submittedRegistrations.length;
+                    const withFile = submittedRegistrations.filter(r => r.screenshot_name && r.screenshot_name !== 'no_file').length;
+                    const pct = total > 0 ? Math.round((withFile / total) * 100) : 0;
+                    return (
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.8rem', fontWeight: 700 }}>
+                          <span style={{ color: '#3b82f6' }}>Attachment Uploaded ({withFile})</span>
+                          <span style={{ color: '#cbd5e1' }}>Pending Upload ({total - withFile})</span>
+                        </div>
+                        <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden', display: 'flex' }}>
+                          <div style={{ width: `${pct}%`, background: '#3b82f6', transition: 'width 0.5s ease-in-out' }} />
+                          <div style={{ width: `${100 - pct}%`, background: '#cbd5e1' }} />
+                        </div>
+                        <div style={{ marginTop: '0.75rem', fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>
+                          {pct}% of payment receipts are uploaded and ready for review.
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            )}
 
             {submittedRegistrations.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '4rem 1rem', color: '#64748b' }}>
@@ -2470,14 +2699,40 @@ export default function AdminPage({
                     </div>
                     <div>
                       <label htmlFor="spk_img" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Photo / Image URL</label>
-                      <input
-                        id="spk_img"
-                        type="text"
-                        value={editingSpeaker.image_url || ''}
-                        onChange={(e) => setEditingSpeaker({ ...editingSpeaker, image_url: e.target.value })}
-                        placeholder="https://example.com/avatar.jpg"
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
+                      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
+                        <input
+                          id="spk_img"
+                          type="text"
+                          value={editingSpeaker.image_url || ''}
+                          onChange={(e) => setEditingSpeaker({ ...editingSpeaker, image_url: e.target.value })}
+                          placeholder="https://example.com/avatar.jpg"
+                          style={{ flex: 1, padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem' }}
+                        />
+                        <div style={{ position: 'relative', overflow: 'hidden' }}>
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            style={{ padding: '0.5rem 1rem', height: '100%', fontSize: '0.8rem', whiteSpace: 'nowrap' }}
+                          >
+                            {uploadingSpeakerImage ? 'Uploading...' : 'Upload'}
+                          </button>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleSpeakerImageUpload}
+                            disabled={uploadingSpeakerImage}
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              right: 0,
+                              bottom: 0,
+                              left: 0,
+                              opacity: 0,
+                              cursor: 'pointer'
+                            }}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
@@ -2535,45 +2790,81 @@ export default function AdminPage({
                 </form>
               )}
 
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '2px solid #e2e8f0', color: '#475569' }}>
-                      <th style={{ padding: '0.5rem' }}>Speaker</th>
-                      <th style={{ padding: '0.5rem' }}>Talk Title</th>
-                      <th style={{ padding: '0.5rem' }}>Affiliation</th>
-                      <th style={{ padding: '0.5rem', textAlign: 'center' }}>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {speakers
-                      .filter(s => s.name?.toLowerCase().includes(searchTerm.toLowerCase()))
-                      .map((item, idx) => (
-                        <tr key={item.id || idx} style={{ borderBottom: '1px solid #f1f5f9', verticalAlign: 'top' }}>
-                          <td style={{ padding: '1rem 0.5rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                              <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: `2px solid ${item.color || '#cbd5e1'}`, overflow: 'hidden' }}>
-                                <img src={item.image_url || 'https://via.placeholder.com/150'} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                              </div>
-                              <div>
-                                <div style={{ fontWeight: 700 }}>{item.name}</div>
-                                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{item.title}</div>
-                              </div>
-                            </div>
-                          </td>
-                          <td style={{ padding: '1rem 0.5rem', fontWeight: 600, color: '#0f52ba', maxWidth: '280px' }}>{item.talk || 'N/A'}</td>
-                          <td style={{ padding: '1rem 0.5rem', color: '#475569' }}>{item.role}</td>
-                          <td style={{ padding: '1rem 0.5rem', textAlign: 'center' }}>
-                            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                              <button onClick={() => setEditingSpeaker(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
-                              <button onClick={() => handleDeleteSpeaker(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
+               {/* Desktop view */}
+               <div className="admin-desktop-view" style={{ overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: '0.5rem' }}>
+                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left', background: '#ffffff' }}>
+                   <thead>
+                     <tr style={{ borderBottom: '2px solid #e2e8f0', color: '#475569' }}>
+                       <th style={{ padding: '0.75rem 1rem' }}>Speaker</th>
+                       <th style={{ padding: '0.75rem 1rem' }}>Talk Title</th>
+                       <th style={{ padding: '0.75rem 1rem' }}>Affiliation / Role</th>
+                       <th style={{ padding: '0.75rem 1rem', textAlign: 'center' }}>Actions</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     {speakers
+                       .filter(s => s.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+                       .map((item, idx) => (
+                         <tr key={item.id || idx} style={{ borderBottom: '1px solid #f1f5f9', verticalAlign: 'top' }}>
+                           <td style={{ padding: '1rem' }}>
+                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                               <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: `2px solid ${item.color || '#cbd5e1'}`, overflow: 'hidden', flexShrink: 0 }}>
+                                 <img src={item.image_url || 'https://via.placeholder.com/150'} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                               </div>
+                               <div>
+                                 <div style={{ fontWeight: 700 }}>{item.name}</div>
+                                 <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{item.title}</div>
+                               </div>
+                             </div>
+                           </td>
+                           <td style={{ padding: '1rem', fontWeight: 600, color: '#0f52ba', maxWidth: '280px' }}>{item.talk || 'N/A'}</td>
+                           <td style={{ padding: '1rem', color: '#475569' }}>{item.role}</td>
+                           <td style={{ padding: '1rem', textAlign: 'center' }}>
+                             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                               <button onClick={() => setEditingSpeaker(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
+                               <button onClick={() => handleDeleteSpeaker(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
+                             </div>
+                           </td>
+                         </tr>
+                       ))}
+                   </tbody>
+                 </table>
+               </div>
+
+               {/* Mobile view */}
+               <div className="admin-mobile-view admin-mobile-card-list">
+                 {speakers
+                   .filter(s => s.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+                   .map((item, idx) => (
+                     <div key={item.id || idx} className="admin-mobile-card">
+                       <div className="admin-mobile-card-header">
+                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                           <div style={{ width: '36px', height: '36px', borderRadius: '50%', border: `2px solid ${item.color || '#cbd5e1'}`, overflow: 'hidden', flexShrink: 0 }}>
+                             <img src={item.image_url || 'https://via.placeholder.com/150'} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                           </div>
+                           <div>
+                             <div style={{ fontWeight: 700, color: '#0f172a' }}>{item.name}</div>
+                             <div style={{ fontSize: '0.7rem', color: '#64748b' }}>{item.title}</div>
+                           </div>
+                         </div>
+                         <div style={{ display: 'flex', gap: '0.5rem' }}>
+                           <button onClick={() => setEditingSpeaker(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
+                           <button onClick={() => handleDeleteSpeaker(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
+                         </div>
+                       </div>
+                       <div className="admin-mobile-card-body">
+                         <div className="admin-mobile-card-row">
+                           <span className="admin-mobile-card-label">Talk:</span>
+                           <span className="admin-mobile-card-value" style={{ fontWeight: 600, color: '#0f52ba' }}>{item.talk || 'N/A'}</span>
+                         </div>
+                         <div className="admin-mobile-card-row">
+                           <span className="admin-mobile-card-label">Affiliation:</span>
+                           <span className="admin-mobile-card-value">{item.role || 'N/A'}</span>
+                         </div>
+                       </div>
+                     </div>
+                   ))}
+               </div>
             </div>
           </div>
         )}
@@ -2748,35 +3039,55 @@ export default function AdminPage({
                       />
                     </div>
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                     <div>
-                      <label htmlFor="mem_des" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Designation (e.g. Professor)</label>
-                      <input
-                        id="mem_des"
-                        type="text"
-                        value={editingCommittee.designation || ''}
-                        onChange={(e) => setEditingCommittee({ ...editingCommittee, designation: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
+                      {editingCommittee.category === 'organizing' ? (
+                        <>
+                          <label htmlFor="mem_sub" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Subgroup Title (For Organizing Committee)</label>
+                          <select
+                            id="mem_sub"
+                            value={editingCommittee.role || ''}
+                            onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
+                            style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', background: '#ffffff' }}
+                          >
+                            <option value="">Select Subgroup...</option>
+                            <option value="Executive Committee">Executive Committee</option>
+                            <option value="Patrons">Patrons</option>
+                            <option value="General Chairs">General Chairs</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Publication">Publication</option>
+                            <option value="Arrangements">Arrangements</option>
+                            <option value="Registration">Registration</option>
+                            <option value="Tutorials & Workshops">Tutorials & Workshops</option>
+                            <option value="Technical Review">Technical Review</option>
+                            <option value="Outreach & Promotion">Outreach & Promotion</option>
+                            <option value="Website & Media">Website & Media</option>
+                            <option value="Hospitality">Hospitality</option>
+                            <option value="General Members">General Members</option>
+                          </select>
+                        </>
+                      ) : (
+                        <>
+                          <label htmlFor="mem_role" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Role / Designation</label>
+                          <input
+                            id="mem_role"
+                            type="text"
+                            placeholder="e.g. Advisory Chair, Reviewer, etc."
+                            value={editingCommittee.role || ''}
+                            onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
+                            style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                          />
+                        </>
+                      )}
                     </div>
                     <div>
-                      <label htmlFor="mem_inst" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Institution / University</label>
+                      <label htmlFor="mem_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Affiliation / Description</label>
                       <input
-                        id="mem_inst"
+                        id="mem_desc"
                         type="text"
-                        value={editingCommittee.institution || ''}
-                        onChange={(e) => setEditingCommittee({ ...editingCommittee, institution: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="mem_sub" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Subgroup Title (For Organizing Committee)</label>
-                      <input
-                        id="mem_sub"
-                        type="text"
-                        placeholder="e.g. Finance, Registration, etc."
-                        value={editingCommittee.subgroup || ''}
-                        onChange={(e) => setEditingCommittee({ ...editingCommittee, subgroup: e.target.value })}
+                        placeholder="e.g. Professor, IIT Bombay"
+                        value={editingCommittee.desc || ''}
+                        onChange={(e) => setEditingCommittee({ ...editingCommittee, desc: e.target.value })}
                         style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
                       />
                     </div>
@@ -2788,49 +3099,93 @@ export default function AdminPage({
                 </form>
               )}
 
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '2px solid #e2e8f0', color: '#475569' }}>
-                      <th style={{ padding: '0.5rem' }}>Name</th>
-                      <th style={{ padding: '0.5rem' }}>Group Category</th>
-                      <th style={{ padding: '0.5rem' }}>Subgroup</th>
-                      <th style={{ padding: '0.5rem' }}>Affiliation / Designation</th>
-                      <th style={{ padding: '0.5rem', textAlign: 'center' }}>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {committeeMembers
-                      .filter(c => c.name?.toLowerCase().includes(searchTerm.toLowerCase()))
-                      .map((item, idx) => (
-                        <tr key={item.id || idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                          <td style={{ padding: '0.75rem 0.5rem', fontWeight: 700 }}>{item.name}</td>
-                          <td style={{ padding: '0.75rem 0.5rem' }}>
-                            <span style={{
-                              display: 'inline-block',
-                              padding: '0.15rem 0.4rem',
-                              borderRadius: '0.25rem',
-                              fontSize: '0.7rem',
-                              fontWeight: 700,
-                              background: item.category === 'steering' ? 'rgba(59, 130, 246, 0.1)' : item.category === 'organizing' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(100, 116, 139, 0.1)',
-                              color: item.category === 'steering' ? '#1d4ed8' : item.category === 'organizing' ? '#047857' : '#475569'
-                            }}>
-                              {item.category}
-                            </span>
-                          </td>
-                          <td style={{ padding: '0.75rem 0.5rem', fontStyle: 'italic' }}>{item.subgroup || 'N/A'}</td>
-                          <td style={{ padding: '0.75rem 0.5rem', color: '#475569' }}>{item.designation} • {item.institution}</td>
-                          <td style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>
-                            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                              <button onClick={() => setEditingCommittee(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
-                              <button onClick={() => handleDeleteCommittee(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
+               {/* Desktop view */}
+               <div className="admin-desktop-view" style={{ overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: '0.5rem' }}>
+                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left', background: '#ffffff' }}>
+                   <thead>
+                     <tr style={{ borderBottom: '2px solid #e2e8f0', color: '#475569' }}>
+                       <th style={{ padding: '0.75rem 1rem' }}>Name</th>
+                       <th style={{ padding: '0.75rem 1rem' }}>Group Category</th>
+                       <th style={{ padding: '0.75rem 1rem' }}>Subgroup</th>
+                       <th style={{ padding: '0.75rem 1rem' }}>Affiliation / Designation</th>
+                       <th style={{ padding: '0.75rem 1rem', textAlign: 'center' }}>Actions</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     {committeeMembers
+                       .filter(c => c.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+                       .map((item, idx) => (
+                         <tr key={item.id || idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                           <td style={{ padding: '0.75rem 1rem', fontWeight: 700 }}>{item.name}</td>
+                           <td style={{ padding: '0.75rem 1rem' }}>
+                             <span style={{
+                               display: 'inline-block',
+                               padding: '0.15rem 0.4rem',
+                               borderRadius: '0.25rem',
+                               fontSize: '0.7rem',
+                               fontWeight: 700,
+                               background: item.category === 'steering' ? 'rgba(59, 130, 246, 0.1)' : item.category === 'organizing' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(100, 116, 139, 0.1)',
+                               color: item.category === 'steering' ? '#1d4ed8' : item.category === 'organizing' ? '#047857' : '#475569'
+                             }}>
+                               {item.category}
+                             </span>
+                           </td>
+                           <td style={{ padding: '0.75rem 1rem', fontStyle: 'italic' }}>{item.role || 'N/A'}</td>
+                           <td style={{ padding: '0.75rem 1rem', color: '#475569' }}>{item.desc || 'N/A'}</td>
+                           <td style={{ padding: '0.75rem 1rem', textAlign: 'center' }}>
+                             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                               <button onClick={() => setEditingCommittee(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
+                               <button onClick={() => handleDeleteCommittee(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
+                             </div>
+                           </td>
+                         </tr>
+                       ))}
+                   </tbody>
+                 </table>
+               </div>
+
+               {/* Mobile view */}
+               <div className="admin-mobile-view admin-mobile-card-list">
+                 {committeeMembers
+                   .filter(c => c.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+                   .map((item, idx) => (
+                     <div key={item.id || idx} className="admin-mobile-card">
+                       <div className="admin-mobile-card-header">
+                         <div style={{ fontWeight: 700, color: '#0f172a' }}>{item.name}</div>
+                         <div style={{ display: 'flex', gap: '0.5rem' }}>
+                           <button onClick={() => setEditingCommittee(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
+                           <button onClick={() => handleDeleteCommittee(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
+                         </div>
+                       </div>
+                       <div className="admin-mobile-card-body">
+                         <div className="admin-mobile-card-row">
+                           <span className="admin-mobile-card-label">Category:</span>
+                           <span className="admin-mobile-card-value">
+                             <span style={{
+                               display: 'inline-block',
+                               padding: '0.15rem 0.4rem',
+                               borderRadius: '0.25rem',
+                               fontSize: '0.7rem',
+                               fontWeight: 700,
+                               background: item.category === 'steering' ? 'rgba(59, 130, 246, 0.1)' : item.category === 'organizing' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(100, 116, 139, 0.1)',
+                               color: item.category === 'steering' ? '#1d4ed8' : item.category === 'organizing' ? '#047857' : '#475569'
+                             }}>
+                               {item.category}
+                             </span>
+                           </span>
+                         </div>
+                         <div className="admin-mobile-card-row">
+                           <span className="admin-mobile-card-label">Role / Subgroup:</span>
+                           <span className="admin-mobile-card-value" style={{ fontStyle: 'italic' }}>{item.role || 'N/A'}</span>
+                         </div>
+                         <div className="admin-mobile-card-row">
+                           <span className="admin-mobile-card-label">Affiliation:</span>
+                           <span className="admin-mobile-card-value">{item.desc || 'N/A'}</span>
+                         </div>
+                       </div>
+                     </div>
+                   ))}
+               </div>
             </div>
           </div>
         )}

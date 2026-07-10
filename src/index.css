@@ -2221,28 +2221,43 @@ h2, h3, h4, h5, h6, td {
   display: none;
 }
 
+.admin-mobile-tabbar {
+  display: none;
+}
+
 /* Responsive Overrides */
 @media (max-width: 1024px) {
+  .admin-layout {
+    display: block !important;
+  }
+
   .admin-header {
     display: flex;
   }
   
   .admin-sidebar {
-    position: fixed;
+    position: fixed !important;
     top: 70px;
     left: 0;
     bottom: 0;
-    width: 270px;
-    transform: translateX(-100%);
-    box-shadow: 10px 0 30px rgba(9, 15, 29, 0.25);
+    width: 270px !important;
+    transform: translateX(-100%) !important;
+    box-shadow: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .admin-sidebar.admin-sidebar-open {
-    transform: translateX(0);
+    transform: translateX(0) !important;
+    box-shadow: 10px 0 30px rgba(9, 15, 29, 0.25);
   }
   
   .admin-content {
     padding: 1.5rem;
+  }
+
+  .admin-main-container {
+    width: 100% !important;
+    min-width: 100% !important;
   }
 }
 

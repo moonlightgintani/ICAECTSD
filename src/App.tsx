@@ -47,8 +47,11 @@ import balamurgunImg from './assets/balamurugan.jpg';
 import narendranImg from './assets/Narendran.png';
 import logo2 from './assets/logo2.png';
 import principalImg from './assets/principal.jpeg';
+import sakthivelImg from './assets/Sakthivel.png';
+import radhaImg from './assets/Screenshot 2026-07-10 142828.png';
+import brindhaImg from './assets/Screenshot 2026-07-10 142835.png';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
-import ExplorePage from './ExplorePage';
+import ExplorePage from './ExplorePage'
 import AdminPage from './AdminPage';
 
 // Navigation Items
@@ -1507,11 +1510,10 @@ export default function App() {
     if (name.includes('Sundar Ramakrishnan') || name.includes('R. Sundar')) return logo2;
     if (name.includes('S. Narendran')) return narendranImg;
     if (name.includes('Balamurugan'))    return balamurgunImg;
-    // ── ORGANIZING: General Chairs ────────────────────────────────────
     if (name.includes('Soundarrajan')) return principalImg;
-    // if (name.includes('P. Sakthivel'))   return sakthivelImg;    // add sakthivel.png to assets
-    // if (name.includes('S. Radha'))       return radhaImg;         // add radha.png to assets
-    // if (name.includes('S. Brindha'))     return brindhaImg;       // add brindha.png to assets
+    if (name.includes('P. Sakthivel'))   return sakthivelImg;    
+    if (name.includes('S. Radha'))       return radhaImg;        
+    if (name.includes('S. Brindha'))     return brindhaImg;       
 
     // ── ORGANIZING: Conference / Session Chairs ────────────────────────
     if (name.includes('Karpagam')) return karpagamImg;
@@ -1592,22 +1594,24 @@ export default function App() {
       </div>
 
       {/* Top Page Progress Indicator */}
-      <motion.div 
-        style={{
-          scaleX,
-          position: 'fixed',
-          top: 'var(--banner-height, 0px)',
-          left: 0,
-          right: 0,
-          height: '4px',
-          background: 'linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%)',
-          transformOrigin: '0%',
-          zIndex: 125
-        }} 
-      />
+      {currentPage !== 'admin' && (
+        <motion.div 
+          style={{
+            scaleX,
+            position: 'fixed',
+            top: 'var(--banner-height, 0px)',
+            left: 0,
+            right: 0,
+            height: '4px',
+            background: 'linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%)',
+            transformOrigin: '0%',
+            zIndex: 125
+          }} 
+        />
+      )}
 
       {/* Announcement Banner */}
-      {info.show_announcement !== 'false' && (
+      {currentPage !== 'admin' && info.show_announcement !== 'false' && (
         <div className="announcement-banner">
           <div className="announcement-content">
             <div className="announcement-marquee-container">
@@ -1623,7 +1627,8 @@ export default function App() {
       )}
 
       {/* Header / Navbar */}
-      <header className="main-header">
+      {currentPage !== 'admin' && (
+        <header className="main-header">
         <a 
           href={info.srec_url || "https://srec.ac.in/"} 
           target="_blank" 
@@ -1833,10 +1838,12 @@ export default function App() {
           </button>
         </div>
       </header>
+      )}
  
       {/* Mobile Drawer Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
+      {currentPage !== 'admin' && (
+        <AnimatePresence>
+          {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1912,6 +1919,7 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      )}
 
       <AnimatePresence mode="wait">
         {currentPage === 'explore' ? (
@@ -6255,7 +6263,8 @@ export default function App() {
 
 
       {/* Nexus Agent Chatbot Floating Widget */}
-      <><div className="nexus-chat-container">
+      {currentPage !== 'admin' && (
+        <><div className="nexus-chat-container">
   {!showNexusChat && showNexusTooltip && (
     <div className="nexus-chat-tooltip">
       <span className="nexus-chat-tooltip-dot">●</span>
@@ -6366,6 +6375,7 @@ export default function App() {
       </motion.div>
     )}
   </AnimatePresence></>
+      )}
     </div>
   );
 }
