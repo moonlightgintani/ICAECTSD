@@ -20,6 +20,7 @@ import {
   Layers, 
   Terminal, 
   ChevronRight, 
+  ChevronDown,
   CheckCircle, 
   Menu,
   X,
@@ -343,6 +344,8 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [committeeTab, setCommitteeTab] = useState<'steering' | 'organizing' | 'advisory'>('organizing');
   const [activeSubcommittee, setActiveSubcommittee] = useState<string>('patrons');
+  const [subcommitteeDropdownOpen, setSubcommitteeDropdownOpen] = useState(false);
+  const [desktopNavDropdownOpen, setDesktopNavDropdownOpen] = useState(false);
   const [submissionTab, setSubmissionTab] = useState<'initial' | 'camera-ready'>('initial');
   
   // Database content states
@@ -428,11 +431,11 @@ export default function App() {
 
   // Nexus Agent Chatbot states
   const [showNexusChat, setShowNexusChat] = useState<boolean>(false);
-  const [chatMessages, setChatMessages] = useState<{ sender: 'agent' | 'user'; text: string }[]>([
+  const [chatMessages] = useState<{ sender: 'agent' | 'user'; text: string }[]>([
     { sender: 'agent', text: 'Hello! I am Nexus, your SREC Conference AI Assistant. Ask me anything about AECTSD 2027 registration, important dates, key tracks, speakers, or workshops!' }
   ]);
   const [chatInput, setChatInput] = useState<string>('');
-  const [isAgentTyping, setIsAgentTyping] = useState<boolean>(false);
+  const [isAgentTyping] = useState<boolean>(false);
 
   // Admin Portal authentication handlers
   const handleAdminAuth = async (e: React.FormEvent) => {
@@ -1429,53 +1432,6 @@ export default function App() {
     }, 4000);
   };
 
-  const handleSendChatMessage = (textToSend?: string) => {
-    const messageText = textToSend || chatInput;
-    if (!messageText.trim()) return;
-
-    // Add user message
-    const updatedMessages = [...chatMessages, { sender: 'user' as const, text: messageText }];
-    setChatMessages(updatedMessages);
-    if (!textToSend) setChatInput('');
-    setIsAgentTyping(true);
-
-    // Generate response after a short timeout (typing effect)
-    setTimeout(() => {
-      const lower = messageText.toLowerCase();
-      let reply = "";
-
-      // Helper function to extract info cleanly
-      const dateList = importantDates.map(d => `- ${d.title}: ${d.event_date}`).join('\n');
-      const speakerList = speakers.map(s => `- ${s.name} (${s.role}): "${s.talk}"`).join('\n');
-      const trackList = departments.map(d => `- ${d.name}`).join('\n');
-      const workshopList = workshops.map(w => `- ${w.title} by ${w.instructor} (${w.duration})`).join('\n');
-
-      if (lower.includes('date') || lower.includes('deadline') || lower.includes('when') || lower.includes('timeline')) {
-        reply = `Here are the important timeline dates for the conference:\n\n${dateList || "Important dates will be announced soon. Please stay tuned!"}`;
-      } else if (lower.includes('fee') || lower.includes('price') || lower.includes('cost') || lower.includes('payment') || lower.includes('register') || lower.includes('registration')) {
-        reply = `Registration Fee Information:\n\n- Indian Authors (Student): ₹6,000 / Non-Member: ₹7,000\n- Indian Authors (Professional): ₹7,000 / Non-Member: ₹8,000\n- International Authors: $150 to $300 USD\n\nYou can click on "Registration" in the menu or use the "Calculate Fee" button on the main banner to see the exact price breakdown for your criteria and find the bank wire transfer details.`;
-      } else if (lower.includes('speaker') || lower.includes('keynote') || lower.includes('talk')) {
-        reply = `We have a stellar lineup of keynote speakers at AECTSD 2027:\n\n${speakerList || "- To be updated soon."}`;
-      } else if (lower.includes('track') || lower.includes('department') || lower.includes('topic') || lower.includes('scope')) {
-        reply = `The conference covers key research tracks including:\n\n${trackList || "- Advanced Electronics\n- Communication\n- Trust, Security and Devices"}\n\nYou can view full details of each track by clicking on the tracks listed under the "Explore" or "Call for Papers" sections on our site.`;
-      } else if (lower.includes('workshop') || lower.includes('tutorial')) {
-        reply = `Pre-conference Workshops & Tutorials:\n\n${workshopList || "Pre-conference tutorial sessions will be announced soon."}`;
-      } else if (lower.includes('location') || lower.includes('where') || lower.includes('venue') || lower.includes('address') || lower.includes('travel') || lower.includes('direction')) {
-        reply = `AECTSD 2027 is hosted at:\n\n${info.event_location_display || "Sri Ramakrishna Engineering College, Coimbatore, Tamilnadu, India."}\n\nCoimbatore is well connected by air, rail, and road. You can check the "Directions" map and explore tourist spots nearby directly in the "Explore" page.`;
-      } else if (lower.includes('submit') || lower.includes('paper') || lower.includes('cmt') || lower.includes('manuscript')) {
-        reply = `You can submit your research paper through the Microsoft CMT Portal at the following URL:\n\n${info.cmt_link || "https://cmt3.research.microsoft.com/"}\n\nFormat guidelines: Fenced to 6 pages. Templates can be downloaded from IEEE guidelines.`;
-      } else if (lower.includes('contact') || lower.includes('phone') || lower.includes('email') || lower.includes('help')) {
-        reply = `For any questions, you can reach out to the conference secretariat at:\n\nEmail: aectsd@srec.ac.in\nSecretariat: ${info.secretariat_address || "Sri Ramakrishna Engineering College, Coimbatore, India."}`;
-      } else if (lower.includes('hello') || lower.includes('hi') || lower.includes('hey') || lower.includes('nexus')) {
-        reply = `Hello! How can I help you today? Ask me about paper submission, important dates, registration fees, or venue details.`;
-      } else {
-        reply = `Thank you for your question. AECTSD 2027 (International Conference on Advanced Electronics, Communication, Trust, Security and Devices) is organized by Sri Ramakrishna Engineering College. \n\nI can help you with:\n- Key dates & deadlines\n- Paper submission link (CMT)\n- Registration fees & bank details\n- Keynote speakers\n- Workshop details\n\nWhat would you like to know?`;
-      }
-
-      setChatMessages(prev => [...prev, { sender: 'agent' as const, text: reply }]);
-      setIsAgentTyping(false);
-    }, 1000);
-  };
 
   // Framer Motion Animation Presets
   const fadeInUp = {
@@ -1609,6 +1565,10 @@ export default function App() {
     return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=0f52ba,06b6d4,f58220`;
   };
 
+  function handleSendChatMessage(_text: string): void {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <div style={{ position: 'relative', width: '100%', minHeight: '100vh', background: 'var(--bg-deep)' }}>
       {/* Background Grids and Overlays */}
@@ -1667,6 +1627,9 @@ export default function App() {
         <nav className="desktop-nav" style={{ flex: 1, justifyContent: 'center', minWidth: 0 }}>
           <ul style={{ display: 'flex', listStyle: 'none', alignItems: 'center', margin: 0, padding: 0, flexWrap: 'nowrap', justifyContent: 'space-between', width: '100%' }}>
             {NAV_ITEMS.map((item: any) => {
+              if (item.id === 'explore' || item.id === 'contact-us' || item.id === 'ieee-sb') {
+                return null;
+              }
               return (
                 <li key={item.id}>
                   {item.external ? (
@@ -1708,6 +1671,106 @@ export default function App() {
                 </li>
               );
             })}
+
+            {/* Combined Hamburger / Dropdown Nav Item */}
+            <li 
+              style={{ position: 'relative' }}
+              onMouseLeave={() => setDesktopNavDropdownOpen(false)}
+            >
+              <button
+                onClick={() => setDesktopNavDropdownOpen(!desktopNavDropdownOpen)}
+                className={`nav-link ${
+                  ['explore', 'contact-us', 'ieee-sb'].includes(activeSection) ? 'active' : ''
+                }`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  cursor: 'pointer'
+                }}
+              >
+                <Menu size={16} />
+                <span>More</span>
+                <ChevronDown size={12} />
+              </button>
+              
+              <AnimatePresence>
+                {desktopNavDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    style={{
+                      position: 'absolute',
+                      right: 0,
+                      top: '100%',
+                      marginTop: '0.5rem',
+                      background: 'rgba(255, 255, 255, 0.95)',
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(15, 23, 42, 0.08)',
+                      borderRadius: '0.5rem',
+                      boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+                      minWidth: '200px',
+                      zIndex: 1000,
+                      padding: '0.5rem 0'
+                    }}
+                  >
+                    {[
+                      { id: 'explore', label: 'Explore Coimbatore' },
+                      { id: 'contact-us', label: 'Contact Us' },
+                      { id: 'ieee-sb', label: 'IEEE SB', external: true }
+                    ].map((item) => (
+                      <div key={item.id}>
+                        {item.external ? (
+                          <a
+                            href={info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/"}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="dropdown-item"
+                            style={{
+                              display: 'block',
+                              padding: '0.6rem 1rem',
+                              color: '#1e293b',
+                              textDecoration: 'none',
+                              fontSize: '0.8rem',
+                              fontWeight: 500,
+                              textAlign: 'left',
+                              cursor: 'pointer'
+                            }}
+                            onClick={() => setDesktopNavDropdownOpen(false)}
+                          >
+                            {navLabelMap[item.id] || item.label}
+                          </a>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              scrollToSection(item.id);
+                              setDesktopNavDropdownOpen(false);
+                            }}
+                            className="dropdown-item"
+                            style={{
+                              display: 'block',
+                              width: '100%',
+                              padding: '0.6rem 1rem',
+                              color: activeSection === item.id ? '#3b82f6' : '#1e293b',
+                              background: 'transparent',
+                              border: 'none',
+                              fontSize: '0.8rem',
+                              fontWeight: 500,
+                              textAlign: 'left',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            {navLabelMap[item.id] || item.label}
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </li>
           </ul>
         </nav>
 
@@ -2236,8 +2299,8 @@ export default function App() {
                   )}
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%' }}>
-                    {/* Subcommittee Buttons in Two Rows */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem', width: '100%', alignItems: 'center' }}>
+                    {/* Subcommittee Buttons: Desktop Layout */}
+                    <div className="desktop-subcommittee-nav" style={{ flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem', width: '100%', alignItems: 'center' }}>
                       {/* Row 1 */}
                       <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', width: '100%' }}>
                         {[
@@ -2282,6 +2345,114 @@ export default function App() {
                           </button>
                         ))}
                       </div>
+                    </div>
+
+                    {/* Subcommittee Dropdown: Mobile Layout */}
+                    <div className="mobile-subcommittee-nav" style={{ width: '100%', maxWidth: '320px', margin: '0 auto 2rem', position: 'relative' }}>
+                      <button
+                        type="button"
+                        onClick={() => setSubcommitteeDropdownOpen(!subcommitteeDropdownOpen)}
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem 1.25rem',
+                          background: '#1e293b',
+                          border: '1px solid #334155',
+                          borderRadius: '0.5rem',
+                          color: '#ffffff',
+                          fontWeight: 600,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          cursor: 'pointer',
+                          textAlign: 'left'
+                        }}
+                      >
+                        <span>
+                          {
+                            [
+                              { id: 'patrons', label: 'Patrons' },
+                              { id: 'general-chairs', label: 'General Chairs' },
+                              { id: 'executive', label: 'Executive Committee' },
+                              { id: 'finance', label: 'Finance' },
+                              { id: 'publication', label: 'Publication' },
+                              { id: 'arrangements', label: 'Arrangements' },
+                              { id: 'registration', label: 'Registration' },
+                              { id: 'tutorials', label: 'Tutorials & Workshops' },
+                              { id: 'review', label: 'Technical Review' },
+                              { id: 'outreach', label: 'Outreach & Promotion' },
+                              { id: 'website', label: 'Website & Media' },
+                              { id: 'hospitality', label: 'Hospitality' },
+                              { id: 'members', label: 'General Members' }
+                            ].find(g => g.id === activeSubcommittee)?.label || 'Patrons'
+                          }
+                        </span>
+                        <ChevronDown size={18} style={{ marginLeft: 'auto' }} />
+                      </button>
+
+                      <AnimatePresence>
+                        {subcommitteeDropdownOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                            style={{
+                              position: 'absolute',
+                              top: '105%',
+                              left: 0,
+                              right: 0,
+                              background: 'rgba(15, 23, 42, 0.95)',
+                              backdropFilter: 'blur(12px)',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              borderRadius: '0.5rem',
+                              zIndex: 10,
+                              maxHeight: '300px',
+                              overflowY: 'auto',
+                              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)'
+                            }}
+                          >
+                            {[
+                              { id: 'patrons', label: 'Patrons' },
+                              { id: 'general-chairs', label: 'General Chairs' },
+                              { id: 'executive', label: 'Executive Committee' },
+                              { id: 'finance', label: 'Finance' },
+                              { id: 'publication', label: 'Publication' },
+                              { id: 'arrangements', label: 'Arrangements' },
+                              { id: 'registration', label: 'Registration' },
+                              { id: 'tutorials', label: 'Tutorials & Workshops' },
+                              { id: 'review', label: 'Technical Review' },
+                              { id: 'outreach', label: 'Outreach & Promotion' },
+                              { id: 'website', label: 'Website & Media' },
+                              { id: 'hospitality', label: 'Hospitality' },
+                              { id: 'members', label: 'General Members' }
+                            ].map((group) => (
+                              <button
+                                key={group.id}
+                                type="button"
+                                onClick={() => {
+                                  setActiveSubcommittee(group.id);
+                                  setSubcommitteeDropdownOpen(false);
+                                }}
+                                style={{
+                                  width: '100%',
+                                  padding: '0.75rem 1.25rem',
+                                  background: activeSubcommittee === group.id ? 'rgba(59, 130, 246, 0.2)' : 'transparent',
+                                  border: 'none',
+                                  color: '#ffffff',
+                                  textAlign: 'left',
+                                  fontSize: '0.9rem',
+                                  fontWeight: activeSubcommittee === group.id ? 700 : 500,
+                                  cursor: 'pointer',
+                                  display: 'block',
+                                  borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+                                }}
+                              >
+                                {group.label}
+                              </button>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
 
                     {/* Active Panel Members Grid */}
@@ -5417,81 +5588,194 @@ export default function App() {
 
                         {editingCommittee && (
                           <div className="glass-card" style={{ marginBottom: '2rem', background: '#f8fafc', borderColor: '#3b82f6' }}>
-                            <h5 style={{ fontSize: '1.1rem', marginBottom: '1rem', fontWeight: 700 }}>{editingCommittee.id ? 'Edit Committee Member' : 'Add New Member'}</h5>
-                            <form onSubmit={handleSaveCommittee} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                              <div className="admin-form-row">
-                                <div className="admin-form-group">
-                                  <label htmlFor="committee_name">Full Name</label>
-                                  <input 
-                                    id="committee_name"
-                                    type="text" 
-                                    required 
-                                    className="form-input"
-                                    value={editingCommittee.name}
-                                    onChange={(e) => setEditingCommittee({ ...editingCommittee, name: e.target.value })}
-                                    placeholder="Enter Full Name"
-                                    title="Full Name"
-                                  />
+                              <h5 style={{ fontSize: '1.1rem', marginBottom: '1rem', fontWeight: 700 }}>{editingCommittee.id ? 'Edit Committee Member' : 'Add New Member'}</h5>
+                              <form onSubmit={handleSaveCommittee} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div className="admin-form-row">
+                                  <div className="admin-form-group">
+                                    <label htmlFor="committee_name">Full Name</label>
+                                    <input
+                                      id="committee_name"
+                                      type="text"
+                                      required
+                                      className="form-input"
+                                      value={editingCommittee.name}
+                                      onChange={(e) => setEditingCommittee({ ...editingCommittee, name: e.target.value })}
+                                      placeholder="Enter Full Name"
+                                      title="Full Name" />
+                                  </div>
+                                  <div className="admin-form-group">
+                                    <label htmlFor="committee_category">Committee Category</label>
+                                    <select
+                                      id="committee_category"
+                                      value={editingCommittee.category}
+                                      onChange={(e) => setEditingCommittee({ ...editingCommittee, category: e.target.value })}
+                                      className="form-input"
+                                      style={{ background: '#ffffff' }}
+                                      title="Committee Category"
+                                    >
+                                      <option value="organizing">Organizing Committee</option>
+                                      <option value="advisory">Advisory Committee</option>
+                                      <option value="technical">Technical Program Committee</option>
+                                    </select>
+                                  </div>
                                 </div>
-                                <div className="admin-form-group">
-                                  <label htmlFor="committee_category">Committee Category</label>
-                                  <select 
-                                    id="committee_category"
-                                    value={editingCommittee.category}
-                                    onChange={(e) => setEditingCommittee({ ...editingCommittee, category: e.target.value })}
-                                    className="form-input"
-                                    style={{ background: '#ffffff' }}
-                                    title="Committee Category"
-                                  >
-                                    <option value="organizing">Organizing Committee</option>
-                                    <option value="advisory">Advisory Committee</option>
-                                    <option value="technical">Technical Program Committee</option>
-                                  </select>
-                                </div>
-                              </div>
 
                               <div className="admin-form-row">
                                 <div className="admin-form-group">
-                                  <label htmlFor="committee_role">Role / Position Title (e.g. Patron, General Chair)</label>
-                                  <input 
-                                    id="committee_role"
-                                    type="text" 
+                                  <label htmlFor="committee_role_select">Role / Position Title</label>
+                                  <select
+                                    id="committee_role_select"
                                     className="form-input"
-                                    value={editingCommittee.role || ''}
-                                    onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
-                                    placeholder="Leave blank if standard member"
-                                    title="Role / Position Title"
-                                  />
+                                    style={{ background: '#ffffff' }}
+                                    value={!editingCommittee.role
+                                      ? ""
+                                      : [
+                                        'Steering Committee Member',
+                                        'Advisory Committee Member',
+                                        'Chief Patron',
+                                        'Patron',
+                                        'General Chair',
+                                        'Conference Chair',
+                                        'Conference Chair & Organizing Secretary',
+                                        'Session Chair',
+                                        'Program and Finance Chair',
+                                        'Finance Committee Member',
+                                        'Program and Finance Committee Member',
+                                        'Publication Chair',
+                                        'Publication Committee Member',
+                                        'Local Arrangements Chair',
+                                        'Local Arrangements Committee Member',
+                                        'Registration Chair',
+                                        'Registration Committee Member',
+                                        'Conference Pre-Tutorial Sessions Chair',
+                                        'Pre-Tutorial Sessions Committee Member',
+                                        'Technical Review Committee Convener',
+                                        'Technical Review Committee Member',
+                                        'Outreach and Promotion Committee Convener',
+                                        'Outreach and Promotion Committee Member',
+                                        'Website and Social Media Promotion Committee Chair',
+                                        'Website and Social Media Promotion Committee Member',
+                                        'Hospitality Committee Convener',
+                                        'Hospitality Committee Member',
+                                        'Member'
+                                      ].includes(editingCommittee.role)
+                                        ? editingCommittee.role
+                                        : "other"}
+                                    onChange={(e) => {
+                                      const val = e.target.value;
+                                      if (val === "other") {
+                                        setEditingCommittee({ ...editingCommittee, role: "Custom Role" });
+                                      } else {
+                                        setEditingCommittee({ ...editingCommittee, role: val || null });
+                                      }
+                                    } }
+                                  >
+                                    <option value="">Leave blank (Standard Member)</option>
+                                    <optgroup label="Steering & Advisory">
+                                      <option value="Steering Committee Member">Steering Committee Member</option>
+                                      <option value="Advisory Committee Member">Advisory Committee Member</option>
+                                    </optgroup>
+                                    <optgroup label="Patrons & Chairs">
+                                      <option value="Chief Patron">Chief Patron</option>
+                                      <option value="Patron">Patron</option>
+                                      <option value="General Chair">General Chair</option>
+                                      <option value="Conference Chair">Conference Chair</option>
+                                      <option value="Conference Chair & Organizing Secretary">Conference Chair & Organizing Secretary</option>
+                                      <option value="Session Chair">Session Chair</option>
+                                    </optgroup>
+                                    <optgroup label="Subcommittees">
+                                      <option value="Program and Finance Chair">Program and Finance Chair</option>
+                                      <option value="Program and Finance Committee Member">Program and Finance Committee Member</option>
+                                      <option value="Finance Committee Member">Finance Committee Member</option>
+                                      <option value="Publication Chair">Publication Chair</option>
+                                      <option value="Publication Committee Member">Publication Committee Member</option>
+                                      <option value="Local Arrangements Chair">Local Arrangements Chair</option>
+                                      <option value="Local Arrangements Committee Member">Local Arrangements Committee Member</option>
+                                      <option value="Registration Chair">Registration Chair</option>
+                                      <option value="Registration Committee Member">Registration Committee Member</option>
+                                      <option value="Conference Pre-Tutorial Sessions Chair">Conference Pre-Tutorial Sessions Chair</option>
+                                      <option value="Pre-Tutorial Sessions Committee Member">Pre-Tutorial Sessions Committee Member</option>
+                                      <option value="Technical Review Committee Convener">Technical Review Committee Convener</option>
+                                      <option value="Technical Review Committee Member">Technical Review Committee Member</option>
+                                      <option value="Outreach and Promotion Committee Convener">Outreach and Promotion Committee Convener</option>
+                                      <option value="Outreach and Promotion Committee Member">Outreach and Promotion Committee Member</option>
+                                      <option value="Website and Social Media Promotion Committee Chair">Website and Social Media Promotion Committee Chair</option>
+                                      <option value="Website and Social Media Promotion Committee Member">Website and Social Media Promotion Committee Member</option>
+                                      <option value="Hospitality Committee Convener">Hospitality Committee Convener</option>
+                                      <option value="Hospitality Committee Member">Hospitality Committee Member</option>
+                                    </optgroup>
+                                    <optgroup label="General">
+                                      <option value="Member">Member</option>
+                                      <option value="other">Other (Enter Custom Role...)</option>
+                                    </optgroup>
+                                  </select>
+
+                                  {editingCommittee.role && ![
+                                    'Steering Committee Member',
+                                    'Advisory Committee Member',
+                                    'Chief Patron',
+                                    'Patron',
+                                    'General Chair',
+                                    'Conference Chair',
+                                    'Conference Chair & Organizing Secretary',
+                                    'Session Chair',
+                                    'Program and Finance Chair',
+                                    'Finance Committee Member',
+                                    'Program and Finance Committee Member',
+                                    'Publication Chair',
+                                    'Publication Committee Member',
+                                    'Local Arrangements Chair',
+                                    'Local Arrangements Committee Member',
+                                    'Registration Chair',
+                                    'Registration Committee Member',
+                                    'Conference Pre-Tutorial Sessions Chair',
+                                    'Pre-Tutorial Sessions Committee Member',
+                                    'Technical Review Committee Convener',
+                                    'Technical Review Committee Member',
+                                    'Outreach and Promotion Committee Convener',
+                                    'Outreach and Promotion Committee Member',
+                                    'Website and Social Media Promotion Committee Chair',
+                                    'Website and Social Media Promotion Committee Member',
+                                    'Hospitality Committee Convener',
+                                    'Hospitality Committee Member',
+                                    'Member'
+                                  ].includes(editingCommittee.role) && (
+                                      <div style={{ marginTop: '0.5rem' }}>
+                                        <input
+                                          id="committee_role_custom"
+                                          type="text"
+                                          required
+                                          className="form-input"
+                                          value={editingCommittee.role}
+                                          onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
+                                          placeholder="Enter Custom Role Title"
+                                          title="Custom Role Title" />
+                                      </div>
+                                    )}
                                 </div>
                                 <div className="admin-form-group">
                                   <label htmlFor="committee_desc">Institution / Bio Description</label>
-                                  <input 
+                                  <input
                                     id="committee_desc"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingCommittee.desc}
                                     onChange={(e) => setEditingCommittee({ ...editingCommittee, desc: e.target.value })}
                                     placeholder="Enter Institution / Bio Description"
-                                    title="Institution / Bio Description"
-                                  />
+                                    title="Institution / Bio Description" />
                                 </div>
-                              </div>
-
-                              <div className="admin-form-group">
+                              </div><div className="admin-form-group">
                                 <label htmlFor="committee_image">Image URL / Path</label>
-                                <input 
+                                <input
                                   id="committee_image"
-                                  type="text" 
+                                  type="text"
                                   className="form-input"
                                   value={editingCommittee.image_url || ''}
                                   onChange={(e) => setEditingCommittee({ ...editingCommittee, image_url: e.target.value })}
                                   placeholder="e.g. /images/name.jpg or full URL (optional)"
-                                  title="Image URL / Path"
-                                />
-                              </div>
-
-                              <div style={{ display: 'flex', gap: '0.75rem' }}>
+                                  title="Image URL / Path" />
+                              </div><div style={{ display: 'flex', gap: '0.75rem' }}>
                                 <button type="submit" className="btn btn-primary">
                                   <Save size={16} /> Save Changes
                                 </button>
@@ -5937,122 +6221,117 @@ export default function App() {
 
 
       {/* Nexus Agent Chatbot Floating Widget */}
-      <div className="nexus-chat-container">
-        {!showNexusChat && (
-          <div className="nexus-chat-tooltip">
-            <span className="nexus-chat-tooltip-dot">●</span>
-            How can I help you?
-          </div>
-        )}
-        
-        <div 
-          className="nexus-chat-trigger" 
-          onClick={() => setShowNexusChat(!showNexusChat)}
-          title="Chat with Nexus AI Agent"
-        >
-          {showNexusChat ? (
-            <div className="nexus-chat-close-btn">
-              <X size={24} />
+      <><div className="nexus-chat-container">
+  {!showNexusChat && (
+    <div className="nexus-chat-tooltip">
+      <span className="nexus-chat-tooltip-dot">●</span>
+      How can I help you?
+    </div>
+  )}
+
+  <div
+    className="nexus-chat-trigger"
+    onClick={() => setShowNexusChat(!showNexusChat)}
+    title="Chat with Nexus AI Agent"
+  >
+    {showNexusChat ? (
+      <div className="nexus-chat-close-btn">
+        <X size={24} />
+      </div>
+    ) : (
+      <img
+        src={chatbotIcon}
+        alt="Nexus Agent"
+        className="nexus-chat-mascot-img" />
+    )}
+  </div>
+</div><AnimatePresence>
+    {showNexusChat && (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+        transition={{ duration: 0.2 }}
+        className="nexus-chat-window"
+      >
+        {/* Header */}
+        <div className="nexus-chat-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <img
+              src={chatbotIcon}
+              alt="Nexus Agent Avatar"
+              style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(255, 255, 255, 0.2)', display: 'block' }} />
+            <div>
+              <h4 style={{ fontSize: '0.95rem', fontWeight: 800, margin: 0 }}>Nexus AI Assistant</h4>
+              <span style={{ fontSize: '0.7rem', opacity: 0.8, display: 'block' }}>SREC Conference Agent</span>
             </div>
-          ) : (
-            <img 
-              src={chatbotIcon} 
-              alt="Nexus Agent" 
-              className="nexus-chat-mascot-img"
-            />
+          </div>
+          <button
+            onClick={() => setShowNexusChat(false)}
+            style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Message List */}
+        <div className="nexus-chat-messages" id="nexus-chat-messages-container">
+          {chatMessages.map((msg, index) => (
+            <div key={index} className={`nexus-chat-message ${msg.sender}`}>
+              <p style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '0.85rem' }}>{msg.text}</p>
+            </div>
+          ))}
+          {isAgentTyping && (
+            <div className="nexus-chat-message agent" style={{ display: 'inline-flex', alignItems: 'center' }}>
+              <div className="nexus-typing-dots">
+                <div className="nexus-typing-dot"></div>
+                <div className="nexus-typing-dot"></div>
+                <div className="nexus-typing-dot"></div>
+              </div>
+            </div>
           )}
         </div>
-      </div>
 
-      <AnimatePresence>
-        {showNexusChat && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ duration: 0.2 }}
-            className="nexus-chat-window"
-          >
-            {/* Header */}
-            <div className="nexus-chat-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                <img 
-                  src={chatbotIcon} 
-                  alt="Nexus Agent Avatar" 
-                  style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(255, 255, 255, 0.2)', display: 'block' }} 
-                />
-                <div>
-                  <h4 style={{ fontSize: '0.95rem', fontWeight: 800, margin: 0 }}>Nexus AI Assistant</h4>
-                  <span style={{ fontSize: '0.7rem', opacity: 0.8, display: 'block' }}>SREC Conference Agent</span>
-                </div>
-              </div>
-              <button 
-                onClick={() => setShowNexusChat(false)}
-                style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            {/* Message List */}
-            <div className="nexus-chat-messages" id="nexus-chat-messages-container">
-              {chatMessages.map((msg, index) => (
-                <div key={index} className={`nexus-chat-message ${msg.sender}`}>
-                  <p style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '0.85rem' }}>{msg.text}</p>
-                </div>
-              ))}
-              {isAgentTyping && (
-                <div className="nexus-chat-message agent" style={{ display: 'inline-flex', alignItems: 'center' }}>
-                  <div className="nexus-typing-dots">
-                    <div className="nexus-typing-dot"></div>
-                    <div className="nexus-typing-dot"></div>
-                    <div className="nexus-typing-dot"></div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Suggested Prompts */}
-            <div className="nexus-chat-suggested">
-              {[
-                { label: 'Dates 📅', text: 'What are the important dates/deadlines?' },
-                { label: 'Fees 💳', text: 'How much are the registration fees?' },
-                { label: 'Submission 📝', text: 'How do I submit my paper?' },
-                { label: 'Speakers 🎙️', text: 'Who are the keynote speakers?' }
-              ].map((p, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleSendChatMessage(p.text)}
-                  className="nexus-chat-suggested-btn"
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Input Area */}
-            <form 
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSendChatMessage();
-              }}
-              className="nexus-chat-input-area"
+        {/* Suggested Prompts */}
+        <div className="nexus-chat-suggested">
+          {[
+            { label: 'Dates 📅', text: 'What are the important dates/deadlines?' },
+            { label: 'Fees 💳', text: 'How much are the registration fees?' },
+            { label: 'Submission 📝', text: 'How do I submit my paper?' },
+            { label: 'Speakers 🎙️', text: 'Who are the keynote speakers?' }
+          ].map((p, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleSendChatMessage(p.text)}
+              className="nexus-chat-suggested-btn"
             >
-              <input
-                type="text"
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                placeholder="Ask Nexus a question..."
-                className="nexus-chat-input"
-                title="Chat Input"
-              />
-              <button type="submit" className="nexus-chat-send">
-                Send
-              </button>
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              {p.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Input Area */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSendChatMessage();
+          } }
+          className="nexus-chat-input-area"
+        >
+          <input
+            type="text"
+            value={chatInput}
+            onChange={(e) => setChatInput(e.target.value)}
+            placeholder="Ask Nexus a question..."
+            className="nexus-chat-input"
+            title="Chat Input" />
+          <button type="submit" className="nexus-chat-send">
+            Send
+          </button>
+        </form>
+      </motion.div>
+    )}
+  </AnimatePresence></>
     </div>
   );
 }

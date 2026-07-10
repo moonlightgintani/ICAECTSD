@@ -2303,6 +2303,30 @@ h2, h3, h4, h5, h6, td {
   font-weight: 600;
 }
 
+/* Custom mobile nav for subcommittees */
+@media (max-width: 767px) {
+  .desktop-subcommittee-nav {
+    display: none !important;
+  }
+  .mobile-subcommittee-nav {
+    display: block !important;
+  }
+}
+@media (min-width: 768px) {
+  .desktop-subcommittee-nav {
+    display: flex !important;
+  }
+  .mobile-subcommittee-nav {
+    display: none !important;
+  }
+}
 
-
-
+/* Hover style for desktop dropdown nav item */
+.dropdown-item {
+  transition: all 0.2s ease;
+}
+.dropdown-item:hover {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+  color: #3b82f6 !important;
+  padding-left: 1.25rem !important;
+}
