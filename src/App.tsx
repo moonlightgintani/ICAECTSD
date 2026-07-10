@@ -43,9 +43,10 @@ import chatbotIcon from './assets/chatbot.gif';
 import heroBg from './assets/hero.png';
 import karpagamImg from './assets/karpagam.png';
 import jansiImg from './assets/jansi.png';
+import balamurgunImg from './assets/balamurugan.jpg';
 import narendranImg from './assets/Narendran.png';
 import logo2 from './assets/logo2.png';
-import principalImg from './assets/principal.png';
+import principalImg from './assets/principal.jpeg';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 import ExplorePage from './ExplorePage';
 import AdminPage from './AdminPage';
@@ -1405,6 +1406,15 @@ export default function App() {
       return;
     }
 
+    if (id === 'admin') {
+      setCurrentPage('admin');
+      setActiveSection('admin');
+      setMobileMenuOpen(false);
+      setShowAdminPortal(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     setCurrentPage('main');
 
     // Allow state change and DOM rendering to complete if switching back from explore page
@@ -1484,18 +1494,11 @@ export default function App() {
     return text;
   };
 
-  /**
-   * Returns the best available image for a committee member.
-   * Priority: local asset → DB image_url → dicebear initials avatar
-   *
-   * TO ADD A PHOTO: save the image to src/assets/, import it at the top of App.tsx,
-   * then uncomment the matching line below.
-   */
   const getMemberImage = (name: string, imageUrl?: string): string => {
     // ── ORGANIZING: Chief Patrons ──────────────────────────────────────
     if (name.includes('Sundar Ramakrishnan') || name.includes('R. Sundar')) return logo2;
     if (name.includes('S. Narendran')) return narendranImg;
-
+    if (name.includes('Balamurugan'))    return balamurgunImg;
     // ── ORGANIZING: General Chairs ────────────────────────────────────
     if (name.includes('Soundarrajan')) return principalImg;
     // if (name.includes('P. Sakthivel'))   return sakthivelImg;    // add sakthivel.png to assets
@@ -1507,7 +1510,7 @@ export default function App() {
     // if (name.includes('Kingsy Grace'))   return kingsyImg;        // add kingsy.png to assets
 
     // ── ORGANIZING: Finance ───────────────────────────────────────────
-    // if (name.includes('Balamurugan'))    return balamuruganImg;   // add balamurugan.png to assets
+    //    // add balamurugan.png to assets
     // if (name.includes('Praveenkumar') || name.includes('Praveen Kumar')) return praveenkumarImg;
 
     // ── ORGANIZING: Publication ───────────────────────────────────────
@@ -1780,9 +1783,10 @@ export default function App() {
             src={acLogo} 
             alt="AECTSD Logo" 
             onClick={() => {
-              setShowAdminPortal(true);
-              setAdminRegMode(false);
-              setAdminError(null);
+              setCurrentPage('admin');
+              setActiveSection('admin');
+              setShowAdminPortal(false);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className="ac-logo-img"
           />
@@ -1938,7 +1942,16 @@ export default function App() {
               setPricing={setPricing}
               setStats={setStats}
               setCoordinators={setCoordinators}
-              onClose={() => setCurrentPage('main')}
+              onClose={() => {
+                // Auto logout when leaving admin page
+                localStorage.removeItem('srec_logged_in_admin');
+                setAdminUser(null);
+                setAdminUsername('');
+                setAdminPassword('');
+                setAdminTab('overview');
+                setCurrentPage('main');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
             />
           </motion.div>
         ) : (
@@ -4714,7 +4727,20 @@ export default function App() {
                       </div>
                     </div>
                     
-                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                      <button 
+                        onClick={() => {
+                          setCurrentPage('admin');
+                          setShowAdminPortal(false);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className="btn btn-primary"
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 1rem', fontSize: '0.85rem', background: 'linear-gradient(135deg, #0f52ba 0%, #06b6d4 100%)', border: 'none', color: '#ffffff', borderRadius: '0.5rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(15,82,186,0.25)' }}
+                      >
+                        <ExternalLink size={14} />
+                        Open Full Dashboard
+                      </button>
+
                       <button 
                         onClick={() => fetchDbData().then(() => alert('Database content refreshed!'))}
                         className="btn btn-secondary"
@@ -6314,7 +6340,7 @@ export default function App() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handleSendChatMessage();
+            handleSendChatMessage(chatInput);
           } }
           className="nexus-chat-input-area"
         >
