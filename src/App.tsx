@@ -432,11 +432,19 @@ export default function App() {
 
   // Nexus Agent Chatbot states
   const [showNexusChat, setShowNexusChat] = useState<boolean>(false);
+  const [showNexusTooltip, setShowNexusTooltip] = useState<boolean>(true);
   const [chatMessages] = useState<{ sender: 'agent' | 'user'; text: string }[]>([
     { sender: 'agent', text: 'Hello! I am Nexus, your SREC Conference AI Assistant. Ask me anything about AECTSD 2027 registration, important dates, key tracks, speakers, or workshops!' }
   ]);
   const [chatInput, setChatInput] = useState<string>('');
   const [isAgentTyping] = useState<boolean>(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowNexusTooltip(false);
+    }, 6000); // Auto-hide tooltip after 6 seconds
+    return () => clearTimeout(timer);
+  }, []);
 
   // Admin Portal authentication handlers
   const handleAdminAuth = async (e: React.FormEvent) => {
@@ -6248,7 +6256,7 @@ export default function App() {
 
       {/* Nexus Agent Chatbot Floating Widget */}
       <><div className="nexus-chat-container">
-  {!showNexusChat && (
+  {!showNexusChat && showNexusTooltip && (
     <div className="nexus-chat-tooltip">
       <span className="nexus-chat-tooltip-dot">●</span>
       How can I help you?
