@@ -47,6 +47,7 @@ import balamurgunImg from './assets/balamurugan.jpg';
 import narendranImg from './assets/narendran.png';
 import logo2 from './assets/logo2.png';
 import principalImg from './assets/principal.jpeg';
+import kingsyImg from './assets/kingsy.png';
 import sakthivelImg from './assets/Sakthivel.png';
 import radhaImg from './assets/Screenshot 2026-07-10 142828.png';
 import brindhaImg from './assets/Screenshot 2026-07-10 142835.png';
@@ -1506,7 +1507,6 @@ export default function App() {
   };
 
   const getMemberImage = (name: string, imageUrl?: string): string => {
-    // ── ORGANIZING: Chief Patrons ──────────────────────────────────────
     if (name.includes('Sundar Ramakrishnan') || name.includes('R. Sundar')) return logo2;
     if (name.includes('S. Narendran')) return narendranImg;
     if (name.includes('Balamurugan'))    return balamurgunImg;
@@ -1514,16 +1514,9 @@ export default function App() {
     if (name.includes('P. Sakthivel'))   return sakthivelImg;    
     if (name.includes('S. Radha'))       return radhaImg;        
     if (name.includes('S. Brindha'))     return brindhaImg;       
-
-    // ── ORGANIZING: Conference / Session Chairs ────────────────────────
+    if (name.includes('Kingsy Grace'))   return kingsyImg;
+    //if (name.includes('Praveen Kumar')) return praveenkumarImg;
     if (name.includes('Karpagam')) return karpagamImg;
-    // if (name.includes('Kingsy Grace'))   return kingsyImg;        // add kingsy.png to assets
-
-    // ── ORGANIZING: Finance ───────────────────────────────────────────
-    //    // add balamurugan.png to assets
-    // if (name.includes('Praveenkumar') || name.includes('Praveen Kumar')) return praveenkumarImg;
-
-    // ── ORGANIZING: Publication ───────────────────────────────────────
     if (name.includes('Jansi')) return jansiImg;
     // if (name.includes('Aravindaguru'))   return aravindaguruImg;
     // if (name.includes('Sowntharya'))     return sowntharImage;
