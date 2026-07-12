@@ -2516,16 +2516,18 @@ export default function App() {
                       .map((member, mIdx) => {
                           return (
                             <div key={mIdx} className="member-profile-card">
-                              <div className="member-avatar-wrapper">
-                                <img 
-                                  src={getMemberImage(member.name, member.image_url)}
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0f52ba,06b6d4,f58220`;
-                                  }}
-                                  alt={member.name}
-                                  className="member-avatar-img"
-                                />
-                              </div>
+                              {['patrons', 'general-chairs', 'executive', 'finance'].includes(activeSubcommittee) && (
+                                <div className="member-avatar-wrapper">
+                                  <img 
+                                    src={getMemberImage(member.name, member.image_url)}
+                                    onError={(e) => {
+                                      (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0f52ba,06b6d4,f58220`;
+                                    }}
+                                    alt={member.name}
+                                    className="member-avatar-img"
+                                  />
+                                </div>
+                              )}
                               <span className="member-role-badge">
                                 {member.role && member.role !== 'Member' ? member.role : 'Organizing Member'}
                               </span>
