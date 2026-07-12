@@ -2281,16 +2281,6 @@ export default function App() {
                       .filter((member) => member.category === 'steering')
                       .map((member, mIdx) => (
                         <div key={mIdx} className="member-profile-card">
-                          <div className="member-avatar-wrapper">
-                            <img 
-                              src={getMemberImage(member.name, member.image_url)}
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0f52ba,06b6d4,f58220`;
-                              }}
-                              alt={member.name}
-                              className="member-avatar-img"
-                            />
-                          </div>
                           <span className="member-role-badge">
                             {member.role || 'Steering Committee Member'}
                           </span>
@@ -2562,16 +2552,6 @@ export default function App() {
                   <div className="centered-flex-grid">
                     {committeeMembers.filter(m => m.category === 'advisory').map((adviser, index) => (
                       <div key={index} className="member-profile-card">
-                        <div className="member-avatar-wrapper">
-                          <img 
-                            src={getMemberImage(adviser.name, adviser.image_url)}
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(adviser.name)}&backgroundColor=0f52ba,06b6d4,f58220`;
-                            }}
-                            alt={adviser.name}
-                            className="member-avatar-img"
-                          />
-                        </div>
                         <span className="member-role-badge">{adviser.role || 'Advisory Member'}</span>
                         <h4 className="member-name">{adviser.name}</h4>
                         <p className="member-desc">{adviser.desc}</p>
