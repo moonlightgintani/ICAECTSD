@@ -45,7 +45,7 @@ import karpagamImg from './assets/karpagam.png';
 import jansiImg from './assets/jansi.png';
 import balamurgunImg from './assets/balamurugan.jpg';
 import narendranImg from './assets/Narendran.png';
-import logo2 from './assets/logo2.png';
+import logo5 from './assets/logo5.jpg';
 import principalImg from './assets/principal.jpeg';
 import kingsyImg from './assets/Kingsy.png';
 import sakthivelImg from './assets/Sakthivel.png';
@@ -1507,7 +1507,7 @@ export default function App() {
   };
 
   const getMemberImage = (name: string, imageUrl?: string): string => {
-    if (name.includes('Sundar Ramakrishnan') || name.includes('R. Sundar')) return logo2;
+    if (name.includes('Sundar Ramakrishnan') || name.includes('R. Sundar')) return logo5;
     if (name.includes('S. Narendran')) return narendranImg;
     if (name.includes('Balamurugan'))    return balamurgunImg;
     if (name.includes('Soundarrajan')) return principalImg;
@@ -2506,7 +2506,7 @@ export default function App() {
                       .map((member, mIdx) => {
                           return (
                             <div key={mIdx} className="member-profile-card">
-                              {['patrons', 'general-chairs', 'executive', 'finance'].includes(activeSubcommittee) && (
+                              {['patrons', 'general-chairs', 'executive'].includes(activeSubcommittee) && (
                                 <div className="member-avatar-wrapper">
                                   <img 
                                     src={getMemberImage(member.name, member.image_url)}
