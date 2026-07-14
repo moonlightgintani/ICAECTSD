@@ -37,7 +37,7 @@ import {
 } from 'lucide-react';
 import { SrecLogo } from './components/SrecLogo';
 import Footer from './components/Footer';
-import acLogo from './assets/ac.png';
+import acLogo from './assets/logo.jpeg';
 import srecLogo from './assets/srec-logo.png';
 import chatbotIcon from './assets/chatbot.gif';
 import heroBg from './assets/hero.png';
