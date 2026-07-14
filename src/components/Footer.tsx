@@ -8,7 +8,7 @@ interface FooterProps {
 
 import logo1 from '../assets/logo1.png';
 import logo2 from '../assets/logo2.png';
-import logo3 from '../assets/logo3.png';
+import logo3 from '../assets/logo.jpeg';
 
 export default function Footer({ srecUrl, copyright, sponsor }: FooterProps) {
   const defaultCopyright = `© 2027  Sri Ramakrishna Engineering College. All rights reserved.`;
