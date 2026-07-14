@@ -1514,7 +1514,7 @@ export default function App() {
     if (name.includes('P. Sakthivel'))   return sakthivelImg;    
     if (name.includes('S. Radha'))       return radhaImg;        
     if (name.includes('S. Brindha'))     return brindhaImg;       
-    if (name.includes('kingsy Grace'))   return kingsyImg;
+    if (name.toLowerCase().includes('kingsy'))   return kingsyImg;
     //if (name.includes('Praveen Kumar')) return praveenkumarImg;
     if (name.includes('Karpagam')) return karpagamImg;
     if (name.includes('Jansi')) return jansiImg;
