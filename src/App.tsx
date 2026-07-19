@@ -69,7 +69,7 @@ const NAV_ITEMS = [
   { id: 'call-for-papers', label: 'Tracks' },
   { id: 'speakers', label: 'Speakers' },
   { id: 'important-dates', label: 'Schedule' },
-  { id: 'registration', label: 'Payment Details' },
+  { id: 'registration', label: 'Registration' },
   { id: 'call-for-papers-main', label: 'Call For Papers' },
   { id: 'guidelines', label: 'Guidelines & Policies' },
   { id: 'committee', label: 'Committee' },
