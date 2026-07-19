@@ -3149,25 +3149,13 @@ export default function AdminPage({
                   <h4 style={{ fontWeight: 700, color: '#0b4f30', marginBottom: '1rem', borderBottom: '2px solid #e2e8f0', paddingBottom: '0.25rem' }}>🇮🇳 National Fees (INR ₹)</h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                     {[
-                      { key: 'base_conf_student_ieee_inr', label: 'Conf: Student (IEEE Member)' },
-                      { key: 'base_conf_student_non_ieee_inr', label: 'Conf: Student (Non-IEEE)' },
-                      { key: 'base_conf_prof_ieee_inr', label: 'Conf: Academician / Pro (IEEE)' },
-                      { key: 'base_conf_prof_non_ieee_inr', label: 'Conf: Academician / Pro (Non-IEEE)' },
-                      { key: 'base_tut_student_ieee_inr', label: 'Tutorial: Student (IEEE Member)' },
-                      { key: 'base_tut_student_non_ieee_inr', label: 'Tutorial: Student (Non-IEEE)' },
-                      { key: 'base_tut_prof_ieee_inr', label: 'Tutorial: Academician / Pro (IEEE)' },
-                      { key: 'base_tut_prof_non_ieee_inr', label: 'Tutorial: Academician / Pro (Non-IEEE)' },
-                      { key: 'base_both_student_ieee_inr', label: 'Both: Student (IEEE Member)' },
-                      { key: 'base_both_student_non_ieee_inr', label: 'Both: Student (Non-IEEE)' },
-                      { key: 'base_both_prof_ieee_inr', label: 'Both: Academician / Pro (IEEE)' },
-                      { key: 'base_both_prof_non_ieee_inr', label: 'Both: Academician / Pro (Non-IEEE)' },
-                      { key: 'base_listener_student_ieee_inr', label: 'Listener: Student (IEEE Member)' },
-                      { key: 'base_listener_student_non_ieee_inr', label: 'Listener: Student (Non-IEEE)' },
-                      { key: 'base_listener_prof_ieee_inr', label: 'Listener: Academician / Pro (IEEE)' },
-                      { key: 'base_listener_prof_non_ieee_inr', label: 'Listener: Academician / Pro (Non-IEEE)' }
+                      { key: 'base_conf_student_ieee_inr', label: 'IEEE Student Member' },
+                      { key: 'base_conf_student_non_ieee_inr', label: 'Non-IEEE Student Member' },
+                      { key: 'base_conf_prof_ieee_inr', label: 'IEEE Member' },
+                      { key: 'base_conf_prof_non_ieee_inr', label: 'Non-IEEE Member' }
                     ].map(field => (
                       <div key={field.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{field.label}</span>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{field.label}</span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                           <span style={{ fontWeight: 700 }}>₹</span>
                           <input
@@ -3187,21 +3175,13 @@ export default function AdminPage({
                   <h4 style={{ fontWeight: 700, color: '#f59e0b', marginBottom: '1rem', borderBottom: '2px solid #e2e8f0', paddingBottom: '0.25rem' }}>🌎 International Fees (USD $)</h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                     {[
-                      { key: 'base_conf_student_ieee_usd', label: 'Conf: Student (IEEE Member)' },
-                      { key: 'base_conf_student_non_ieee_usd', label: 'Conf: Student (Non-IEEE)' },
-                      { key: 'base_conf_prof_ieee_usd', label: 'Conf: Academician / Pro (IEEE)' },
-                      { key: 'base_conf_prof_non_ieee_usd', label: 'Conf: Academician / Pro (Non-IEEE)' },
-                      { key: 'base_tut_student_ieee_usd', label: 'Tutorial: Student (IEEE Member)' },
-                      { key: 'base_tut_student_non_ieee_usd', label: 'Tutorial: Student (Non-IEEE)' },
-                      { key: 'base_tut_prof_ieee_usd', label: 'Tutorial: Academician / Pro (IEEE)' },
-                      { key: 'base_tut_prof_non_ieee_usd', label: 'Tutorial: Academician / Pro (Non-IEEE)' },
-                      { key: 'base_both_student_ieee_usd', label: 'Both: Student (IEEE Member)' },
-                      { key: 'base_both_student_non_ieee_usd', label: 'Both: Student (Non-IEEE)' },
-                      { key: 'base_both_prof_ieee_usd', label: 'Both: Academician / Pro (IEEE)' },
-                      { key: 'base_both_prof_non_ieee_usd', label: 'Both: Academician / Pro (Non-IEEE)' }
+                      { key: 'base_conf_student_ieee_usd', label: 'IEEE Student Member' },
+                      { key: 'base_conf_student_non_ieee_usd', label: 'Non-IEEE Student Member' },
+                      { key: 'base_conf_prof_ieee_usd', label: 'IEEE Member' },
+                      { key: 'base_conf_prof_non_ieee_usd', label: 'Non-IEEE Member' }
                     ].map(field => (
                       <div key={field.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{field.label}</span>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{field.label}</span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                           <span style={{ fontWeight: 700 }}>$</span>
                           <input
