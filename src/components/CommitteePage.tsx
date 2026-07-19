@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ArrowLeft } from 'lucide-react';
 
@@ -14,6 +14,7 @@ interface CommitteeMember {
 interface CommitteePageProps {
   committeeMembers: CommitteeMember[];
   info: Record<string, string>;
+  getMemberImage?: (name: string, imageUrl?: string) => string;
   onBackToHome: () => void;
 }
 
@@ -48,7 +49,8 @@ const getMemberImage = (name: string, imageUrl?: string): string => {
   return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=58111a,eab308&textColor=ffffff`;
 };
 
-export default function CommitteePage({ committeeMembers, info, onBackToHome }: CommitteePageProps) {
+export default function CommitteePage({ committeeMembers, info, getMemberImage: getMemberImageProp, onBackToHome }: CommitteePageProps) {
+  const resolveMemberImage = getMemberImageProp || getMemberImage;
   const [committeeTab, setCommitteeTab] = useState<'steering' | 'organizing' | 'advisory'>('organizing');
   const [activeSubcommittee, setActiveSubcommittee] = useState<string>('patrons');
   const [subcommitteeDropdownOpen, setSubcommitteeDropdownOpen] = useState(false);
@@ -68,6 +70,33 @@ export default function CommitteePage({ committeeMembers, info, onBackToHome }: 
     { id: 'hospitality', label: 'Hospitality' },
     { id: 'members', label: 'General Members' }
   ];
+
+  // IntersectionObserver for auto-highlighting tabs while scrolling
+  useEffect(() => {
+    if (committeeTab !== 'organizing') return;
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-10% 0px -75% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id.replace('sub-', '');
+          setActiveSubcommittee(id);
+        }
+      });
+    }, observerOptions);
+
+    SUBCOMMITTEES.forEach((sub) => {
+      const element = document.getElementById(`sub-${sub.id}`);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, [committeeTab, committeeMembers]);
 
   const getTabHeader = () => {
     switch (committeeTab) {
@@ -221,7 +250,7 @@ export default function CommitteePage({ committeeMembers, info, onBackToHome }: 
                         flexShrink: 0
                       }}>
                         <img 
-                          src={getMemberImage(member.name, member.image_url)}
+                          src={resolveMemberImage(member.name, member.image_url)}
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=58111a,eab308&textColor=ffffff`;
                           }}
@@ -242,7 +271,7 @@ export default function CommitteePage({ committeeMembers, info, onBackToHome }: 
             )}
 
             {committeeTab === 'organizing' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%' }}>
                   {/* Subcommittee Buttons: Desktop Layout */}
                   <div className="desktop-subcommittee-nav" style={{ flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem', width: '100%', alignItems: 'center' }}>
@@ -252,7 +281,10 @@ export default function CommitteePage({ committeeMembers, info, onBackToHome }: 
                         <button
                           key={group.id}
                           type="button"
-                          onClick={() => setActiveSubcommittee(group.id)}
+                          onClick={() => {
+                            setActiveSubcommittee(group.id);
+                            document.getElementById(`sub-${group.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }}
                           className="subcommittee-btn"
                           style={{
                             background: activeSubcommittee === group.id ? '#58111A' : '#ffffff',
@@ -278,7 +310,10 @@ export default function CommitteePage({ committeeMembers, info, onBackToHome }: 
                         <button
                           key={group.id}
                           type="button"
-                          onClick={() => setActiveSubcommittee(group.id)}
+                          onClick={() => {
+                            setActiveSubcommittee(group.id);
+                            document.getElementById(`sub-${group.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }}
                           className="subcommittee-btn"
                           style={{
                             background: activeSubcommittee === group.id ? '#58111A' : '#ffffff',
@@ -353,6 +388,7 @@ export default function CommitteePage({ committeeMembers, info, onBackToHome }: 
                               onClick={() => {
                                 setActiveSubcommittee(group.id);
                                 setSubcommitteeDropdownOpen(false);
+                                document.getElementById(`sub-${group.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                               }}
                               style={{
                                 width: '100%',
@@ -376,92 +412,124 @@ export default function CommitteePage({ committeeMembers, info, onBackToHome }: 
                     </AnimatePresence>
                   </div>
 
-                  {/* Active Panel Members Grid */}
-                  <div className="centered-flex-grid" style={{ gap: '2rem', justifyContent: 'center' }}>
-                    {committeeMembers
-                      .filter((member) => {
+                  {/* All Subcommittees Rendered Vertically Stacked (Scrollable) */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem', width: '100%' }}>
+                    {SUBCOMMITTEES.map((sub) => {
+                      const members = committeeMembers.filter((member) => {
                         if (member.category !== 'organizing') return false;
-                        switch (activeSubcommittee) {
+                        const role = (member.role || '').toLowerCase();
+                        switch (sub.id) {
                           case 'patrons':
-                            return member.role === 'Chief Patron' || member.role === 'Patron';
+                            return role.includes('patron');
                           case 'general-chairs':
-                            return member.role === 'General Chair';
+                            return role.includes('general chair') || role.includes('general co-chair');
                           case 'executive':
-                            return member.role === 'Conference Chair' || member.role === 'Conference Chair & Organizing Secretary' || member.role === 'Session Chair';
+                            return role.includes('executive committee') || role.includes('organizing chair') || role.includes('organizing co-chair') || role.includes('organizing secretary') || role.includes('joint secretary') || role.includes('session chair') || role.includes('convenor') || role.includes('conference chair') || role.includes('co-convenor');
                           case 'finance':
-                            return member.role === 'Program and Finance Chair' || member.role === 'Finance Committee Member' || member.role === 'Program and Finance Committee Member';
+                            return role.includes('finance');
                           case 'publication':
-                            return member.role === 'Publication Chair' || member.role === 'Publication Committee Member';
+                            return role.includes('publication');
                           case 'arrangements':
-                            return member.role === 'Local Arrangements Chair' || member.role === 'Local Arrangements Committee Member';
+                            return role.includes('arrangement') || role.includes('reception') || role.includes('local arrangements') || role.includes('venue');
                           case 'registration':
-                            return member.role === 'Registration Chair' || member.role === 'Registration Committee Member';
+                            return role.includes('registration');
                           case 'tutorials':
-                            return member.role === 'Conference Pre-Tutorial Sessions Chair' || member.role === 'Pre-Tutorial Sessions Committee Member';
+                            return role.includes('tutorial') || role.includes('workshop');
                           case 'review':
-                            return member.role === 'Technical Review Committee Convener' || member.role === 'Technical Review Committee Member';
+                            return role.includes('review') || role.includes('scrutiny');
                           case 'outreach':
-                            return member.role === 'Outreach and Promotion Committee Convener' || member.role === 'Outreach and Promotion Committee Member';
+                            return role.includes('outreach') || role.includes('promotion') || role.includes('publicity');
                           case 'website':
-                            return member.role === 'Website and Social Media Promotion Committee Chair' || member.role === 'Website and Social Media Promotion Committee Member';
+                            return role.includes('website') || role.includes('social media');
                           case 'hospitality':
-                            return member.role === 'Hospitality Committee Convener' || member.role === 'Hospitality Committee Member';
+                            return role.includes('hospitality');
                           case 'members':
-                            return member.role === 'Member' || !member.role;
+                            return role === 'member' || role === '';
                           default:
                             return false;
                         }
-                      })
-                      .map((member, mIdx) => (
+                      });
+
+                      if (members.length === 0) return null;
+
+                      return (
                         <div 
-                          key={mIdx} 
-                          className="committee-profile-card"
-                          style={{
-                            background: '#ffffff',
-                            border: '1px solid #cbd5e1',
-                            borderRadius: '1.5rem',
-                            padding: '2.25rem 2rem',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                            width: '280px',
-                            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.03)',
-                            transition: 'all 0.3s ease'
+                          key={sub.id} 
+                          id={`sub-${sub.id}`} 
+                          style={{ 
+                            scrollMarginTop: '120px',
+                            background: 'rgba(255, 255, 255, 0.45)',
+                            borderRadius: '2rem',
+                            padding: '2.5rem 1.5rem',
+                            border: '1px solid rgba(88, 17, 26, 0.04)',
+                            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.01)'
                           }}
                         >
-                          <div style={{
-                            width: '140px',
-                            height: '140px',
-                            borderRadius: '50%',
-                            border: '2px solid #eab308',
-                            padding: '4px',
-                            marginBottom: '1.25rem',
-                            overflow: 'hidden',
-                            background: '#ffffff',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0
+                          <h4 style={{ 
+                            fontSize: '1.45rem', 
+                            color: '#58111A', 
+                            fontWeight: 800, 
+                            textAlign: 'center', 
+                            marginBottom: '2rem' 
                           }}>
-                            <img 
-                              src={getMemberImage(member.name, member.image_url)}
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=58111a,eab308&textColor=ffffff`;
-                              }}
-                              alt={member.name}
-                              style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
-                            />
-                          </div>
-                          <h4 style={{ fontSize: '1.2rem', color: '#58111A', fontWeight: 800, margin: '0 0 0.75rem' }}>{member.name}</h4>
-                          <div style={{ color: '#475569', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', lineHeight: '1.4' }}>
-                            {member.role && member.role !== 'Organizing Member' && member.role !== 'Member' && (
-                              <div style={{ fontWeight: 700, color: '#091d36' }}>{member.role}</div>
-                            )}
-                            <div style={{ fontWeight: 500 }}>{renderFormattedDesc(member.desc)}</div>
+                            The {sub.label} Committee
+                          </h4>
+
+                          <div className="centered-flex-grid" style={{ gap: '2rem', justifyContent: 'center' }}>
+                            {members.map((member, mIdx) => (
+                              <div 
+                                key={mIdx} 
+                                className="committee-profile-card"
+                                style={{
+                                  background: '#ffffff',
+                                  border: '1px solid #cbd5e1',
+                                  borderRadius: '1.5rem',
+                                  padding: '2.25rem 2rem',
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  textAlign: 'center',
+                                  width: '280px',
+                                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.03)',
+                                  transition: 'all 0.3s ease'
+                                }}
+                              >
+                                <div style={{
+                                  width: '140px',
+                                  height: '140px',
+                                  borderRadius: '50%',
+                                  border: '2px solid #eab308',
+                                  padding: '4px',
+                                  marginBottom: '1.25rem',
+                                  overflow: 'hidden',
+                                  background: '#ffffff',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  flexShrink: 0
+                                }}>
+                                  <img 
+                                    src={resolveMemberImage(member.name, member.image_url)}
+                                    onError={(e) => {
+                                      (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=58111a,eab308&textColor=ffffff`;
+                                    }}
+                                    alt={member.name}
+                                    style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                                  />
+                                </div>
+                                <h4 style={{ fontSize: '1.2rem', color: '#58111A', fontWeight: 800, margin: '0 0 0.75rem' }}>{member.name}</h4>
+                                <div style={{ color: '#475569', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', lineHeight: '1.4' }}>
+                                  {member.role && member.role !== 'Organizing Member' && member.role !== 'Member' && (
+                                    <div style={{ fontWeight: 700, color: '#091d36' }}>{member.role}</div>
+                                  )}
+                                  <div style={{ fontWeight: 500 }}>{renderFormattedDesc(member.desc)}</div>
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </div>
-                      ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -504,7 +572,7 @@ export default function CommitteePage({ committeeMembers, info, onBackToHome }: 
                         flexShrink: 0
                       }}>
                         <img 
-                          src={getMemberImage(adviser.name, adviser.image_url)}
+                          src={resolveMemberImage(adviser.name, adviser.image_url)}
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(adviser.name)}&backgroundColor=58111a,eab308&textColor=ffffff`;
                           }}

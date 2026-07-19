@@ -1607,6 +1607,7 @@ export default function App() {
   };
 
   const getMemberImage = (name: string, imageUrl?: string): string => {
+    if (imageUrl && imageUrl !== 'no_file' && imageUrl !== '') return imageUrl;
     if (name.includes('Sundar Ramakrishnan') || name.includes('R. Sundar')) return logo5;
     if (name.includes('S. Narendran')) return narendranImg;
     if (name.includes('Balamurugan')) return balamurgunImg;
@@ -1664,11 +1665,7 @@ export default function App() {
     // if (name.includes('Jagadeeswari'))       return jagadeeswariImg;
     // if (name.includes('N. Sathish Kumar'))   return sathishKumarImg;
 
-    // ── Fallback: DB image_url (Supabase hosted), then dicebear initials ──
-    if (imageUrl && imageUrl.startsWith('http') && !imageUrl.includes('drive.google.com')) {
-      return imageUrl;
-    }
-    return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=0f52ba,06b6d4,f58220`;
+    return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=091d36,f58220&textColor=ffffff`;
   };
 
   function handleSendChatMessage(_text: string): void {
@@ -1993,15 +1990,16 @@ export default function App() {
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.35, ease: 'easeInOut' }}
           >
-            <CommitteePage
-              committeeMembers={committeeMembers}
-              info={info}
-              onBackToHome={() => {
-                setCurrentPage('main');
-                setActiveSection('home');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-            />
+             <CommitteePage
+               committeeMembers={committeeMembers}
+               info={info}
+               getMemberImage={getMemberImage}
+               onBackToHome={() => {
+                 setCurrentPage('main');
+                 setActiveSection('home');
+                 window.scrollTo({ top: 0, behavior: 'smooth' });
+               }}
+             />
           </motion.div>
         ) : (currentPage === 'guidelines' || currentPage === 'payment') ? (
           <motion.div
