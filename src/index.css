@@ -2585,10 +2585,18 @@ h2, h3, h4, h5, h6, td {
 
 @media (max-width: 767px) {
   .floating-logo-banner {
-    flex-direction: column !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
     border-radius: 20px !important;
-    padding: 1.5rem 2rem !important;
+    padding: 0.85rem 1.25rem !important;
     gap: 1.25rem !important;
+    flex-wrap: wrap !important;
+    max-width: 95% !important;
+  }
+  .floating-logo-banner img {
+    height: 38px !important;
+    width: auto !important;
   }
   .logo-separator {
     display: none !important;
