@@ -394,7 +394,6 @@ export default function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [currentPage, setCurrentPage] = useState<'main' | 'explore' | 'admin' | 'committee' | 'guidelines' | 'payment'>('main');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [desktopNavDropdownOpen, setDesktopNavDropdownOpen] = useState(false);
   const [showCmtToast, setShowCmtToast] = useState(true);
 
   // Database content states
@@ -1802,7 +1801,7 @@ export default function App() {
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="mobile-nav-drawer"
             >
-              {NAV_ITEMS.map((item, idx) => (
+              {NAV_ITEMS.map((item: any, idx) => (
                 <motion.div
                   key={item.id}
                   initial={{ opacity: 0, x: -16 }}
