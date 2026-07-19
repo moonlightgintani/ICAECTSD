@@ -2582,3 +2582,15 @@ h2, h3, h4, h5, h6, td {
   border-color: #eab308 !important;
   box-shadow: 0 15px 35px rgba(88, 17, 26, 0.08) !important;
 }
+
+@media (max-width: 767px) {
+  .floating-logo-banner {
+    flex-direction: column !important;
+    border-radius: 20px !important;
+    padding: 1.5rem 2rem !important;
+    gap: 1.25rem !important;
+  }
+  .logo-separator {
+    display: none !important;
+  }
+}

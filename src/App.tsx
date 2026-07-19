@@ -2128,6 +2128,7 @@ export default function App() {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
+                  className="floating-logo-banner"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -2144,9 +2145,9 @@ export default function App() {
                   }}
                 >
                   <img src={srecLogo} alt="Sri Ramakrishna Engineering College" style={{ height: '55px', width: 'auto', display: 'block' }} />
-                  <div style={{ height: '36px', width: '1px', background: '#cbd5e1' }} />
+                  <div className="logo-separator" style={{ height: '36px', width: '1px', background: '#cbd5e1' }} />
                   <img src={logo1} alt="AECTSD Logo" style={{ height: '55px', width: 'auto', display: 'block' }} />
-                  <div style={{ height: '36px', width: '1px', background: '#cbd5e1' }} />
+                  <div className="logo-separator" style={{ height: '36px', width: '1px', background: '#cbd5e1' }} />
                   <img src={logo2} alt="SNR Trust" style={{ height: '60px', width: 'auto', display: 'block' }} />
                 </motion.div>
 
