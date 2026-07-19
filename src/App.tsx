@@ -72,7 +72,8 @@ const NAV_ITEMS = [
   { id: 'call-for-papers-main', label: 'Call For Papers' },
   { id: 'committee', label: 'Committee' },
   { id: 'explore', label: 'Explore' },
-  { id: 'location', label: 'Venue' }
+  { id: 'location', label: 'Venue' },
+  { id: 'admin', label: 'Admin' }
 ];
 
 
