@@ -220,7 +220,7 @@ export const renderFormattedDesc = (descText: string | undefined | null) => {
     <>
       {parts.map((part, index) => {
         if (phrases.includes(part)) {
-          return <span key={index} style={{ whiteSpace: 'nowrap' }}>{part}</span>;
+          return <span key={index}>{part}</span>;
         }
         return part;
       })}
@@ -393,7 +393,6 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<'main' | 'explore' | 'admin' | 'committee' | 'guidelines' | 'payment'>('main');
   const [initialRegTab, setInitialRegTab] = useState<'submission' | 'fees' | 'form'>('submission');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showCmtToast, setShowCmtToast] = useState(true);
   const isSeparatePage = (id: string) => ['committee', 'guidelines', 'call-for-papers-main', 'registration', 'explore'].includes(id);
 
   // Database content states
@@ -493,12 +492,7 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowCmtToast(false);
-    }, 8000); // Auto-hide CMT toast after 8 seconds
-    return () => clearTimeout(timer);
-  }, []);
+
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -6034,95 +6028,7 @@ export default function App() {
               </motion.div>
             )}
           </AnimatePresence>
-
-          <AnimatePresence>
-            {showCmtToast && (
-              <motion.div
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 100 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                style={{
-                  position: 'fixed',
-                  bottom: '95px',
-                  right: '20px',
-                  width: '320px',
-                  background: '#58111A',
-                  borderBottom: '4px solid #d4af37',
-                  borderRadius: '12px',
-                  padding: '1.25rem',
-                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3)',
-                  zIndex: 9998,
-                  display: 'flex',
-                  gap: '1rem',
-                  alignItems: 'start'
-                }}
-              >
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '10px',
-                  background: '#d4af37',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  boxShadow: '0 2px 8px rgba(212, 175, 55, 0.3)'
-                }}>
-                  <FileText size={20} style={{ color: '#58111A' }} />
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', textAlign: 'left', flexGrow: 1, paddingRight: '0.75rem' }}>
-                  <span style={{ color: '#f59e0b', fontSize: '0.78rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                    CMT PORTAL LIVE
-                  </span>
-                  <p style={{ color: '#f8fafc', fontSize: '0.8rem', margin: 0, lineHeight: 1.4 }}>
-                    Submissions are now open. Upload your manuscript for peer review.
-                  </p>
-                  <div style={{ marginTop: '0.5rem' }}>
-                    <a
-                      href={info.cmt_link || 'https://cmt3.research.microsoft.com/aectsd2025'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        background: '#ffffff',
-                        color: '#58111A',
-                        padding: '0.4rem 0.85rem',
-                        borderRadius: '20px',
-                        fontSize: '0.72rem',
-                        fontWeight: 700,
-                        textDecoration: 'none',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.25rem',
-                        transition: 'all 0.2s ease',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                      }}
-                    >
-                      SUBMIT PAPER &rarr;
-                    </a>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => setShowCmtToast(false)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: 'rgba(255, 255, 255, 0.6)',
-                    cursor: 'pointer',
-                    padding: 0,
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px'
-                  }}
-                  title="Close"
-                >
-                  <X size={16} />
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence></>
+        </>
       )}
     </div>
   );

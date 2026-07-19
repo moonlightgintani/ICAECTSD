@@ -34,7 +34,7 @@ export const renderFormattedDesc = (descText: string | undefined | null) => {
     <>
       {parts.map((part, index) => {
         if (phrases.includes(part)) {
-          return <span key={index} style={{ whiteSpace: 'nowrap' }}>{part}</span>;
+          return <span key={index}>{part}</span>;
         }
         return part;
       })}
