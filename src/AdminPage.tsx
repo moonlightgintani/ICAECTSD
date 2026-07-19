@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Shield, 
   Database, 
@@ -174,6 +174,37 @@ export default function AdminPage({
   const [editingCoordinator, setEditingCoordinator] = useState<any | null>(null);
   const [editingStat, setEditingStat] = useState<any | null>(null);
   const [uploadingSpeakerImage, setUploadingSpeakerImage] = useState<boolean>(false);
+
+  // Local state copy of pricing configuration
+  const [localPricing, setLocalPricing] = useState<Record<string, number>>({});
+  const [isSavingPricing, setIsSavingPricing] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pricing) {
+      setLocalPricing(pricing);
+    }
+  }, [pricing]);
+
+  const handleSaveAllPricing = async () => {
+    setIsSavingPricing(true);
+    try {
+      if (isSupabaseConfigured && supabase) {
+        // Upsert all pricing rules in parallel
+        const promises = Object.entries(localPricing).map(([key, val]) => 
+          supabase.from('registration_pricing').upsert({ key, value: val })
+        );
+        const results = await Promise.all(promises);
+        const firstError = results.find(r => r.error);
+        if (firstError) throw firstError.error;
+      }
+      setPricing(localPricing);
+      alert('All pricing configurations saved successfully to database!');
+    } catch (err: any) {
+      alert('Save pricing failed: ' + (err.message || err));
+    } finally {
+      setIsSavingPricing(false);
+    }
+  };
 
   // Refresh helper
   const handleRefresh = async () => {
@@ -2585,14 +2616,14 @@ export default function AdminPage({
         {/* TAB 4: Registration Pricing (NEW CRUD) */}
         {activeTab === 'pricing' && (
           <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.02)' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Fee Pricing Configuration</h3>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem', color: '#0b4f30' }}>Fee Pricing Configuration</h3>
             <p style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '1.5rem' }}>Configure national fees (INR ₹) and international fees (USD $) directly.</p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                 {/* National Pricing (INR) */}
                 <div>
-                  <h4 style={{ fontWeight: 700, color: '#0f52ba', marginBottom: '1rem', borderBottom: '2px solid #e2e8f0', paddingBottom: '0.25rem' }}>🇮🇳 National Fees (INR ₹)</h4>
+                  <h4 style={{ fontWeight: 700, color: '#0b4f30', marginBottom: '1rem', borderBottom: '2px solid #e2e8f0', paddingBottom: '0.25rem' }}>🇮🇳 National Fees (INR ₹)</h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {[
                       { key: 'national_student_ieee', label: 'Student / Scholar (IEEE Member)' },
@@ -2611,8 +2642,8 @@ export default function AdminPage({
                           <span style={{ fontWeight: 700 }}>₹</span>
                           <input
                             type="number"
-                            value={pricing[field.key] || 0}
-                            onChange={(e) => handleSavePricingRule(field.key, Number(e.target.value))}
+                            value={localPricing[field.key] || 0}
+                            onChange={(e) => setLocalPricing(prev => ({ ...prev, [field.key]: Number(e.target.value) }))}
                             style={{ width: '100px', padding: '0.35rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', textAlign: 'right', fontWeight: 700 }}
                           />
                         </div>
@@ -2642,8 +2673,8 @@ export default function AdminPage({
                           <span style={{ fontWeight: 700 }}>$</span>
                           <input
                             type="number"
-                            value={pricing[field.key] || 0}
-                            onChange={(e) => handleSavePricingRule(field.key, Number(e.target.value))}
+                            value={localPricing[field.key] || 0}
+                            onChange={(e) => setLocalPricing(prev => ({ ...prev, [field.key]: Number(e.target.value) }))}
                             style={{ width: '100px', padding: '0.35rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', textAlign: 'right', fontWeight: 700 }}
                           />
                         </div>
@@ -2651,6 +2682,33 @@ export default function AdminPage({
                     ))}
                   </div>
                 </div>
+              </div>
+
+              {/* Explicit Save button */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '2rem', borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem' }}>
+                <button
+                  type="button"
+                  onClick={handleSaveAllPricing}
+                  disabled={isSavingPricing}
+                  style={{
+                    background: 'linear-gradient(135deg, #0b4f30 0%, #198754 100%)',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    padding: '0.75rem 2rem',
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(11, 79, 48, 0.25)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    transition: 'opacity 0.2s',
+                    opacity: isSavingPricing ? 0.7 : 1
+                  }}
+                >
+                  {isSavingPricing ? 'Saving Configurations...' : 'Save Pricing Configurations'}
+                </button>
               </div>
             </div>
           </div>
