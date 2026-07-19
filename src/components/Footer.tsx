@@ -6,7 +6,7 @@ interface FooterProps {
   sponsor?: string;
 }
 
-import logo1 from '../assets/logo1.png';
+import srecLogo from '../assets/srec-logo.png';
 import logo2 from '../assets/logo2.png';
 import logo3 from '../assets/logo.png';
 
@@ -48,12 +48,12 @@ export default function Footer({ srecUrl, copyright, sponsor }: FooterProps) {
           alignItems: 'center',
           maxWidth: '800px',
           margin: '0 auto',
-          gap: '1rem',
+          gap: '2.5rem',
           flexWrap: 'wrap'
         }}>
-          <img src={logo1} alt="Logo 1" style={{ height: '60px', objectFit: 'contain' }} />
-          <img src={logo2} alt="Logo 2" style={{ height: '60px', objectFit: 'contain' }} />
-          <img src={logo3} alt="Logo 3" style={{ height: '60px', objectFit: 'contain' }} />
+          <img src={srecLogo} alt="SREC Logo" style={{ height: '60px', objectFit: 'contain' }} />
+          <img src={logo3} alt="AECTSD Logo" style={{ height: '60px', objectFit: 'contain' }} />
+          <img src={logo2} alt="SNR Trust Logo" style={{ height: '60px', objectFit: 'contain' }} />
         </div>
       </div>
     </footer>

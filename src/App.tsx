@@ -1732,7 +1732,7 @@ export default function App() {
             title="AECTSD 2027"
             style={{ display: 'inline-flex', cursor: 'pointer', textDecoration: 'none', flexShrink: 0, flexGrow: 0 }}
           >
-            <img src={acLogo} alt="AECTSD Logo" style={{ height: '48px', width: 'auto', display: 'block', borderRadius: '50%' }} />
+            <img src={acLogo} alt="AECTSD Logo" style={{ height: '60px', width: 'auto', display: 'block', borderRadius: '50%' }} />
           </a>
 
           {/* Desktop Navigation Links */}
