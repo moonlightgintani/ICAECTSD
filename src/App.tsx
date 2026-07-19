@@ -1,26 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  motion, 
-  AnimatePresence, 
-  useScroll, 
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
   useSpring,
   useTransform
 } from 'framer-motion';
-import { 
-  Calendar, 
-  MapPin, 
-  Clock, 
-  Download, 
-  ExternalLink, 
-  Mail, 
-  Phone, 
-  User, 
-  BookOpen, 
-  Award, 
-  Terminal, 
-  ChevronRight, 
-  ChevronDown,
-  CheckCircle, 
+import {
+  Calendar,
+  MapPin,
+  Clock,
+  Download,
+  ExternalLink,
+  Mail,
+  Phone,
+  User,
+  BookOpen,
+  Award,
+  Terminal,
+  ChevronRight,
+  CheckCircle,
   Menu,
   X,
   FileText,
@@ -255,12 +254,12 @@ async function sha256(message: string): Promise<string> {
   // Fallback pure JS SHA-256 implementation for insecure HTTP contexts
   function sha256_fallback(str: string): string {
     const rotateRight = (n: number, x: number) => (x >>> n) | (x << (32 - n));
-    
+
     const hash = [
       0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
       0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
     ];
-    
+
     const k = [
       0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
       0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -274,14 +273,14 @@ async function sha256(message: string): Promise<string> {
 
     const msgBuffer = new TextEncoder().encode(str);
     const words = new Uint32Array(((msgBuffer.length + 8) >> 6) + 1 << 4);
-    
+
     for (let i = 0; i < msgBuffer.length; i++) {
       words[i >> 2] |= msgBuffer[i] << (24 - (i % 4) * 8);
     }
-    
+
     words[msgBuffer.length >> 2] |= 0x80 << (24 - (msgBuffer.length % 4) * 8);
     words[words.length - 1] = msgBuffer.length * 8;
-    
+
     for (let i = 0; i < words.length; i += 16) {
       const w = new Uint32Array(64);
       for (let j = 0; j < 16; j++) w[j] = words[i + j];
@@ -290,9 +289,9 @@ async function sha256(message: string): Promise<string> {
         const s1 = rotateRight(17, w[j - 2]) ^ rotateRight(19, w[j - 2]) ^ (w[j - 2] >>> 10);
         w[j] = (w[j - 16] + s0 + w[j - 7] + s1) | 0;
       }
-      
+
       let [a, b, c, d, e, f, g, h] = hash;
-      
+
       for (let j = 0; j < 64; j++) {
         const S1 = rotateRight(6, e) ^ rotateRight(11, e) ^ rotateRight(25, e);
         const ch = (e & f) ^ (~e & g);
@@ -300,7 +299,7 @@ async function sha256(message: string): Promise<string> {
         const S0 = rotateRight(2, a) ^ rotateRight(13, a) ^ rotateRight(22, a);
         const maj = (a & b) ^ (a & c) ^ (b & c);
         const temp2 = (S0 + maj) | 0;
-        
+
         h = g;
         g = f;
         f = e;
@@ -310,7 +309,7 @@ async function sha256(message: string): Promise<string> {
         b = a;
         a = (temp1 + temp2) | 0;
       }
-      
+
       hash[0] = (hash[0] + a) | 0;
       hash[1] = (hash[1] + b) | 0;
       hash[2] = (hash[2] + c) | 0;
@@ -320,7 +319,7 @@ async function sha256(message: string): Promise<string> {
       hash[6] = (hash[6] + g) | 0;
       hash[7] = (hash[7] + h) | 0;
     }
-    
+
     return Array.from(hash).map(h => (h >>> 0).toString(16).padStart(8, '0')).join('');
   }
 
@@ -397,7 +396,7 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [desktopNavDropdownOpen, setDesktopNavDropdownOpen] = useState(false);
   const [showCmtToast, setShowCmtToast] = useState(true);
-  
+
   // Database content states
   const [departments, setDepartments] = useState<Department[]>([]);
   const [committeeMembers, setCommitteeMembers] = useState<CommitteeMember[]>([]);
@@ -472,7 +471,7 @@ export default function App() {
   const [regPaymentUrl, setRegPaymentUrl] = useState<string>('');
   const [regRegisterForTour, setRegRegisterForTour] = useState<boolean>(false);
   const [regPreferredTourPlace, setRegPreferredTourPlace] = useState<string>('');
-  
+
   // Submitting states
   const [regSubmitting, setRegSubmitting] = useState<boolean>(false);
   const [regSuccess, setRegSuccess] = useState<boolean>(false);
@@ -492,13 +491,6 @@ export default function App() {
     const timer = setTimeout(() => {
       setShowNexusTooltip(false);
     }, 6000); // Auto-hide tooltip after 6 seconds
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowCmtToast(false);
-    }, 8000); // Auto-hide CMT toast after 8 seconds
     return () => clearTimeout(timer);
   }, []);
 
@@ -940,7 +932,7 @@ export default function App() {
   const calculateTotalFees = () => {
     const suffix = isIndian ? 'inr' : 'usd';
     let baseKey = 'base_';
-    
+
     // Choose base pricing option
     if (regOption === 'conference') {
       baseKey += `conf_${isStudent ? 'student' : 'prof'}_${isIeeeMember ? 'ieee' : 'non_ieee'}_${suffix}`;
@@ -954,7 +946,7 @@ export default function App() {
         baseKey += `listener_${isStudent ? 'student' : 'prof'}_${isIeeeMember ? 'ieee' : 'non_ieee'}_inr`;
       } else {
         // Fallback for international listeners
-        baseKey += `conf_student_ieee_usd`; 
+        baseKey += `conf_student_ieee_usd`;
       }
     }
 
@@ -975,7 +967,7 @@ export default function App() {
       base_listener_student_non_ieee_inr: 5000,
       base_listener_prof_ieee_inr: 4500,
       base_listener_prof_non_ieee_inr: 6000,
-      
+
       base_conf_student_ieee_usd: 150,
       base_conf_student_non_ieee_usd: 200,
       base_conf_prof_ieee_usd: 200,
@@ -1041,7 +1033,7 @@ export default function App() {
     const templateId = info.emailjs_template_id;
     const publicKey = info.emailjs_public_key;
     const recipient = info.emailjs_recipient || info.secretariat_email || 'aectsd2027@srec.ac.in';
-    
+
     if (serviceId && templateId && publicKey) {
       try {
         let receiptBase64 = '';
@@ -1053,7 +1045,7 @@ export default function App() {
             reader.onerror = error => reject(error);
           });
         }
-        
+
         const bill = calculateTotalFees();
         const templateParams = {
           to_email: recipient,
@@ -1093,7 +1085,7 @@ export default function App() {
 
   const handleRegistrationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!regPaperId || !regAuthorName || !regPaperTitle || !regEmail || !regPhone || (!regScreenshot && !regPaymentUrl)) {
       setShowRegValidation(true);
       setRegError('Please fill out all required fields and upload the payment screenshot or enter a valid proof URL.');
@@ -1103,9 +1095,9 @@ export default function App() {
     setRegSubmitting(true);
     setRegError(null);
     setShowRegValidation(false);
-    
+
     const fullPhone = `${regPhoneCode} ${regPhone}`;
-    
+
     try {
       if (!isSupabaseConfigured || !supabase) {
         // Mock success if Supabase is offline
@@ -1137,7 +1129,7 @@ export default function App() {
         }, 1200);
         return;
       }
-      
+
       // Upload screenshot to Supabase Storage or use manual URL.
       let screenshotUrl = 'no_file';
       let screenshotFileName = 'no_file';
@@ -1152,7 +1144,7 @@ export default function App() {
           const { data: uploadData, error: uploadError } = await supabase.storage
             .from('payment-proofs')
             .upload(safeFileName, regScreenshot, { cacheControl: '3600', upsert: false });
-          
+
           if (uploadError) {
             console.warn('File upload failed, saving filename only:', uploadError.message);
             screenshotUrl = screenshotFileName;
@@ -1180,7 +1172,7 @@ export default function App() {
         register_for_tour: regRegisterForTour,
         preferred_tour_place: regPreferredTourPlace || null
       });
-      
+
       if (error) {
         throw error;
       }
@@ -1190,7 +1182,7 @@ export default function App() {
 
       setRegSuccess(true);
       fetchDbData();
-      
+
     } catch (err: unknown) {
       const errorMsg = err instanceof Error ? err.message : 'Failed to submit registration. Please try again.';
       console.error('Registration submission error:', err);
@@ -1234,7 +1226,7 @@ export default function App() {
     // 1. Load localStorage updates first so they render immediately
     const localDepts = localStorage.getItem('srec_offline_departments');
     if (localDepts) setDepartments(JSON.parse(localDepts));
-    
+
     const localCommittee = localStorage.getItem('srec_offline_committee');
     if (localCommittee) setCommitteeMembers(JSON.parse(localCommittee));
 
@@ -1535,8 +1527,8 @@ export default function App() {
   // Framer Motion Animation Presets
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }
     }
@@ -1586,12 +1578,12 @@ export default function App() {
   const getMemberImage = (name: string, imageUrl?: string): string => {
     if (name.includes('Sundar Ramakrishnan') || name.includes('R. Sundar')) return logo5;
     if (name.includes('S. Narendran')) return narendranImg;
-    if (name.includes('Balamurugan'))    return balamurgunImg;
+    if (name.includes('Balamurugan')) return balamurgunImg;
     if (name.includes('Soundarrajan')) return principalImg;
-    if (name.includes('P. Sakthivel'))   return sakthivelImg;    
-    if (name.includes('S. Radha'))       return radhaImg;        
-    if (name.includes('S. Brindha'))     return brindhaImg;       
-    if (name.toLowerCase().includes('kingsy'))   return kingsyImg;
+    if (name.includes('P. Sakthivel')) return sakthivelImg;
+    if (name.includes('S. Radha')) return radhaImg;
+    if (name.includes('S. Brindha')) return brindhaImg;
+    if (name.toLowerCase().includes('kingsy')) return kingsyImg;
     //if (name.includes('Praveen Kumar')) return praveenkumarImg;
     if (name.includes('Karpagam')) return karpagamImg;
     if (name.includes('Jansi')) return jansiImg;
@@ -1666,7 +1658,7 @@ export default function App() {
 
       {/* Top Page Progress Indicator */}
       {currentPage !== 'admin' && (
-        <motion.div 
+        <motion.div
           style={{
             scaleX,
             position: 'fixed',
@@ -1677,7 +1669,7 @@ export default function App() {
             background: 'linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%)',
             transformOrigin: '0%',
             zIndex: 125
-          }} 
+          }}
         />
       )}
 
@@ -1688,7 +1680,7 @@ export default function App() {
             <div className="announcement-marquee-container">
               <span className="announcement-marquee-text">
                 {renderBannerContent(
-                  info.announcement_text || 
+                  info.announcement_text ||
                   "📢 Call for Papers! Mark your calendars: The Call for Papers for AECTSD 2027 opens on 15th December 2026. Start preparing your submission"
                 )}
               </span>
@@ -1700,9 +1692,9 @@ export default function App() {
       {/* Header / Navbar */}
       {currentPage !== 'admin' && (
         <header className="main-header">
-          <a 
-            href={info.srec_url || "https://srec.ac.in/"} 
-            target="_blank" 
+          <a
+            href={info.srec_url || "https://srec.ac.in/"}
+            target="_blank"
             rel="noopener noreferrer"
             title="Sri Ramakrishna Engineering College"
             style={{ display: 'inline-flex', cursor: 'pointer', textDecoration: 'none', flexShrink: 0, flexGrow: 0 }}
@@ -1722,7 +1714,7 @@ export default function App() {
                   >
                     {item.label}
                     {activeSection === item.id && (
-                      <motion.div 
+                      <motion.div
                         layoutId="activeIndicator"
                         style={{
                           position: 'absolute',
@@ -1744,16 +1736,16 @@ export default function App() {
           {/* AC Logo and Mobile Navigation Toggle Container */}
           <div className="header-right-container" style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
             {/* Contact Us Button on Desktop */}
-            <button 
+            <button
               onClick={() => scrollToSection('contact-us')}
               className="contact-btn-nav desktop-contact-btn"
             >
               CONTACT US
             </button>
 
-            <img 
-              src={acLogo} 
-              alt="Admin Portal" 
+            <img
+              src={acLogo}
+              alt="Admin Portal"
               onClick={() => {
                 setCurrentPage('admin');
                 setActiveSection('admin');
@@ -1764,7 +1756,7 @@ export default function App() {
             />
 
             {/* Mobile Navigation Toggle */}
-            <button 
+            <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               style={{
                 background: 'transparent',
@@ -1798,86 +1790,86 @@ export default function App() {
           </div>
         </header>
       )}
- 
+
       {/* Mobile Drawer Menu */}
       {currentPage !== 'admin' && (
         <AnimatePresence>
           {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -30 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="mobile-nav-drawer"
-          >
-            {NAV_ITEMS.map((item, idx) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ 
-                  duration: 0.3, 
-                  delay: idx * 0.035, 
-                  ease: [0.16, 1, 0.3, 1] 
-                }}
-                style={{ width: '100%' }}
-              >
-                {item.external ? (
-                  <a
-                    href={
-                      item.id === 'ieee-sb'
-                        ? (info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/")
-                        : (info.snr_url || info.snr_trust_url || "https://www.snrst.org")
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      color: '#1e293b',
-                      textAlign: 'left',
-                      padding: '0.75rem 1rem',
-                      borderRadius: '0.5rem',
-                      fontSize: '1rem',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      width: '100%',
-                      textDecoration: 'none',
-                      display: 'block',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {navLabelMap[item.id] || item.label}
-                  </a>
-                ) : (
-                  <button
-                    onClick={() => {
-                      scrollToSection(item.id);
-                      setMobileMenuOpen(false);
-                    }}
-                    style={{
-                      background: activeSection === item.id ? 'rgba(59, 130, 246, 0.08)' : 'transparent',
-                      border: 'none',
-                      color: activeSection === item.id ? '#3b82f6' : '#1e293b',
-                      textAlign: 'left',
-                      padding: '0.75rem 1rem',
-                      borderRadius: '0.5rem',
-                      fontSize: '1rem',
-                      fontWeight: activeSection === item.id ? '700' : '600',
-                      cursor: 'pointer',
-                      width: '100%',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    {navLabelMap[item.id] || item.label}
-                  </button>
-                )}
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="mobile-nav-drawer"
+            >
+              {NAV_ITEMS.map((item, idx) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    delay: idx * 0.035,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                  style={{ width: '100%' }}
+                >
+                  {item.external ? (
+                    <a
+                      href={
+                        item.id === 'ieee-sb'
+                          ? (info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/")
+                          : (info.snr_url || info.snr_trust_url || "https://www.snrst.org")
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#1e293b',
+                        textAlign: 'left',
+                        padding: '0.75rem 1rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '1rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        width: '100%',
+                        textDecoration: 'none',
+                        display: 'block',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {navLabelMap[item.id] || item.label}
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        scrollToSection(item.id);
+                        setMobileMenuOpen(false);
+                      }}
+                      style={{
+                        background: activeSection === item.id ? 'rgba(59, 130, 246, 0.08)' : 'transparent',
+                        border: 'none',
+                        color: activeSection === item.id ? '#3b82f6' : '#1e293b',
+                        textAlign: 'left',
+                        padding: '0.75rem 1rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '1rem',
+                        fontWeight: activeSection === item.id ? '700' : '600',
+                        cursor: 'pointer',
+                        width: '100%',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {navLabelMap[item.id] || item.label}
+                    </button>
+                  )}
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       )}
 
       <AnimatePresence mode="wait">
@@ -1978,7 +1970,7 @@ export default function App() {
               isSupabaseConfigured={isSupabaseConfigured}
               supabase={supabase}
               fetchDbData={fetchDbData}
-              
+
               regPaperId={regPaperId}
               setRegPaperId={setRegPaperId}
               regPaperTitle={regPaperTitle}
@@ -2009,7 +2001,7 @@ export default function App() {
               setShowRegValidation={setShowRegValidation}
               paymentTab={paymentTab}
               setPaymentTab={setPaymentTab}
-              
+
               isIndian={isIndian}
               setIsIndian={setIsIndian}
               isStudent={isStudent}
@@ -2026,7 +2018,7 @@ export default function App() {
               setVirtualMode={setVirtualMode}
               regOption={regOption}
               setRegOption={setRegOption}
-              
+
               handleRegistrationSubmit={handleRegistrationSubmit}
               calculateTotalFees={calculateTotalFees}
               onBackToHome={() => {
@@ -2044,1445 +2036,1445 @@ export default function App() {
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.35, ease: 'easeInOut' }}
           >
-          {/* Hero Section */}
-          <section 
-            id="home" 
-            style={{
-              minHeight: '100vh',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              position: 'relative',
-              padding: 'calc(8rem + var(--banner-height, 0px)) 1.5rem 6rem',
-              textAlign: 'center',
-              overflow: 'hidden'
-            }}
-          >
-            {/* Parallax Hero Background Image */}
-            <motion.div 
+            {/* Hero Section */}
+            <section
+              id="home"
               style={{
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'relative',
+                padding: 'calc(8rem + var(--banner-height, 0px)) 1.5rem 6rem',
+                textAlign: 'center',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Parallax Hero Background Image */}
+              <motion.div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: `url(${info.hero_background_image || heroBg})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  y: heroBgY,
+                  scale: heroBgScale,
+                  zIndex: 0
+                }}
+              />
+
+              {/* Dark overlay for exact styling match */}
+              <div style={{
                 position: 'absolute',
                 inset: 0,
-                backgroundImage: `url(${info.hero_background_image || heroBg})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                y: heroBgY,
-                scale: heroBgScale,
-                zIndex: 0
-              }}
-            />
+                background: 'linear-gradient(to bottom, rgba(44, 8, 13, 0.97) 0%, rgba(88, 17, 26, 0.92) 50%, rgba(44, 8, 13, 0.99) 100%)',
+                zIndex: 1
+              }} />
 
-            {/* Dark overlay for exact styling match */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(to bottom, rgba(44, 8, 13, 0.97) 0%, rgba(88, 17, 26, 0.92) 50%, rgba(44, 8, 13, 0.99) 100%)',
-              zIndex: 1
-            }} />
+              <div style={{ position: 'relative', zIndex: 2, maxWidth: '960px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: '960px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          
-          {/* Sponsoring/Organizing Logos Floating Banner */}
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '1.5rem',
-              background: '#fcfbf7', // light cream
-              border: '1px solid rgba(255, 255, 255, 0.8)',
-              borderRadius: '16px',
-              padding: '0.85rem 1.75rem',
-              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.35)',
-              margin: '0 auto 1rem',
-              flexWrap: 'wrap',
-              maxWidth: '90%'
-            }}
-          >
-            <img src={logo1} alt="IEEE India Council" style={{ height: '36px', width: 'auto', display: 'block' }} />
-            <div style={{ height: '24px', width: '1px', background: '#cbd5e1' }} />
-            <img src={logo2} alt="IEEE Madras Section" style={{ height: '40px', width: 'auto', display: 'block' }} />
-            <div style={{ height: '24px', width: '1px', background: '#cbd5e1' }} />
-            <img src={srecLogo} alt="Sri Ramakrishna Engineering College" style={{ height: '36px', width: 'auto', display: 'block' }} />
-          </motion.div>
-
-          {/* Banner Subtext */}
-          <motion.span 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            style={{
-              color: '#fbbf24', // yellow/gold
-              fontSize: '0.82rem',
-              fontWeight: 800,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              display: 'block',
-              marginBottom: '2.5rem',
-              textShadow: '0 2px 4px rgba(0,0,0,0.6)'
-            }}
-          >
-            AN IEEE INDIA COUNCIL CONFERENCE
-          </motion.span>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="glass-card"
-            style={{
-              padding: '3rem 2.5rem',
-              borderRadius: '1.5rem',
-              background: 'rgba(88, 17, 26, 0.45)', // dark burgundy tint
-              backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              boxShadow: '0 20px 45px rgba(0, 0, 0, 0.3)',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '1.5rem',
-              color: '#ffffff'
-            }}
-          >
-            {/* Title */}
-            <h1 className="hero-title" style={{ margin: 0, fontSize: '3rem', fontWeight: 800, background: 'linear-gradient(135deg, #ffffff 40%, #fbbf24 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 1.2 }}>
-              {info.hero_title || 'Welcome to ICAECTSD 2027'}
-            </h1>
-
-            {/* Subtitle */}
-            <p style={{ fontSize: '1.25rem', fontWeight: 600, color: '#ffffff', opacity: 0.95, maxWidth: '800px', margin: 0, lineHeight: 1.5, textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>
-              {info.hero_subtitle || 'Second IEEE International Conference on Advances in Engineering and Computing Technologies for Sustainable Development (ICAECTSD) 2027'}
-            </p>
-
-            {/* Date & Location */}
-            <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', margin: '0.5rem 0 1rem', fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Calendar size={20} style={{ color: '#fbbf24' }} />
-                <span>{renderDateWithSuperscript(info.event_date_display || '17th and 18th December 2027')}</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <MapPin size={20} style={{ color: '#fbbf24' }} />
-                <span>{info.event_location_display || 'Sri Ramakrishna Engineering College, Coimbatore, Tamilnadu, India'}</span>
-              </div>
-            </div>
-
-            {/* Countdown Clock */}
-            <div className="countdown-container" style={{ width: '100%', maxWidth: '600px', padding: '1rem', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '1rem', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#ffffff' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: '#fbbf24', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
-                <Clock size={16} />
-                <span>{info.hero_countdown_title || 'Conference Countdown'}</span>
-              </div>
-              <div className="countdown-row" style={{ color: '#ffffff' }}>
-                {[
-                  { label: info.label_days || 'Days', value: timeLeft.days },
-                  { label: info.label_hours || 'Hours', value: timeLeft.hours },
-                  { label: info.label_mins || 'Minutes', value: timeLeft.minutes },
-                  { label: info.label_secs || 'Seconds', value: timeLeft.seconds }
-                ].map((t, idx) => (
-                  <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <span className="countdown-val" style={{ display: 'inline-flex', overflow: 'hidden', height: '2.5rem', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontSize: '1.8rem', fontWeight: 800 }}>
-                      <AnimatePresence mode="popLayout" initial={false}>
-                        <motion.span
-                          key={t.value}
-                          initial={{ y: 20, opacity: 0 }}
-                          animate={{ y: 0, opacity: 1 }}
-                          exit={{ y: -20, opacity: 0 }}
-                          transition={{ duration: 0.2, ease: 'easeOut' }}
-                          style={{ display: 'inline-block' }}
-                        >
-                          {String(t.value).padStart(2, '0')}
-                        </motion.span>
-                      </AnimatePresence>
-                    </span>
-                    <span className="countdown-lbl" style={{ color: '#94a3b8', fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 600 }}>
-                      {t.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', width: '100%', marginTop: '0.5rem' }}>
-              <button 
-                onClick={() => scrollToSection('paper-submission')} 
-                className="btn btn-primary" 
-                style={{ 
-                  fontSize: '0.95rem', 
-                  padding: '0.8rem 1.75rem', 
-                  background: '#fbbf24', 
-                  color: '#58111A', 
-                  fontWeight: 800, 
-                  border: 'none', 
-                  borderRadius: '30px',
-                  boxShadow: '0 4px 12px rgba(251, 191, 36, 0.25)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
-                }}
-              >
-                <FileText size={18} />
-                {info.hero_btn_submit || 'Submit Paper'}
-              </button>
-              <button 
-                onClick={() => {
-                  alert('Brochure download starting...');
-                  const link = document.createElement('a');
-                  link.href = '#';
-                  link.setAttribute('download', 'ICAECTSD_2027_Brochure.pdf');
-                  document.body.appendChild(link);
-                }} 
-                className="btn btn-secondary" 
-                style={{ 
-                  fontSize: '0.95rem', 
-                  padding: '0.8rem 1.75rem', 
-                  background: 'rgba(255, 255, 255, 0.08)', 
-                  border: '1px solid rgba(255, 255, 255, 0.2)', 
-                  color: '#ffffff',
-                  borderRadius: '30px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
-                }}
-              >
-                <Download size={18} />
-                Download Brochure
-              </button>
-              <button 
-                onClick={() => setShowCalcModal(true)} 
-                className="btn btn-secondary" 
-                style={{ 
-                  fontSize: '0.95rem', 
-                  padding: '0.8rem 1.75rem', 
-                  background: 'rgba(255, 255, 255, 0.08)', 
-                  border: '1px solid rgba(255, 255, 255, 0.2)', 
-                  color: '#ffffff',
-                  borderRadius: '30px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
-                }}
-              >
-                {info.hero_btn_register || 'Calculate Fees'}
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="section" style={{ background: '#faf9f6', borderBottom: '1px solid #e2e8f0' }}>
-        <div className="container">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '4rem' }}
-          >
-            <h2 style={{ fontSize: '2.5rem', color: 'var(--text-primary)', marginTop: '0.5rem', fontWeight: 800 }}>
-              {info.logo_title || "IEEE AECTSD 2027"}
-            </h2>
-            <div style={{ height: '3.5px', width: '80px', background: '#f58220', margin: '1rem auto 0', borderRadius: '2px' }} />
-          </motion.div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem', marginBottom: '4rem', alignItems: 'start' }} className="grid-2-col-desktop-custom">
-            {/* Left Column: Badges & Details */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', textAlign: 'left' }}
-            >
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                <span style={{ background: '#fef3c7', color: '#b45309', padding: '0.35rem 0.85rem', borderRadius: '2rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Theme
-                </span>
-                <span style={{ background: '#eff6ff', color: '#1e40af', padding: '0.35rem 0.85rem', borderRadius: '2rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  {info.conf_record_no ? `IEEE Conference Record: #${info.conf_record_no}` : "IEEE Conference"}
-                </span>
-              </div>
-
-              <h3 style={{ fontSize: '1.85rem', color: '#091d36', fontWeight: 800, lineHeight: 1.3, margin: '0.5rem 0 0' }}>
-                {info.hero_subtitle || "Net-Zero Cyber-Physical Intelligence: AI, 6G & Sustainable Electronics"}
-              </h3>
-
-              {info.about_conference?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
-                <p key={idx} style={{ color: 'var(--text-secondary)', margin: 0, textAlign: 'justify', lineHeight: '1.75', fontSize: '0.95rem' }}>
-                  {para}
-                </p>
-              ))}
-
-              <div style={{
-                marginTop: '1rem',
-                padding: '1.25rem',
-                background: '#ffffff',
-                border: '1px solid #cbd5e1',
-                borderRadius: '0.75rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem',
-                flexWrap: 'wrap',
-                justifyContent: 'space-between',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '280px' }}>
-                  <Award size={24} style={{ flexShrink: 0, color: '#0f52ba' }} />
-                  <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                    The proceedings of the previous edition (<strong>AECTSD 2025</strong>) have been successfully published in <strong>IEEE Xplore</strong> and indexed in <strong>Scopus</strong>.
-                  </p>
-                </div>
-                <a 
-                  href="https://ieee-aectsd.srec.ac.in" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="btn btn-secondary" 
-                  style={{ 
-                    fontSize: '0.85rem', 
-                    padding: '0.5rem 1.25rem', 
-                    background: 'rgba(59, 130, 246, 0.08)', 
-                    border: '1px solid rgba(59, 130, 246, 0.2)', 
-                    color: '#0f52ba', 
+                {/* Sponsoring/Organizing Logos Floating Banner */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  style={{
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '0.35rem',
-                    textDecoration: 'none',
-                    fontWeight: 700
+                    justifyContent: 'center',
+                    gap: '1.5rem',
+                    background: '#fcfbf7', // light cream
+                    border: '1px solid rgba(255, 255, 255, 0.8)',
+                    borderRadius: '16px',
+                    padding: '0.85rem 1.75rem',
+                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.35)',
+                    margin: '0 auto 1rem',
+                    flexWrap: 'wrap',
+                    maxWidth: '90%'
                   }}
                 >
-                  Visit Previous Edition
-                </a>
-              </div>
-            </motion.div>
+                  <img src={logo1} alt="IEEE India Council" style={{ height: '36px', width: 'auto', display: 'block' }} />
+                  <div style={{ height: '24px', width: '1px', background: '#cbd5e1' }} />
+                  <img src={logo2} alt="IEEE Madras Section" style={{ height: '40px', width: 'auto', display: 'block' }} />
+                  <div style={{ height: '24px', width: '1px', background: '#cbd5e1' }} />
+                  <img src={srecLogo} alt="Sri Ramakrishna Engineering College" style={{ height: '36px', width: 'auto', display: 'block' }} />
+                </motion.div>
 
-            {/* Right Column: 2x2 Grid of 4 Cards */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem', width: '100%' }}
-            >
-              {[
-                {
-                  title: "Global Knowledge Exchange",
-                  desc: "Bringing together researchers and professionals from academia, industry and government.",
-                  icon: Globe,
-                  color: '#e0f2fe',
-                  iconColor: '#0369a1'
-                },
-                {
-                  title: "Industry Collaboration",
-                  desc: "Promoting partnerships among industries, startups, innovators and IEEE communities.",
-                  icon: Handshake,
-                  color: '#fef3c7',
-                  iconColor: '#b45309'
-                },
-                {
-                  title: "Sustainable Engineering",
-                  desc: "Encouraging green technologies and engineering solutions aligned with Net-Zero goals.",
-                  icon: Leaf,
-                  color: '#dcfce7',
-                  iconColor: '#15803d'
-                },
-                {
-                  title: "Future-Ready Society",
-                  desc: "Advancing AI, 6G, CPS and sustainable electronics for smart and resilient communities.",
-                  icon: Sparkles,
-                  color: '#f3e8ff',
-                  iconColor: '#6b21a8'
-                }
-              ].map((card, cidx) => {
-                const CardIcon = card.icon;
-                return (
-                  <div 
-                    key={cidx} 
-                    className="about-grid-card"
-                    style={{
-                      background: '#ffffff',
-                      border: '1px solid #cbd5e1',
-                      borderRadius: '1rem',
-                      padding: '1.75rem',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '1rem',
-                      textAlign: 'left',
-                      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.03)',
-                      position: 'relative'
-                    }}
-                  >
-                    <div style={{
-                      width: '45px',
-                      height: '45px',
-                      borderRadius: '50%',
-                      background: card.color,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: card.iconColor
-                    }}>
-                      <CardIcon size={22} />
-                    </div>
-                    <h4 style={{ fontSize: '1.05rem', color: '#091d36', fontWeight: 800, margin: 0 }}>{card.title}</h4>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>{card.desc}</p>
-                  </div>
-                );
-              })}
-            </motion.div>
-          </div>
-
-          {/* SREC Trust & Institution Details */}
-          <div className="grid-2-col" style={{ gap: '2rem' }}>
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="glass-card"
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                <BookOpen size={24} style={{ color: '#0f52ba' }} />
-                <h3 style={{ fontSize: '1.5rem', color: '#091d36', fontWeight: 700 }}>{info.about_card_conf_title || "About the Trust"}</h3>
-              </div>
-              {info.about_trust?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
-                <p key={idx} style={{ color: 'var(--text-secondary)', marginBottom: '1rem', textIndent: '2rem', textAlign: 'justify', lineHeight: '1.7', fontSize: '0.95rem' }}>
-                  {para}
-                </p>
-              ))}
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="glass-card"
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                <Award size={24} style={{ color: '#f58220' }} />
-                <h3 style={{ fontSize: '1.5rem', color: '#091d36', fontWeight: 700 }}>{info.about_card_inst_title || "About the Institution"}</h3>
-              </div>
-              {info.about_institution?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
-                <p key={idx} style={{ color: 'var(--text-secondary)', marginBottom: '1rem', textIndent: '2rem', textAlign: 'justify', lineHeight: '1.7', fontSize: '0.95rem' }}>
-                  {para}
-                </p>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Stats Bar */}
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid-4-col"
-            style={{ marginTop: '4rem' }}
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                variants={fadeInUp}
-                className="glass-card"
-                style={{ textAlign: 'center', padding: '1.5rem' }}
-              >
-                <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#3b82f6', fontFamily: 'var(--font-heading)' }}>
-                  <CounterUp target={stat.number} />
-                </div>
-                <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Committee page is now standalone at src/components/CommitteePage.tsx */}
-
-      {/* Speakers Section */}
-      <section id="speakers" className="section">
-        <div className="container">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '4rem' }}
-          >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.speakers_badge}</span>
-            <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.speakers_title}</h2>
-            <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
-            {info.speakers_desc && (
-              <p style={{ color: 'var(--text-secondary)', marginTop: '1.5rem', maxWidth: '800px', marginInline: 'auto', lineHeight: '1.7', fontSize: '0.95rem' }}>
-                {info.speakers_desc}
-              </p>
-            )}
-          </motion.div>
-
-          <div className="grid-3-col" style={{ gap: '2rem' }}>
-            {speakers.map((speaker, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-card"
-                style={{ 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  alignItems: 'center', 
-                  textAlign: 'center',
-                  borderTop: `4px solid ${speaker.color}`
-                }}
-              >
-                <div style={{ 
-                  width: '90px', 
-                  height: '90px', 
-                  borderRadius: '50%', 
-                  background: 'rgba(0, 0, 0, 0.02)', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
-                  border: `2px solid ${speaker.color}`,
-                  marginBottom: '1.25rem',
-                  overflow: 'hidden'
-                }}>
-                  {speaker.image_url ? (
-                    <img 
-                      src={speaker.image_url} 
-                      alt={speaker.name} 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                    />
-                  ) : (
-                    <User size={45} style={{ color: speaker.color }} />
-                  )}
-                </div>
-                <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '0.25rem' }}>{speaker.name}</h3>
-                <span style={{ fontSize: '0.85rem', color: speaker.color, fontWeight: 700, textTransform: 'uppercase' }}>{speaker.title}</span>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '0.5rem 0 1.25rem' }}>{speaker.role}</p>
-                <div style={{ 
-                  background: 'rgba(0, 0, 0, 0.02)', 
-                  border: '1px solid rgba(0, 0, 0, 0.06)',
-                  padding: '1rem', 
-                  borderRadius: '0.5rem', 
-                  width: '100%', 
-                  marginTop: 'auto' 
-                }}>
-                  <span style={{ display: 'block', fontSize: '0.75rem', color: '#d97706', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>{info.speakers_keynote_label}</span>
-                  <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 600 }}>"{speaker.talk}"</span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Call For Papers Section */}
-      <section id="call-for-papers" className="section" style={{ background: '#faf9f6', borderBottom: '1px solid #e2e8f0' }}>
-        <div className="container">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '3rem' }}
-          >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.cfp_badge || 'CALL FOR PAPERS'}</span>
-            <h2 style={{ fontSize: '2.5rem', color: '#091d36', marginTop: '0.5rem', fontWeight: 800 }}>
-              Technical Tracks
-            </h2>
-            <div style={{ height: '3.5px', width: '80px', background: '#eab308', margin: '1rem auto 0', borderRadius: '2px' }} />
-            <p style={{ color: 'var(--text-secondary)', marginTop: '1.5rem', maxWidth: '800px', marginInline: 'auto', lineHeight: 1.7, fontSize: '0.95rem' }}>
-              {info.cfp_desc || 'Prospective authors are invited to submit papers showcasing original research in the following technical tracks.'}
-            </p>
-          </motion.div>
-
-          {/* Departments grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '3rem' }}>
-            {departments.map((dept, index) => {
-              const getTrackIcon = (idx: number) => {
-                switch (idx) {
-                  case 0: return <Cpu size={26} style={{ color: '#0f52ba' }} />;
-                  case 1: return <Terminal size={26} style={{ color: '#0891b2' }} />;
-                  case 2: return <Shield size={26} style={{ color: '#16a34a' }} />;
-                  case 3: return <Zap size={26} style={{ color: '#ca8a04' }} />;
-                  case 4: return <Database size={26} style={{ color: '#9333ea' }} />;
-                  default: return <Leaf size={26} style={{ color: '#059669' }} />;
-                }
-              };
-
-              return (
-                <div 
-                  key={index} 
-                  className="track-redesign-card" 
-                  onClick={() => setSelectedDept(dept)}
+                {/* Banner Subtext */}
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  style={{
+                    color: '#fbbf24', // yellow/gold
+                    fontSize: '0.82rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    display: 'block',
+                    marginBottom: '2.5rem',
+                    textShadow: '0 2px 4px rgba(0,0,0,0.6)'
+                  }}
                 >
-                  {/* Background fainted number */}
-                  <span style={{ 
-                    position: 'absolute', 
-                    right: '1.25rem', 
-                    bottom: '0.25rem', 
-                    fontSize: '4.5rem', 
-                    fontWeight: 900, 
-                    color: 'rgba(15, 82, 186, 0.03)', 
-                    pointerEvents: 'none',
-                    userSelect: 'none',
-                    fontFamily: 'var(--font-heading)'
-                  }}>
-                    {(index + 1).toString().padStart(2, '0')}
-                  </span>
+                  AN IEEE INDIA COUNCIL CONFERENCE
+                </motion.span>
 
-                  <div className="track-icon-wrapper">
-                    {getTrackIcon(index)}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="glass-card"
+                  style={{
+                    padding: '3rem 2.5rem',
+                    borderRadius: '1.5rem',
+                    background: 'rgba(88, 17, 26, 0.45)', // dark burgundy tint
+                    backdropFilter: 'blur(16px)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    boxShadow: '0 20px 45px rgba(0, 0, 0, 0.3)',
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '1.5rem',
+                    color: '#ffffff'
+                  }}
+                >
+                  {/* Title */}
+                  <h1 className="hero-title" style={{ margin: 0, fontSize: '3rem', fontWeight: 800, background: 'linear-gradient(135deg, #ffffff 40%, #fbbf24 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 1.2 }}>
+                    {info.hero_title || 'Welcome to ICAECTSD 2027'}
+                  </h1>
+
+                  {/* Subtitle */}
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#f1f5f9', opacity: 0.95, maxWidth: '800px', margin: 0, lineHeight: 1.5, textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>
+                    {info.hero_subtitle || 'Second IEEE International Conference on Advances in Engineering and Computing Technologies for Sustainable Development (ICAECTSD) 2027'}
+                  </h2>
+
+                  {/* Date & Location */}
+                  <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', margin: '0.5rem 0 1rem', fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Calendar size={20} style={{ color: '#fbbf24' }} />
+                      <span>{renderDateWithSuperscript(info.event_date_display || '17th and 18th December 2027')}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <MapPin size={20} style={{ color: '#fbbf24' }} />
+                      <span>{info.event_location_display || 'Sri Ramakrishna Engineering College, Coimbatore, Tamilnadu, India'}</span>
+                    </div>
                   </div>
 
-                  <h3 style={{ fontSize: '1.15rem', color: '#091d36', fontWeight: 800, margin: '0 0 1.25rem 0', lineHeight: 1.45 }}>
-                    {dept.name}
-                  </h3>
-                  
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: '#0f52ba', fontWeight: 700, marginTop: 'auto' }}>
-                    <span>View Scope Details</span>
-                    <ChevronRight size={16} />
+                  {/* Countdown Clock */}
+                  <div className="countdown-container" style={{ width: '100%', maxWidth: '600px', padding: '1rem', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '1rem', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#ffffff' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: '#fbbf24', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
+                      <Clock size={16} />
+                      <span>{info.hero_countdown_title || 'Conference Countdown'}</span>
+                    </div>
+                    <div className="countdown-row" style={{ color: '#ffffff' }}>
+                      {[
+                        { label: info.label_days || 'Days', value: timeLeft.days },
+                        { label: info.label_hours || 'Hours', value: timeLeft.hours },
+                        { label: info.label_mins || 'Minutes', value: timeLeft.minutes },
+                        { label: info.label_secs || 'Seconds', value: timeLeft.seconds }
+                      ].map((t, idx) => (
+                        <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                          <span className="countdown-val" style={{ display: 'inline-flex', overflow: 'hidden', height: '2.5rem', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontSize: '1.8rem', fontWeight: 800 }}>
+                            <AnimatePresence mode="popLayout" initial={false}>
+                              <motion.span
+                                key={t.value}
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: -20, opacity: 0 }}
+                                transition={{ duration: 0.2, ease: 'easeOut' }}
+                                style={{ display: 'inline-block' }}
+                              >
+                                {String(t.value).padStart(2, '0')}
+                              </motion.span>
+                            </AnimatePresence>
+                          </span>
+                          <span className="countdown-lbl" style={{ color: '#94a3b8', fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 600 }}>
+                            {t.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
 
-          {/* Template Downloads */}
-          <div style={{ marginTop: '3.5rem', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a 
-              href="https://template-selector.ieee.org/" 
-              className="btn btn-primary"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem', padding: '0.8rem 2.2rem' }}
-            >
-              <Download size={18} />
-              Download IEEE Paper Templates
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Important Dates Section */}
-      <section id="important-dates" className="section" style={{ background: '#ffffff', color: '#0f172a', padding: '6rem 0' }}>
-        <div className="container">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '4rem' }}
-          >
-            <span style={{ color: '#58111A', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.12em' }}>{info.dates_badge || "TIMELINE"}</span>
-            <h2 style={{ fontSize: '2.5rem', color: '#58111A', marginTop: '0.5rem', fontWeight: 800 }}>{info.dates_title || "Important Dates"}</h2>
-            <div style={{ height: '3.5px', width: '80px', background: '#fbbf24', margin: '1rem auto 0', borderRadius: '2px' }} />
-          </motion.div>
-
-          {/* Blocks Layout with Colorful Outlines and Highlights */}
-          <div className="grid-3-col" style={{ marginTop: '2rem', gap: '2rem' }}>
-            {(() => {
-              const CARD_PALETTES = [
-                {
-                  border: '#cbd5e1',
-                  borderActive: '#3b82f6',
-                  badgeBg: '#3b82f6',
-                  badgeText: '#ffffff',
-                  titleColor: '#1e3a8a',
-                  iconColor: '#3b82f6',
-                  glowColor: 'rgba(59, 130, 246, 0.08)'
-                },
-                {
-                  border: '#cbd5e1',
-                  borderActive: '#10b981',
-                  badgeBg: '#10b981',
-                  badgeText: '#ffffff',
-                  titleColor: '#065f46',
-                  iconColor: '#10b981',
-                  glowColor: 'rgba(16, 185, 129, 0.08)'
-                },
-                {
-                  border: '#cbd5e1',
-                  borderActive: '#f97316',
-                  badgeBg: '#f97316',
-                  badgeText: '#ffffff',
-                  titleColor: '#7c2d12',
-                  iconColor: '#f97316',
-                  glowColor: 'rgba(249, 115, 22, 0.08)'
-                },
-                {
-                  border: '#cbd5e1',
-                  borderActive: '#d946ef',
-                  badgeBg: '#d946ef',
-                  badgeText: '#ffffff',
-                  titleColor: '#701a75',
-                  iconColor: '#d946ef',
-                  glowColor: 'rgba(217, 70, 239, 0.08)'
-                },
-                {
-                  border: '#cbd5e1',
-                  borderActive: '#f43f5e',
-                  badgeBg: '#f43f5e',
-                  badgeText: '#ffffff',
-                  titleColor: '#4c0519',
-                  iconColor: '#f43f5e',
-                  glowColor: 'rgba(244, 63, 94, 0.08)'
-                },
-                {
-                  border: '#cbd5e1',
-                  borderActive: '#14b8a6',
-                  badgeBg: '#14b8a6',
-                  badgeText: '#ffffff',
-                  titleColor: '#0f766e',
-                  iconColor: '#14b8a6',
-                  glowColor: 'rgba(20, 184, 166, 0.08)'
-                }
-              ];
-
-              const isPassedArray = importantDates.map(evt => {
-                try {
-                  const cleanDateStr = evt.event_date.replace(/-[0-9]+/g, '').trim(); 
-                  const dateVal = new Date(cleanDateStr);
-                  if (isNaN(dateVal.getTime())) return false;
-                  return dateVal <= new Date();
-                } catch (e) {
-                  return false;
-                }
-              });
-
-              return importantDates.map((evt, idx) => {
-                const { month, day, year } = parseDateDisplay(evt.event_date);
-                const isPassed = isPassedArray[idx];
-                const palette = CARD_PALETTES[idx % CARD_PALETTES.length];
-
-                return (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: idx * 0.05 }}
-                    whileHover={{ 
-                      y: -5,
-                      borderColor: palette.borderActive,
-                      boxShadow: `0 12px 30px ${palette.glowColor}`
-                    }}
-                    style={{
-                      background: '#ffffff',
-                      border: `1px solid ${palette.border}`,
-                      borderRadius: '1.25rem',
-                      padding: '2rem',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      position: 'relative',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      cursor: 'default'
-                    }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                      <span style={{
-                        fontSize: '0.75rem',
+                  {/* Actions */}
+                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', width: '100%', marginTop: '0.5rem' }}>
+                    <button
+                      onClick={() => scrollToSection('paper-submission')}
+                      className="btn btn-primary"
+                      style={{
+                        fontSize: '0.95rem',
+                        padding: '0.8rem 1.75rem',
+                        background: '#fbbf24',
+                        color: '#58111A',
                         fontWeight: 800,
-                        color: palette.badgeText,
-                        background: palette.badgeBg,
-                        padding: '0.4rem 0.95rem',
-                        borderRadius: '2rem',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em'
-                      }}>
-                        {month} {day}, {year}
-                      </span>
-                      
-                      {isPassed ? (
-                        <CheckCircle size={22} style={{ color: '#10b981', flexShrink: 0 }} />
-                      ) : (
-                        <Clock size={22} style={{ color: palette.iconColor, flexShrink: 0 }} />
-                      )}
-                    </div>
-
-                    <h4 style={{
-                      fontSize: '1.2rem',
-                      fontWeight: 800,
-                      color: palette.titleColor,
-                      marginBottom: '0.75rem',
-                      lineHeight: 1.3
-                    }}>
-                      {evt.title}
-                    </h4>
-
-                    <p style={{
-                      fontSize: '0.9rem',
-                      color: '#475569',
-                      lineHeight: 1.5,
-                      margin: 0
-                    }}>
-                      {evt.desc}
-                    </p>
-                  </motion.div>
-                );
-              });
-            })()}
-          </div>
-        </div>
-      </section>
-
-      {/* Workshops Section */}
-      <section id="workshops" className="section">
-        <div className="container">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '4rem' }}
-          >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.workshops_badge}</span>
-            <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.workshops_title}</h2>
-            <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
-            <p style={{ color: 'var(--text-secondary)', marginTop: '1.5rem', maxWidth: '800px', marginInline: 'auto' }}>
-              {info.workshops_desc}
-            </p>
-          </motion.div>
-
-          <div className="grid-2-col" style={{ gap: '2rem' }}>
-            {workshops.map((wk, index) => (
-              <div key={index} className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <span style={{ fontSize: '0.8rem', color: '#f59e0b', fontWeight: 800, textTransform: 'uppercase' }}>{info.workshop_label} {index + 1}</span>
-                <h3 style={{ fontSize: '1.5rem', color: 'white' }}>{wk.title}</h3>
-                <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                  <strong>{info.label_lead_instructor}</strong> {wk.instructor}
-                </div>
-                <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.85rem', color: '#06b6d4', fontWeight: 600 }}>
-                  <span>{wk.duration}</span>
-                  <span>{info.label_fee} {wk.price}</span>
-                </div>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>{wk.details}</p>
-                <button 
-                  onClick={() => scrollToSection('registration')} 
-                  className="btn btn-secondary" 
-                  style={{ marginTop: 'auto', alignSelf: 'flex-start' }}
-                >
-                  {info.workshops_btn_reg}
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Guidelines & CMT Submission are now standalone at src/components/GuidelinesPage.tsx */}
-
-      {/* Registration Section */}
-      <section id="registration" className="section">
-        <div className="container">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '3.5rem' }}
-          >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.reg_badge}</span>
-            <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.reg_title}</h2>
-            <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
-          </motion.div>
-
-          {/* General Guidelines Card */}
-          <div className="glass-card" style={{ padding: '2rem', marginBottom: '3.5rem' }}>
-            <h3 style={{ fontSize: '1.4rem', color: 'white', marginBottom: '1.25rem', fontWeight: 700 }}>Registration Guidelines</h3>
-            <div style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.7', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <p style={{ margin: 0 }}>
-                <strong>At least one of the authors</strong> of each accepted paper must register for the conference for the paper to be included in the conference proceedings and published through <strong>IEEE Xplore (Scopus Indexed)</strong>.
-              </p>
-              <p style={{ margin: 0 }}>
-                All accepted and presented papers of AECTSD 2027 will be submitted for possible publication in the <strong>IEEE Xplore® Digital Library</strong>.
-              </p>
-              <p style={{ margin: 0 }}>
-                Full registration includes the registration of one paper. Additional papers for a single registration come with an additional fee. The maximum length of the paper is <strong>6 pages</strong> including figures, tables, and references.
-              </p>
-              <p style={{ margin: 0 }}>
-                Registration fee covers admission to all sessions, cost of publishing the article in IEEE Xplore digital library, conference proceedings, welcome reception, conference kit, refreshments, working lunch, banquet dinner and half-a-day tour to nearby places.
-              </p>
-              <p style={{ margin: 0, color: '#d97706', fontWeight: 600 }}>
-                * A fee of Rs. 500 will be applied for each additional page (with a maximum of 2 pages).
-              </p>
-            </div>
-          </div>
-
-          {/* Registration Tables Side-by-Side */}
-          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '3.5rem' }}>
-            
-            {/* Indian Authors Table */}
-            <div style={{ flex: '1 1 500px', minWidth: '0' }}>
-              <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '1.25rem', fontWeight: 700 }}>
-                Indian Authors (Fees in INR, GST Inclusive)
-              </h3>
-              <div className="registration-table-container" style={{ width: '100%', overflowX: 'auto' }}>
-                <table className="registration-table">
-                  <thead>
-                    <tr>
-                      <th rowSpan={2} style={{ width: '30%', verticalAlign: 'middle', textAlign: 'left' }}>Categories</th>
-                      <th colSpan={2}>Graduate Student / Research Scholar</th>
-                      <th colSpan={2}>Professionals</th>
-                    </tr>
-                    <tr>
-                      <th>IEEE Member</th>
-                      <th>Non-IEEE Member</th>
-                      <th>IEEE Member</th>
-                      <th>Non-IEEE Member</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference only</td>
-                      <td>₹6,000*</td>
-                      <td>₹7,000*</td>
-                      <td>₹7,000*</td>
-                      <td>₹8,000*</td>
-                    </tr>
-                    <tr>
-                      <td style={{ fontWeight: 600, textAlign: 'left' }}>Tutorial only</td>
-                      <td>₹1,000</td>
-                      <td>₹1,250</td>
-                      <td>₹1,250</td>
-                      <td>₹1,500</td>
-                    </tr>
-                    <tr>
-                      <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference plus Tutorial</td>
-                      <td>₹6,500*</td>
-                      <td>₹7,500*</td>
-                      <td>₹7,500*</td>
-                      <td>₹8,500*</td>
-                    </tr>
-                    <tr>
-                      <td style={{ fontWeight: 600, textAlign: 'left' }}>Indian Non-Author Attendee</td>
-                      <td>₹3,500</td>
-                      <td>₹5,000</td>
-                      <td>₹4,500</td>
-                      <td>₹6,000</td>
-                    </tr>
-                    <tr>
-                      <td style={{ fontWeight: 600, textAlign: 'left' }}>Rate per Additional Paper</td>
-                      <td>₹3,000</td>
-                      <td>₹3,000</td>
-                      <td>₹3,000</td>
-                      <td>₹3,000</td>
-                    </tr>
-                    <tr>
-                      <td style={{ fontWeight: 600, textAlign: 'left' }}>Extra Page (after 6 pages)</td>
-                      <td>₹500</td>
-                      <td>₹500</td>
-                      <td>₹500</td>
-                      <td>₹500</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Foreign Authors Table */}
-            <div style={{ flex: '1 1 500px', minWidth: '0' }}>
-              <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '1.25rem', fontWeight: 700 }}>
-                Foreign Authors (Fees in USD, GST Inclusive)
-              </h3>
-              <div className="registration-table-container" style={{ width: '100%', overflowX: 'auto' }}>
-                <table className="registration-table">
-                  <thead>
-                    <tr>
-                      <th rowSpan={2} style={{ width: '30%', verticalAlign: 'middle', textAlign: 'left' }}>Categories</th>
-                      <th colSpan={2}>Graduate Student / Research Scholar</th>
-                      <th colSpan={2}>Professionals</th>
-                    </tr>
-                    <tr>
-                      <th>IEEE Member</th>
-                      <th>Non-IEEE Member</th>
-                      <th>IEEE Member</th>
-                      <th>Non-IEEE Member</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference only</td>
-                      <td>$150*</td>
-                      <td>$200*</td>
-                      <td>$200*</td>
-                      <td>$250*</td>
-                    </tr>
-                    <tr>
-                      <td style={{ fontWeight: 600, textAlign: 'left' }}>Tutorial only</td>
-                      <td>$40</td>
-                      <td>$50</td>
-                      <td>$50</td>
-                      <td>$75</td>
-                    </tr>
-                    <tr>
-                      <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference plus Tutorial</td>
-                      <td>$175*</td>
-                      <td>$225*</td>
-                      <td>$225*</td>
-                      <td>$300*</td>
-                    </tr>
-                    <tr>
-                      <td style={{ fontWeight: 600, textAlign: 'left' }}>Rate per Additional Paper</td>
-                      <td>$50</td>
-                      <td>$50</td>
-                      <td>$50</td>
-                      <td>$50</td>
-                    </tr>
-                    <tr>
-                      <td style={{ fontWeight: 600, textAlign: 'left' }}>Extra Page (after 6 pages)</td>
-                      <td>$20</td>
-                      <td>$20</td>
-                      <td>$20</td>
-                      <td>$20</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Bank Account Details */}
-          <div className="glass-card" style={{ padding: '2rem', marginBottom: '3.5rem', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#0f172a' }}>
-            <h3 style={{ fontSize: '1.4rem', color: '#091d36', marginBottom: '0.5rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ color: '#0f52ba', fontSize: '1.5rem', fontWeight: 900 }}>$</span> Bank Account Details
-            </h3>
-            <p style={{ color: '#475569', fontSize: '0.95rem', marginBottom: '2rem', lineHeight: '1.5' }}>
-              Please find the official banking channels to process registration fees. Bank transfer references must include your Paper ID.
-            </p>
-
-            <div className="grid-2-col" style={{ gap: '2.5rem', alignItems: 'stretch' }}>
-              {/* Left Column: Bank Parameters Table */}
-              <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'center' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  {[
-                    { label: 'Account Name', value: 'Sri Ramakrishna Engineering College - AECTSD' },
-                    { label: 'Bank Name', value: 'ICICI Bank, Coimbatore' },
-                    { label: 'Account Number', value: '058705008310' },
-                    { label: 'IFSC Code', value: 'ICIC0000587' },
-                    { label: 'Branch Location', value: 'SREC Campus Branch, Coimbatore' }
-                  ].map((row, rIdx) => (
-                    <div 
-                      key={rIdx} 
-                      style={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
-                        alignItems: 'center', 
-                        paddingBottom: '0.75rem', 
-                        borderBottom: rIdx < 4 ? '1px solid #e2e8f0' : 'none',
-                        gap: '1rem'
+                        border: 'none',
+                        borderRadius: '30px',
+                        boxShadow: '0 4px 12px rgba(251, 191, 36, 0.25)',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
                       }}
                     >
-                      <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.95rem', flexShrink: 0 }}>{row.label}</span>
-                      <span style={{ color: '#1e293b', fontSize: '0.95rem', fontWeight: 500, textAlign: 'right' }}>{row.value}</span>
+                      <FileText size={18} />
+                      {info.hero_btn_submit || 'Submit Paper'}
+                    </button>
+                    <button
+                      onClick={() => {
+                        alert('Brochure download starting...');
+                        const link = document.createElement('a');
+                        link.href = '#';
+                        link.setAttribute('download', 'ICAECTSD_2027_Brochure.pdf');
+                        document.body.appendChild(link);
+                      }}
+                      className="btn btn-secondary"
+                      style={{
+                        fontSize: '0.95rem',
+                        padding: '0.8rem 1.75rem',
+                        background: 'rgba(255, 255, 255, 0.08)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: '#ffffff',
+                        borderRadius: '30px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                    >
+                      <Download size={18} />
+                      Download Brochure
+                    </button>
+                    <button
+                      onClick={() => setShowCalcModal(true)}
+                      className="btn btn-secondary"
+                      style={{
+                        fontSize: '0.95rem',
+                        padding: '0.8rem 1.75rem',
+                        background: 'rgba(255, 255, 255, 0.08)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: '#ffffff',
+                        borderRadius: '30px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                    >
+                      {info.hero_btn_register || 'Calculate Fees'}
+                      <ChevronRight size={18} />
+                    </button>
+                  </div>
+                </motion.div>
+              </div>
+            </section>
+
+            {/* About Section */}
+            <section id="about" className="section" style={{ background: '#faf9f6', borderBottom: '1px solid #e2e8f0' }}>
+              <div className="container">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-100px' }}
+                  variants={fadeInUp}
+                  style={{ textAlign: 'center', marginBottom: '4rem' }}
+                >
+                  <h2 style={{ fontSize: '2.5rem', color: 'var(--text-primary)', marginTop: '0.5rem', fontWeight: 800 }}>
+                    {info.logo_title || "IEEE AECTSD 2027"}
+                  </h2>
+                  <div style={{ height: '3.5px', width: '80px', background: '#f58220', margin: '1rem auto 0', borderRadius: '2px' }} />
+                </motion.div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem', marginBottom: '4rem', alignItems: 'start' }} className="grid-2-col-desktop-custom">
+                  {/* Left Column: Badges & Details */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', textAlign: 'left' }}
+                  >
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <span style={{ background: '#fef3c7', color: '#b45309', padding: '0.35rem 0.85rem', borderRadius: '2rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        Theme
+                      </span>
+                      <span style={{ background: '#eff6ff', color: '#1e40af', padding: '0.35rem 0.85rem', borderRadius: '2rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        {info.conf_record_no ? `IEEE Conference Record: #${info.conf_record_no}` : "IEEE Conference"}
+                      </span>
                     </div>
+
+                    <h3 style={{ fontSize: '1.85rem', color: '#091d36', fontWeight: 800, lineHeight: 1.3, margin: '0.5rem 0 0' }}>
+                      {info.hero_subtitle || "Net-Zero Cyber-Physical Intelligence: AI, 6G & Sustainable Electronics"}
+                    </h3>
+
+                    {info.about_conference?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
+                      <p key={idx} style={{ color: 'var(--text-secondary)', margin: 0, textAlign: 'justify', lineHeight: '1.75', fontSize: '0.95rem' }}>
+                        {para}
+                      </p>
+                    ))}
+
+                    <div style={{
+                      marginTop: '1rem',
+                      padding: '1.25rem',
+                      background: '#ffffff',
+                      border: '1px solid #cbd5e1',
+                      borderRadius: '0.75rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '1rem',
+                      flexWrap: 'wrap',
+                      justifyContent: 'space-between',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '280px' }}>
+                        <Award size={24} style={{ flexShrink: 0, color: '#0f52ba' }} />
+                        <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                          The proceedings of the previous edition (<strong>AECTSD 2025</strong>) have been successfully published in <strong>IEEE Xplore</strong> and indexed in <strong>Scopus</strong>.
+                        </p>
+                      </div>
+                      <a
+                        href="https://ieee-aectsd.srec.ac.in"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-secondary"
+                        style={{
+                          fontSize: '0.85rem',
+                          padding: '0.5rem 1.25rem',
+                          background: 'rgba(59, 130, 246, 0.08)',
+                          border: '1px solid rgba(59, 130, 246, 0.2)',
+                          color: '#0f52ba',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          textDecoration: 'none',
+                          fontWeight: 700
+                        }}
+                      >
+                        Visit Previous Edition
+                      </a>
+                    </div>
+                  </motion.div>
+
+                  {/* Right Column: 2x2 Grid of 4 Cards */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem', width: '100%' }}
+                  >
+                    {[
+                      {
+                        title: "Global Knowledge Exchange",
+                        desc: "Bringing together researchers and professionals from academia, industry and government.",
+                        icon: Globe,
+                        color: '#e0f2fe',
+                        iconColor: '#0369a1'
+                      },
+                      {
+                        title: "Industry Collaboration",
+                        desc: "Promoting partnerships among industries, startups, innovators and IEEE communities.",
+                        icon: Handshake,
+                        color: '#fef3c7',
+                        iconColor: '#b45309'
+                      },
+                      {
+                        title: "Sustainable Engineering",
+                        desc: "Encouraging green technologies and engineering solutions aligned with Net-Zero goals.",
+                        icon: Leaf,
+                        color: '#dcfce7',
+                        iconColor: '#15803d'
+                      },
+                      {
+                        title: "Future-Ready Society",
+                        desc: "Advancing AI, 6G, CPS and sustainable electronics for smart and resilient communities.",
+                        icon: Sparkles,
+                        color: '#f3e8ff',
+                        iconColor: '#6b21a8'
+                      }
+                    ].map((card, cidx) => {
+                      const CardIcon = card.icon;
+                      return (
+                        <div
+                          key={cidx}
+                          className="about-grid-card"
+                          style={{
+                            background: '#ffffff',
+                            border: '1px solid #cbd5e1',
+                            borderRadius: '1rem',
+                            padding: '1.75rem',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '1rem',
+                            textAlign: 'left',
+                            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.03)',
+                            position: 'relative'
+                          }}
+                        >
+                          <div style={{
+                            width: '45px',
+                            height: '45px',
+                            borderRadius: '50%',
+                            background: card.color,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: card.iconColor
+                          }}>
+                            <CardIcon size={22} />
+                          </div>
+                          <h4 style={{ fontSize: '1.05rem', color: '#091d36', fontWeight: 800, margin: 0 }}>{card.title}</h4>
+                          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>{card.desc}</p>
+                        </div>
+                      );
+                    })}
+                  </motion.div>
+                </div>
+
+                {/* SREC Trust & Institution Details */}
+                <div className="grid-2-col" style={{ gap: '2rem' }}>
+                  <motion.div
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="glass-card"
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                      <BookOpen size={24} style={{ color: '#0f52ba' }} />
+                      <h3 style={{ fontSize: '1.5rem', color: '#091d36', fontWeight: 700 }}>{info.about_card_conf_title || "About the Trust"}</h3>
+                    </div>
+                    {info.about_trust?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
+                      <p key={idx} style={{ color: 'var(--text-secondary)', marginBottom: '1rem', textIndent: '2rem', textAlign: 'justify', lineHeight: '1.7', fontSize: '0.95rem' }}>
+                        {para}
+                      </p>
+                    ))}
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="glass-card"
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                      <Award size={24} style={{ color: '#f58220' }} />
+                      <h3 style={{ fontSize: '1.5rem', color: '#091d36', fontWeight: 700 }}>{info.about_card_inst_title || "About the Institution"}</h3>
+                    </div>
+                    {info.about_institution?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
+                      <p key={idx} style={{ color: 'var(--text-secondary)', marginBottom: '1rem', textIndent: '2rem', textAlign: 'justify', lineHeight: '1.7', fontSize: '0.95rem' }}>
+                        {para}
+                      </p>
+                    ))}
+                  </motion.div>
+                </div>
+
+                {/* Stats Bar */}
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  className="grid-4-col"
+                  style={{ marginTop: '4rem' }}
+                >
+                  {stats.map((stat, index) => (
+                    <motion.div
+                      key={index}
+                      variants={fadeInUp}
+                      className="glass-card"
+                      style={{ textAlign: 'center', padding: '1.5rem' }}
+                    >
+                      <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#3b82f6', fontFamily: 'var(--font-heading)' }}>
+                        <CounterUp target={stat.number} />
+                      </div>
+                      <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>{stat.label}</div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </div>
+            </section>
+
+            {/* Committee page is now standalone at src/components/CommitteePage.tsx */}
+
+            {/* Speakers Section */}
+            <section id="speakers" className="section">
+              <div className="container">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  style={{ textAlign: 'center', marginBottom: '4rem' }}
+                >
+                  <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.speakers_badge}</span>
+                  <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.speakers_title}</h2>
+                  <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
+                  {info.speakers_desc && (
+                    <p style={{ color: 'var(--text-secondary)', marginTop: '1.5rem', maxWidth: '800px', marginInline: 'auto', lineHeight: '1.7', fontSize: '0.95rem' }}>
+                      {info.speakers_desc}
+                    </p>
+                  )}
+                </motion.div>
+
+                <div className="grid-3-col" style={{ gap: '2rem' }}>
+                  {speakers.map((speaker, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="glass-card"
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        borderTop: `4px solid ${speaker.color}`
+                      }}
+                    >
+                      <div style={{
+                        width: '90px',
+                        height: '90px',
+                        borderRadius: '50%',
+                        background: 'rgba(0, 0, 0, 0.02)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        border: `2px solid ${speaker.color}`,
+                        marginBottom: '1.25rem',
+                        overflow: 'hidden'
+                      }}>
+                        {speaker.image_url ? (
+                          <img
+                            src={speaker.image_url}
+                            alt={speaker.name}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          />
+                        ) : (
+                          <User size={45} style={{ color: speaker.color }} />
+                        )}
+                      </div>
+                      <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '0.25rem' }}>{speaker.name}</h3>
+                      <span style={{ fontSize: '0.85rem', color: speaker.color, fontWeight: 700, textTransform: 'uppercase' }}>{speaker.title}</span>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '0.5rem 0 1.25rem' }}>{speaker.role}</p>
+                      <div style={{
+                        background: 'rgba(0, 0, 0, 0.02)',
+                        border: '1px solid rgba(0, 0, 0, 0.06)',
+                        padding: '1rem',
+                        borderRadius: '0.5rem',
+                        width: '100%',
+                        marginTop: 'auto'
+                      }}>
+                        <span style={{ display: 'block', fontSize: '0.75rem', color: '#d97706', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>{info.speakers_keynote_label}</span>
+                        <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 600 }}>"{speaker.talk}"</span>
+                      </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
+            </section>
 
-              {/* Right Column: Important Payment Note Card */}
-              <div 
-                style={{ 
-                  background: '#fffbeb', 
-                  border: '1px solid #fef3c7', 
-                  borderRadius: '1rem', 
-                  padding: '1.75rem', 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  gap: '0.75rem' 
-                }}
-              >
-                <h4 style={{ fontSize: '0.95rem', color: '#b45309', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
-                  IMPORTANT PAYMENT NOTE
-                </h4>
-                <p style={{ color: '#78350f', fontSize: '0.92rem', lineHeight: '1.6', margin: 0, fontWeight: 500 }}>
-                  Please include your Paper ID in the payment reference. Once the wire transfer transaction completes successfully, authors are requested to upload the scanned payment receipt copy in the registration form below.
-                </p>
-              </div>
-            </div>
-          </div>
+            {/* Call For Papers Section */}
+            <section id="call-for-papers" className="section" style={{ background: '#faf9f6', borderBottom: '1px solid #e2e8f0' }}>
+              <div className="container">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  style={{ textAlign: 'center', marginBottom: '3rem' }}
+                >
+                  <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.cfp_badge || 'CALL FOR PAPERS'}</span>
+                  <h2 style={{ fontSize: '2.5rem', color: '#091d36', marginTop: '0.5rem', fontWeight: 800 }}>
+                    Technical Tracks
+                  </h2>
+                  <div style={{ height: '3.5px', width: '80px', background: '#eab308', margin: '1rem auto 0', borderRadius: '2px' }} />
+                  <p style={{ color: 'var(--text-secondary)', marginTop: '1.5rem', maxWidth: '800px', marginInline: 'auto', lineHeight: 1.7, fontSize: '0.95rem' }}>
+                    {info.cfp_desc || 'Prospective authors are invited to submit papers showcasing original research in the following technical tracks.'}
+                  </p>
+                </motion.div>
 
-          {/* Modifiers Box & Calculator Callout */}
-          <div className="grid-2-col" style={{ gap: '2rem', alignItems: 'stretch', marginBottom: '3rem' }}>
-            {/* Notes box */}
-            <div className="glass-card" style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1rem', borderLeft: '4px solid #f58220' }}>
-              <h4 style={{ fontSize: '1.1rem', color: 'white', fontWeight: 700, margin: 0 }}>Fee Modifiers & Addons</h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.88rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <li>
-                  <strong style={{ color: '#f58220' }}>* Early Bird Registration:</strong>
-                  <ul style={{ paddingLeft: '1.2rem', marginTop: '0.25rem' }}>
-                    <li>Discount of <strong>INR 1,000</strong> on Indian conference & conference plus tutorial registration fees.</li>
-                    <li>Discount of <strong>INR 500</strong> on the Indian non-author attendee fee.</li>
-                    <li>Discount of <strong>USD 25</strong> on Foreign conference & conference plus tutorial registration fees.</li>
-                  </ul>
-                </li>
-                <li>
-                  <strong style={{ color: 'white' }}>* Late Registration Fee:</strong> Additional surcharge fee of <strong>INR 1,000 / USD 25</strong> applies on conference and conference plus tutorial registration fees.
-                </li>
-                <li>
-                  <strong style={{ color: 'white' }}>* Virtual Mode Presentation:</strong> Additional addon charge of <strong>INR 1,000 / USD 25</strong> applies on the conference registration fee.
-                </li>
-              </ul>
-            </div>
+                {/* Departments grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '3rem' }}>
+                  {departments.map((dept, index) => {
+                    const getTrackIcon = (idx: number) => {
+                      switch (idx) {
+                        case 0: return <Cpu size={26} style={{ color: '#0f52ba' }} />;
+                        case 1: return <Terminal size={26} style={{ color: '#0891b2' }} />;
+                        case 2: return <Shield size={26} style={{ color: '#16a34a' }} />;
+                        case 3: return <Zap size={26} style={{ color: '#ca8a04' }} />;
+                        case 4: return <Database size={26} style={{ color: '#9333ea' }} />;
+                        default: return <Leaf size={26} style={{ color: '#059669' }} />;
+                      }
+                    };
 
-            {/* Interactive portal callout */}
-            <div className="glass-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-              <div style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', padding: '1rem', borderRadius: '50%', marginBottom: '1.25rem' }}>
-                <CheckCircle size={32} />
-              </div>
-              <h4 style={{ fontSize: '1.25rem', color: 'white', fontWeight: 700, marginBottom: '0.5rem' }}>Dynamic Fee Calculator</h4>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', maxWidth: '350px' }}>
-                Instantly calculate your total registration fees including extra pages and optional pre-conference tutorial addons.
-              </p>
-              <button 
-                className="btn btn-primary" 
-                style={{ padding: '0.75rem 2.5rem', fontSize: '1rem' }}
-                onClick={() => setShowCalcModal(true)}
-              >
-                Launch Fee Calculator
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Us Section */}
-      <section id="contact-us" className="section">
-        <div className="container">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '4rem' }}
-          >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.contact_badge || 'Connect'}</span>
-            <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.contact_title || 'Contact Us'}</h2>
-            <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
-          </motion.div>
-
-          <div className="grid-2-col" style={{ gap: '2rem' }}>
-            {/* Contact Form */}
-            <div className="glass-card">
-              <h3 style={{ fontSize: '1.5rem', color: 'white', marginBottom: '1.5rem' }}>{info.contact_form_title || 'Send Us a Message'}</h3>
-              
-              {formSubmitted ? (
-                <div style={{ 
-                  background: 'rgba(34, 197, 94, 0.1)', 
-                  border: '1px solid rgba(34, 197, 94, 0.3)', 
-                  borderRadius: '0.5rem', 
-                  padding: '1.5rem',
-                  textAlign: 'center',
-                  color: '#4ade80'
-                }}>
-                  <CheckCircle size={36} style={{ margin: '0 auto 1rem' }} />
-                  <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>{info.contact_form_success_title || 'Message Sent!'}</h4>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{info.contact_form_success_desc || 'Thank you for reaching out. We will get back to you shortly.'}</p>
-                </div>
-              ) : (
-                <form onSubmit={handleContactSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <div>
-                    <label style={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>{info.contact_form_label_name || 'Your Name'}</label>
-                    <input 
-                      type="text" 
-                      required 
-                      className="form-input" 
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder={info.contact_form_placeholder_name || 'Enter full name'} 
-                    />
-                  </div>
-
-                  <div>
-                    <label style={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>{info.contact_form_label_email || 'Email Address'}</label>
-                    <input 
-                      type="email" 
-                      required 
-                      className="form-input" 
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder={info.contact_form_placeholder_email || 'Enter email address'} 
-                    />
-                  </div>
-
-                  <div>
-                    <label style={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>{info.contact_form_label_subject || 'Subject'}</label>
-                    <input 
-                      type="text" 
-                      required 
-                      className="form-input" 
-                      value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      placeholder={info.contact_form_placeholder_subject || 'How can we help?'} 
-                    />
-                  </div>
-
-                  <div>
-                    <label style={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>{info.contact_form_label_message || 'Message'}</label>
-                    <textarea 
-                      rows={4} 
-                      required 
-                      className="form-input" 
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder={info.contact_form_placeholder_message || 'Type details here...'} 
-                    />
-                  </div>
-
-                  <button type="submit" className="btn btn-primary" style={{ alignSelf: 'flex-start', marginTop: '0.5rem' }}>
-                    {info.contact_form_btn_send || 'Send Message'}
-                  </button>
-                </form>
-              )}
-            </div>
-
-            {/* Coordinators */}
-            <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-              {/* Coordinators */}
-              <div className="glass-card" style={{ height: '100%' }}>
-                <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '1.5rem' }}>{info.contact_coord_title || 'Conference Coordinators'}</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
-                  {coordinators.map((coord, cidx) => {
-                    const initials = coord.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
-                    const bgColors = ['#0f52ba', '#0d9488', '#7c3aed', '#b45309', '#0369a1', '#be185d'];
-                    const bg = bgColors[cidx % bgColors.length];
                     return (
-                      <div key={cidx} style={{ borderRadius: '0.75rem', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', display: 'flex', flexDirection: 'column' }}>
-                        {/* Box Image Area — no overlay badge */}
-                        <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0 }}>
-                          {getMemberImage(coord.name, coord.image_url) && !getMemberImage(coord.name, coord.image_url).includes('dicebear') ? (
-                            <img
-                              src={getMemberImage(coord.name, coord.image_url)}
-                              alt={coord.name}
-                              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
-                            />
-                          ) : (
-                            <div style={{ width: '100%', height: '100%', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <span style={{ fontSize: '3rem', fontWeight: 800, color: 'white', letterSpacing: '0.05em' }}>{initials}</span>
-                            </div>
-                          )}
+                      <div
+                        key={index}
+                        className="track-redesign-card"
+                        onClick={() => setSelectedDept(dept)}
+                      >
+                        {/* Background fainted number */}
+                        <span style={{
+                          position: 'absolute',
+                          right: '1.25rem',
+                          bottom: '0.25rem',
+                          fontSize: '4.5rem',
+                          fontWeight: 900,
+                          color: 'rgba(15, 82, 186, 0.03)',
+                          pointerEvents: 'none',
+                          userSelect: 'none',
+                          fontFamily: 'var(--font-heading)'
+                        }}>
+                          {(index + 1).toString().padStart(2, '0')}
+                        </span>
+
+                        <div className="track-icon-wrapper">
+                          {getTrackIcon(index)}
                         </div>
-                        {/* Info */}
-                        <div style={{ padding: '0.9rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-                          <h4 style={{ fontSize: '1rem', color: 'white', margin: 0, fontWeight: 700 }}>{coord.name}</h4>
-                          <span style={{ fontSize: '0.65rem', color: '#f59e0b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.4 }}>{coord.role}</span>
-                          {coord.email && (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', marginTop: '0.2rem' }}>
-                              <Mail size={11} style={{ color: '#60a5fa', flexShrink: 0 }} />
-                              <a href={`mailto:${coord.email}`} style={{ color: '#60a5fa', textDecoration: 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{coord.email}</a>
-                            </div>
-                          )}
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                            <Phone size={11} style={{ flexShrink: 0 }} />
-                            <span>{coord.phone}</span>
-                          </div>
+
+                        <h3 style={{ fontSize: '1.15rem', color: '#091d36', fontWeight: 800, margin: '0 0 1.25rem 0', lineHeight: 1.45 }}>
+                          {dept.name}
+                        </h3>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: '#0f52ba', fontWeight: 700, marginTop: 'auto' }}>
+                          <span>View Scope Details</span>
+                          <ChevronRight size={16} />
                         </div>
                       </div>
                     );
                   })}
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Map & Directions Section */}
-      <section id="location" className="section" style={{ background: '#ffffff' }}>
-        <div className="container">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '3.5rem' }}
-          >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>Venue</span>
-            <h2 style={{ fontSize: '2.5rem', color: '#091d36', marginTop: '0.5rem' }}>Conference Venue & Reach</h2>
-            <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
-          </motion.div>
-
-          {/* Venue Description Card */}
-          <div className="glass-card" style={{ padding: '2rem', marginBottom: '3rem', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
-            <h3 style={{ fontSize: '1.4rem', color: '#091d36', marginBottom: '1rem', fontWeight: 700 }}>Sri Ramakrishna Engineering College (SREC)</h3>
-            <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: '1.7', margin: '0 0 1.25rem' }}>
-              Sri Ramakrishna Engineering College (SREC), located in Coimbatore, was established in 1994 and is managed by the SNR Sons Charitable Trust. The college offers undergraduate and postgraduate programs in engineering and technology. SREC is known for its strong academic curriculum, research initiatives, and modern facilities, fostering a practical learning environment. The college also emphasizes extracurricular activities and industry collaborations, aiming to produce skilled professionals.
-            </p>
-            <a 
-              href="https://srec.ac.in" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              style={{ color: '#0f52ba', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
-            >
-              Visit SREC Official Website <ExternalLink size={14} />
-            </a>
-          </div>
-
-          <div className="grid-2-col" style={{ gap: '2rem', marginBottom: '3.5rem', alignItems: 'stretch' }}>
-            {/* Left: How to Reach & Mini Map */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              {/* College Mini Map */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="map-container"
-                style={{ height: '320px', overflow: 'hidden', borderRadius: '1rem' }}
-              >
-                <iframe 
-                  title="SREC Campus Map"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.150328964016!2d76.9632117754871!3d11.102171853099849!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8f7000afa766b%3A0x2b5757b8d520a3af!2sSri%20Ramakrishna%20Engineering%20College!5e0!3m2!1sen!2sin!4v1780992469751!5m2!1sen!2sin"
-                  allowFullScreen={true}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  style={{ width: '100%', height: '100%', border: 0 }}
-                />
-              </motion.div>
-            </div>
-
-            {/* Right: How to Reach details */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="glass-card"
-              style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', background: '#f8fafc', border: '1px solid #e2e8f0' }}
-            >
-              <h3 style={{ fontSize: '1.4rem', color: '#091d36', marginBottom: '1.25rem', fontWeight: 700 }}>How to Reach</h3>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '1.5rem' }}>
-                <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
-                  <div style={{ background: 'rgba(59, 130, 246, 0.08)', padding: '0.5rem', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0 }}>
-                    <MapPin size={20} />
-                  </div>
-                  <div>
-                    <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: '0 0 0.15rem', color: '#091d36' }}>Coimbatore International Airport</h4>
-                    <span style={{ fontSize: '0.88rem', color: '#475569' }}>Distance: ~20 km | Approx. 40 minutes travel time</span>
-                  </div>
-                </div>
-                
-                <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
-                  <div style={{ background: 'rgba(59, 130, 246, 0.08)', padding: '0.5rem', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0 }}>
-                    <MapPin size={20} />
-                  </div>
-                  <div>
-                    <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: '0 0 0.15rem', color: '#091d36' }}>Coimbatore Junction Railway Station</h4>
-                    <span style={{ fontSize: '0.88rem', color: '#475569' }}>Distance: ~15 km | Approx. 30 minutes travel time</span>
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', padding: '1rem', borderRadius: '0.5rem', fontSize: '0.88rem', color: '#1e3a8a', lineHeight: '1.5' }}>
-                <p style={{ margin: '0 0 0.5rem' }}>
-                  💡 <strong>Cab Hire Note:</strong> Candidates can hire a car (Red Taxi, Go Taxi, or OLA) directly from Coimbatore Airport or Railway Station to reach SREC.
-                </p>
-                <p style={{ margin: 0 }}>
-                  🚗 <strong>Auto-Rickshaw Note:</strong> Candidates can also hire an auto-rickshaw from <strong>Thudiyalur</strong> (nearest town, ~4 km away) to reach SREC.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-
-
-
-          {/* QR Navigation Cards */}
-          <div className="qr-section">
-            <h3 style={{ fontSize: '1.75rem', color: '#091d36', fontWeight: 800, textAlign: 'center', marginBottom: '0.5rem' }}>
-              Navigate with QR Codes: Find Your Way Easily!
-            </h3>
-            <p style={{ color: '#475569', fontSize: '0.95rem', textAlign: 'center', marginBottom: '2.5rem' }}>
-              Scan the QR codes below on your mobile device to open live GPS directions directly in Google Maps.
-            </p>
-
-            <div className="qr-card-grid">
-              {[
-                {
-                  route: "Route Saravanampatti - SREC",
-                  url: "https://www.google.com/maps/dir/Saravanampatti,+Coimbatore,+Tamil+Nadu/Sri+Ramakrishna+Engineering+College,+Vattamalaipalayam,+Coimbatore,+Tamil+Nadu+641022/"
-                },
-                {
-                  route: "Route Gandhipuram - SREC",
-                  url: "https://www.google.com/maps/dir/Gandhipuram,+Coimbatore,+Tamil+Nadu/Sri+Ramakrishna+Engineering+College,+Vattamalaipalayam,+Coimbatore,+Tamil+Nadu+641022/"
-                },
-                {
-                  route: "Route CBE Railway Station - SREC",
-                  url: "https://www.google.com/maps/dir/Coimbatore+Junction,+State+Bank+Rd,+Gopalapuram,+Coimbatore,+Tamil+Nadu+641018/Sri+Ramakrishna+Engineering+College,+Vattamalaipalayam,+Coimbatore,+Tamil+Nadu+641022/"
-                }
-              ].map((qr, qidx) => (
-                <motion.div
-                  key={qidx}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: qidx * 0.15 }}
-                  className="qr-card"
-                >
-                  <a 
-                    href={info.srec_url || "https://srec.ac.in/"}
+                {/* Template Downloads */}
+                <div style={{ marginTop: '3.5rem', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <a
+                    href="https://template-selector.ieee.org/"
+                    className="btn btn-primary"
                     target="_blank"
                     rel="noopener noreferrer"
-                    title="Sri Ramakrishna Engineering College"
-                    className="qr-card-header"
-                    style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem', padding: '0.8rem 2.2rem' }}
                   >
-                    <img 
-                      src={srecLogo} 
-                      alt="SREC Logo" 
-                      className="qr-card-header-logo"
-                    />
-                    <div className="qr-card-header-text" style={{ paddingLeft: '1rem', textAlign: 'left' }}>
-                      <h4 className="qr-card-header-title">Sri Ramakrishna</h4>
-                      <p className="qr-card-header-subtitle">Engineering College</p>
-                    </div>
+                    <Download size={18} />
+                    Download IEEE Paper Templates
                   </a>
-                  
-                  <div className="qr-gold-container">
-                    <div className="qr-code-wrapper">
-                      <img 
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(qr.url)}`}
-                        alt={`QR Code for ${qr.route}`}
-                        className="qr-code-img"
-                        loading="lazy"
-                      />
+                </div>
+              </div>
+            </section>
+
+            {/* Important Dates Section */}
+            <section id="important-dates" className="section" style={{ background: '#ffffff', color: '#0f172a', padding: '6rem 0' }}>
+              <div className="container">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  style={{ textAlign: 'center', marginBottom: '4rem' }}
+                >
+                  <span style={{ color: '#58111A', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.12em' }}>{info.dates_badge || "TIMELINE"}</span>
+                  <h2 style={{ fontSize: '2.5rem', color: '#58111A', marginTop: '0.5rem', fontWeight: 800 }}>{info.dates_title || "Important Dates"}</h2>
+                  <div style={{ height: '3.5px', width: '80px', background: '#fbbf24', margin: '1rem auto 0', borderRadius: '2px' }} />
+                </motion.div>
+
+                {/* Blocks Layout with Colorful Outlines and Highlights */}
+                <div className="grid-3-col" style={{ marginTop: '2rem', gap: '2rem' }}>
+                  {(() => {
+                    const CARD_PALETTES = [
+                      {
+                        border: '#cbd5e1',
+                        borderActive: '#3b82f6',
+                        badgeBg: '#3b82f6',
+                        badgeText: '#ffffff',
+                        titleColor: '#1e3a8a',
+                        iconColor: '#3b82f6',
+                        glowColor: 'rgba(59, 130, 246, 0.08)'
+                      },
+                      {
+                        border: '#cbd5e1',
+                        borderActive: '#10b981',
+                        badgeBg: '#10b981',
+                        badgeText: '#ffffff',
+                        titleColor: '#065f46',
+                        iconColor: '#10b981',
+                        glowColor: 'rgba(16, 185, 129, 0.08)'
+                      },
+                      {
+                        border: '#cbd5e1',
+                        borderActive: '#f97316',
+                        badgeBg: '#f97316',
+                        badgeText: '#ffffff',
+                        titleColor: '#7c2d12',
+                        iconColor: '#f97316',
+                        glowColor: 'rgba(249, 115, 22, 0.08)'
+                      },
+                      {
+                        border: '#cbd5e1',
+                        borderActive: '#d946ef',
+                        badgeBg: '#d946ef',
+                        badgeText: '#ffffff',
+                        titleColor: '#701a75',
+                        iconColor: '#d946ef',
+                        glowColor: 'rgba(217, 70, 239, 0.08)'
+                      },
+                      {
+                        border: '#cbd5e1',
+                        borderActive: '#f43f5e',
+                        badgeBg: '#f43f5e',
+                        badgeText: '#ffffff',
+                        titleColor: '#4c0519',
+                        iconColor: '#f43f5e',
+                        glowColor: 'rgba(244, 63, 94, 0.08)'
+                      },
+                      {
+                        border: '#cbd5e1',
+                        borderActive: '#14b8a6',
+                        badgeBg: '#14b8a6',
+                        badgeText: '#ffffff',
+                        titleColor: '#0f766e',
+                        iconColor: '#14b8a6',
+                        glowColor: 'rgba(20, 184, 166, 0.08)'
+                      }
+                    ];
+
+                    const isPassedArray = importantDates.map(evt => {
+                      try {
+                        const cleanDateStr = evt.event_date.replace(/-[0-9]+/g, '').trim();
+                        const dateVal = new Date(cleanDateStr);
+                        if (isNaN(dateVal.getTime())) return false;
+                        return dateVal <= new Date();
+                      } catch (e) {
+                        return false;
+                      }
+                    });
+
+                    return importantDates.map((evt, idx) => {
+                      const { month, day, year } = parseDateDisplay(evt.event_date);
+                      const isPassed = isPassedArray[idx];
+                      const palette = CARD_PALETTES[idx % CARD_PALETTES.length];
+
+                      return (
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.4, delay: idx * 0.05 }}
+                          whileHover={{
+                            y: -5,
+                            borderColor: palette.borderActive,
+                            boxShadow: `0 12px 30px ${palette.glowColor}`
+                          }}
+                          style={{
+                            background: '#ffffff',
+                            border: `1px solid ${palette.border}`,
+                            borderRadius: '1.25rem',
+                            padding: '2rem',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            position: 'relative',
+                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                            cursor: 'default'
+                          }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                            <span style={{
+                              fontSize: '0.75rem',
+                              fontWeight: 800,
+                              color: palette.badgeText,
+                              background: palette.badgeBg,
+                              padding: '0.4rem 0.95rem',
+                              borderRadius: '2rem',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.05em'
+                            }}>
+                              {month} {day}, {year}
+                            </span>
+
+                            {isPassed ? (
+                              <CheckCircle size={22} style={{ color: '#10b981', flexShrink: 0 }} />
+                            ) : (
+                              <Clock size={22} style={{ color: palette.iconColor, flexShrink: 0 }} />
+                            )}
+                          </div>
+
+                          <h4 style={{
+                            fontSize: '1.2rem',
+                            fontWeight: 800,
+                            color: palette.titleColor,
+                            marginBottom: '0.75rem',
+                            lineHeight: 1.3
+                          }}>
+                            {evt.title}
+                          </h4>
+
+                          <p style={{
+                            fontSize: '0.9rem',
+                            color: '#475569',
+                            lineHeight: 1.5,
+                            margin: 0
+                          }}>
+                            {evt.desc}
+                          </p>
+                        </motion.div>
+                      );
+                    });
+                  })()}
+                </div>
+              </div>
+            </section>
+
+            {/* Workshops Section */}
+            <section id="workshops" className="section">
+              <div className="container">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  style={{ textAlign: 'center', marginBottom: '4rem' }}
+                >
+                  <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.workshops_badge}</span>
+                  <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.workshops_title}</h2>
+                  <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
+                  <p style={{ color: 'var(--text-secondary)', marginTop: '1.5rem', maxWidth: '800px', marginInline: 'auto' }}>
+                    {info.workshops_desc}
+                  </p>
+                </motion.div>
+
+                <div className="grid-2-col" style={{ gap: '2rem' }}>
+                  {workshops.map((wk, index) => (
+                    <div key={index} className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                      <span style={{ fontSize: '0.8rem', color: '#f59e0b', fontWeight: 800, textTransform: 'uppercase' }}>{info.workshop_label} {index + 1}</span>
+                      <h3 style={{ fontSize: '1.5rem', color: 'white' }}>{wk.title}</h3>
+                      <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                        <strong>{info.label_lead_instructor}</strong> {wk.instructor}
+                      </div>
+                      <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.85rem', color: '#06b6d4', fontWeight: 600 }}>
+                        <span>{wk.duration}</span>
+                        <span>{info.label_fee} {wk.price}</span>
+                      </div>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>{wk.details}</p>
+                      <button
+                        onClick={() => scrollToSection('registration')}
+                        className="btn btn-secondary"
+                        style={{ marginTop: 'auto', alignSelf: 'flex-start' }}
+                      >
+                        {info.workshops_btn_reg}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Guidelines & CMT Submission are now standalone at src/components/GuidelinesPage.tsx */}
+
+            {/* Registration Section */}
+            <section id="registration" className="section">
+              <div className="container">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  style={{ textAlign: 'center', marginBottom: '3.5rem' }}
+                >
+                  <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.reg_badge}</span>
+                  <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.reg_title}</h2>
+                  <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
+                </motion.div>
+
+                {/* General Guidelines Card */}
+                <div className="glass-card" style={{ padding: '2rem', marginBottom: '3.5rem' }}>
+                  <h3 style={{ fontSize: '1.4rem', color: 'white', marginBottom: '1.25rem', fontWeight: 700 }}>Registration Guidelines</h3>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.7', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <p style={{ margin: 0 }}>
+                      <strong>At least one of the authors</strong> of each accepted paper must register for the conference for the paper to be included in the conference proceedings and published through <strong>IEEE Xplore (Scopus Indexed)</strong>.
+                    </p>
+                    <p style={{ margin: 0 }}>
+                      All accepted and presented papers of AECTSD 2027 will be submitted for possible publication in the <strong>IEEE Xplore® Digital Library</strong>.
+                    </p>
+                    <p style={{ margin: 0 }}>
+                      Full registration includes the registration of one paper. Additional papers for a single registration come with an additional fee. The maximum length of the paper is <strong>6 pages</strong> including figures, tables, and references.
+                    </p>
+                    <p style={{ margin: 0 }}>
+                      Registration fee covers admission to all sessions, cost of publishing the article in IEEE Xplore digital library, conference proceedings, welcome reception, conference kit, refreshments, working lunch, banquet dinner and half-a-day tour to nearby places.
+                    </p>
+                    <p style={{ margin: 0, color: '#d97706', fontWeight: 600 }}>
+                      * A fee of Rs. 500 will be applied for each additional page (with a maximum of 2 pages).
+                    </p>
+                  </div>
+                </div>
+
+                {/* Registration Tables Side-by-Side */}
+                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '3.5rem' }}>
+
+                  {/* Indian Authors Table */}
+                  <div style={{ flex: '1 1 500px', minWidth: '0' }}>
+                    <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '1.25rem', fontWeight: 700 }}>
+                      Indian Authors (Fees in INR, GST Inclusive)
+                    </h3>
+                    <div className="registration-table-container" style={{ width: '100%', overflowX: 'auto' }}>
+                      <table className="registration-table">
+                        <thead>
+                          <tr>
+                            <th rowSpan={2} style={{ width: '30%', verticalAlign: 'middle', textAlign: 'left' }}>Categories</th>
+                            <th colSpan={2}>Graduate Student / Research Scholar</th>
+                            <th colSpan={2}>Professionals</th>
+                          </tr>
+                          <tr>
+                            <th>IEEE Member</th>
+                            <th>Non-IEEE Member</th>
+                            <th>IEEE Member</th>
+                            <th>Non-IEEE Member</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference only</td>
+                            <td>₹6,000*</td>
+                            <td>₹7,000*</td>
+                            <td>₹7,000*</td>
+                            <td>₹8,000*</td>
+                          </tr>
+                          <tr>
+                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Tutorial only</td>
+                            <td>₹1,000</td>
+                            <td>₹1,250</td>
+                            <td>₹1,250</td>
+                            <td>₹1,500</td>
+                          </tr>
+                          <tr>
+                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference plus Tutorial</td>
+                            <td>₹6,500*</td>
+                            <td>₹7,500*</td>
+                            <td>₹7,500*</td>
+                            <td>₹8,500*</td>
+                          </tr>
+                          <tr>
+                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Indian Non-Author Attendee</td>
+                            <td>₹3,500</td>
+                            <td>₹5,000</td>
+                            <td>₹4,500</td>
+                            <td>₹6,000</td>
+                          </tr>
+                          <tr>
+                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Rate per Additional Paper</td>
+                            <td>₹3,000</td>
+                            <td>₹3,000</td>
+                            <td>₹3,000</td>
+                            <td>₹3,000</td>
+                          </tr>
+                          <tr>
+                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Extra Page (after 6 pages)</td>
+                            <td>₹500</td>
+                            <td>₹500</td>
+                            <td>₹500</td>
+                            <td>₹500</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
 
-                  <div className="qr-card-footer">
-                    <p className="qr-card-footer-text">
-                      Scan the QR code for Route<br />
-                      <strong>{qr.route.replace('Route ', '')}</strong>
-                    </p>
+                  {/* Foreign Authors Table */}
+                  <div style={{ flex: '1 1 500px', minWidth: '0' }}>
+                    <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '1.25rem', fontWeight: 700 }}>
+                      Foreign Authors (Fees in USD, GST Inclusive)
+                    </h3>
+                    <div className="registration-table-container" style={{ width: '100%', overflowX: 'auto' }}>
+                      <table className="registration-table">
+                        <thead>
+                          <tr>
+                            <th rowSpan={2} style={{ width: '30%', verticalAlign: 'middle', textAlign: 'left' }}>Categories</th>
+                            <th colSpan={2}>Graduate Student / Research Scholar</th>
+                            <th colSpan={2}>Professionals</th>
+                          </tr>
+                          <tr>
+                            <th>IEEE Member</th>
+                            <th>Non-IEEE Member</th>
+                            <th>IEEE Member</th>
+                            <th>Non-IEEE Member</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference only</td>
+                            <td>$150*</td>
+                            <td>$200*</td>
+                            <td>$200*</td>
+                            <td>$250*</td>
+                          </tr>
+                          <tr>
+                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Tutorial only</td>
+                            <td>$40</td>
+                            <td>$50</td>
+                            <td>$50</td>
+                            <td>$75</td>
+                          </tr>
+                          <tr>
+                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference plus Tutorial</td>
+                            <td>$175*</td>
+                            <td>$225*</td>
+                            <td>$225*</td>
+                            <td>$300*</td>
+                          </tr>
+                          <tr>
+                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Rate per Additional Paper</td>
+                            <td>$50</td>
+                            <td>$50</td>
+                            <td>$50</td>
+                            <td>$50</td>
+                          </tr>
+                          <tr>
+                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Extra Page (after 6 pages)</td>
+                            <td>$20</td>
+                            <td>$20</td>
+                            <td>$20</td>
+                            <td>$20</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
+
+                </div>
+
+                {/* Bank Account Details */}
+                <div className="glass-card" style={{ padding: '2rem', marginBottom: '3.5rem', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#0f172a' }}>
+                  <h3 style={{ fontSize: '1.4rem', color: '#091d36', marginBottom: '0.5rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ color: '#0f52ba', fontSize: '1.5rem', fontWeight: 900 }}>$</span> Bank Account Details
+                  </h3>
+                  <p style={{ color: '#475569', fontSize: '0.95rem', marginBottom: '2rem', lineHeight: '1.5' }}>
+                    Please find the official banking channels to process registration fees. Bank transfer references must include your Paper ID.
+                  </p>
+
+                  <div className="grid-2-col" style={{ gap: '2.5rem', alignItems: 'stretch' }}>
+                    {/* Left Column: Bank Parameters Table */}
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'center' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        {[
+                          { label: 'Account Name', value: 'Sri Ramakrishna Engineering College - AECTSD' },
+                          { label: 'Bank Name', value: 'ICICI Bank, Coimbatore' },
+                          { label: 'Account Number', value: '058705008310' },
+                          { label: 'IFSC Code', value: 'ICIC0000587' },
+                          { label: 'Branch Location', value: 'SREC Campus Branch, Coimbatore' }
+                        ].map((row, rIdx) => (
+                          <div
+                            key={rIdx}
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              paddingBottom: '0.75rem',
+                              borderBottom: rIdx < 4 ? '1px solid #e2e8f0' : 'none',
+                              gap: '1rem'
+                            }}
+                          >
+                            <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.95rem', flexShrink: 0 }}>{row.label}</span>
+                            <span style={{ color: '#1e293b', fontSize: '0.95rem', fontWeight: 500, textAlign: 'right' }}>{row.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Right Column: Important Payment Note Card */}
+                    <div
+                      style={{
+                        background: '#fffbeb',
+                        border: '1px solid #fef3c7',
+                        borderRadius: '1rem',
+                        padding: '1.75rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.75rem'
+                      }}
+                    >
+                      <h4 style={{ fontSize: '0.95rem', color: '#b45309', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
+                        IMPORTANT PAYMENT NOTE
+                      </h4>
+                      <p style={{ color: '#78350f', fontSize: '0.92rem', lineHeight: '1.6', margin: 0, fontWeight: 500 }}>
+                        Please include your Paper ID in the payment reference. Once the wire transfer transaction completes successfully, authors are requested to upload the scanned payment receipt copy in the registration form below.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Modifiers Box & Calculator Callout */}
+                <div className="grid-2-col" style={{ gap: '2rem', alignItems: 'stretch', marginBottom: '3rem' }}>
+                  {/* Notes box */}
+                  <div className="glass-card" style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1rem', borderLeft: '4px solid #f58220' }}>
+                    <h4 style={{ fontSize: '1.1rem', color: 'white', fontWeight: 700, margin: 0 }}>Fee Modifiers & Addons</h4>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.88rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                      <li>
+                        <strong style={{ color: '#f58220' }}>* Early Bird Registration:</strong>
+                        <ul style={{ paddingLeft: '1.2rem', marginTop: '0.25rem' }}>
+                          <li>Discount of <strong>INR 1,000</strong> on Indian conference & conference plus tutorial registration fees.</li>
+                          <li>Discount of <strong>INR 500</strong> on the Indian non-author attendee fee.</li>
+                          <li>Discount of <strong>USD 25</strong> on Foreign conference & conference plus tutorial registration fees.</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <strong style={{ color: 'white' }}>* Late Registration Fee:</strong> Additional surcharge fee of <strong>INR 1,000 / USD 25</strong> applies on conference and conference plus tutorial registration fees.
+                      </li>
+                      <li>
+                        <strong style={{ color: 'white' }}>* Virtual Mode Presentation:</strong> Additional addon charge of <strong>INR 1,000 / USD 25</strong> applies on the conference registration fee.
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Interactive portal callout */}
+                  <div className="glass-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                    <div style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', padding: '1rem', borderRadius: '50%', marginBottom: '1.25rem' }}>
+                      <CheckCircle size={32} />
+                    </div>
+                    <h4 style={{ fontSize: '1.25rem', color: 'white', fontWeight: 700, marginBottom: '0.5rem' }}>Dynamic Fee Calculator</h4>
+                    <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', maxWidth: '350px' }}>
+                      Instantly calculate your total registration fees including extra pages and optional pre-conference tutorial addons.
+                    </p>
+                    <button
+                      className="btn btn-primary"
+                      style={{ padding: '0.75rem 2.5rem', fontSize: '1rem' }}
+                      onClick={() => setShowCalcModal(true)}
+                    >
+                      Launch Fee Calculator
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Contact Us Section */}
+            <section id="contact-us" className="section">
+              <div className="container">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  style={{ textAlign: 'center', marginBottom: '4rem' }}
+                >
+                  <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.contact_badge || 'Connect'}</span>
+                  <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.contact_title || 'Contact Us'}</h2>
+                  <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
                 </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+
+                <div className="grid-2-col" style={{ gap: '2rem' }}>
+                  {/* Contact Form */}
+                  <div className="glass-card">
+                    <h3 style={{ fontSize: '1.5rem', color: 'white', marginBottom: '1.5rem' }}>{info.contact_form_title || 'Send Us a Message'}</h3>
+
+                    {formSubmitted ? (
+                      <div style={{
+                        background: 'rgba(34, 197, 94, 0.1)',
+                        border: '1px solid rgba(34, 197, 94, 0.3)',
+                        borderRadius: '0.5rem',
+                        padding: '1.5rem',
+                        textAlign: 'center',
+                        color: '#4ade80'
+                      }}>
+                        <CheckCircle size={36} style={{ margin: '0 auto 1rem' }} />
+                        <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>{info.contact_form_success_title || 'Message Sent!'}</h4>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{info.contact_form_success_desc || 'Thank you for reaching out. We will get back to you shortly.'}</p>
+                      </div>
+                    ) : (
+                      <form onSubmit={handleContactSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div>
+                          <label style={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>{info.contact_form_label_name || 'Your Name'}</label>
+                          <input
+                            type="text"
+                            required
+                            className="form-input"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            placeholder={info.contact_form_placeholder_name || 'Enter full name'}
+                          />
+                        </div>
+
+                        <div>
+                          <label style={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>{info.contact_form_label_email || 'Email Address'}</label>
+                          <input
+                            type="email"
+                            required
+                            className="form-input"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            placeholder={info.contact_form_placeholder_email || 'Enter email address'}
+                          />
+                        </div>
+
+                        <div>
+                          <label style={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>{info.contact_form_label_subject || 'Subject'}</label>
+                          <input
+                            type="text"
+                            required
+                            className="form-input"
+                            value={formData.subject}
+                            onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                            placeholder={info.contact_form_placeholder_subject || 'How can we help?'}
+                          />
+                        </div>
+
+                        <div>
+                          <label style={{ fontSize: '0.85rem', color: '#cbd5e1', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>{info.contact_form_label_message || 'Message'}</label>
+                          <textarea
+                            rows={4}
+                            required
+                            className="form-input"
+                            value={formData.message}
+                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                            placeholder={info.contact_form_placeholder_message || 'Type details here...'}
+                          />
+                        </div>
+
+                        <button type="submit" className="btn btn-primary" style={{ alignSelf: 'flex-start', marginTop: '0.5rem' }}>
+                          {info.contact_form_btn_send || 'Send Message'}
+                        </button>
+                      </form>
+                    )}
+                  </div>
+
+                  {/* Coordinators */}
+                  <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    {/* Coordinators */}
+                    <div className="glass-card" style={{ height: '100%' }}>
+                      <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '1.5rem' }}>{info.contact_coord_title || 'Conference Coordinators'}</h3>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
+                        {coordinators.map((coord, cidx) => {
+                          const initials = coord.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
+                          const bgColors = ['#0f52ba', '#0d9488', '#7c3aed', '#b45309', '#0369a1', '#be185d'];
+                          const bg = bgColors[cidx % bgColors.length];
+                          return (
+                            <div key={cidx} style={{ borderRadius: '0.75rem', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', display: 'flex', flexDirection: 'column' }}>
+                              {/* Box Image Area — no overlay badge */}
+                              <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0 }}>
+                                {getMemberImage(coord.name, coord.image_url) && !getMemberImage(coord.name, coord.image_url).includes('dicebear') ? (
+                                  <img
+                                    src={getMemberImage(coord.name, coord.image_url)}
+                                    alt={coord.name}
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+                                  />
+                                ) : (
+                                  <div style={{ width: '100%', height: '100%', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <span style={{ fontSize: '3rem', fontWeight: 800, color: 'white', letterSpacing: '0.05em' }}>{initials}</span>
+                                  </div>
+                                )}
+                              </div>
+                              {/* Info */}
+                              <div style={{ padding: '0.9rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                                <h4 style={{ fontSize: '1rem', color: 'white', margin: 0, fontWeight: 700 }}>{coord.name}</h4>
+                                <span style={{ fontSize: '0.65rem', color: '#f59e0b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.4 }}>{coord.role}</span>
+                                {coord.email && (
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', marginTop: '0.2rem' }}>
+                                    <Mail size={11} style={{ color: '#60a5fa', flexShrink: 0 }} />
+                                    <a href={`mailto:${coord.email}`} style={{ color: '#60a5fa', textDecoration: 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{coord.email}</a>
+                                  </div>
+                                )}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                                  <Phone size={11} style={{ flexShrink: 0 }} />
+                                  <span>{coord.phone}</span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Map & Directions Section */}
+            <section id="location" className="section" style={{ background: '#ffffff' }}>
+              <div className="container">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInUp}
+                  style={{ textAlign: 'center', marginBottom: '3.5rem' }}
+                >
+                  <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>Venue</span>
+                  <h2 style={{ fontSize: '2.5rem', color: '#091d36', marginTop: '0.5rem' }}>Conference Venue & Reach</h2>
+                  <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
+                </motion.div>
+
+                {/* Venue Description Card */}
+                <div className="glass-card" style={{ padding: '2rem', marginBottom: '3rem', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
+                  <h3 style={{ fontSize: '1.4rem', color: '#091d36', marginBottom: '1rem', fontWeight: 700 }}>Sri Ramakrishna Engineering College (SREC)</h3>
+                  <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: '1.7', margin: '0 0 1.25rem' }}>
+                    Sri Ramakrishna Engineering College (SREC), located in Coimbatore, was established in 1994 and is managed by the SNR Sons Charitable Trust. The college offers undergraduate and postgraduate programs in engineering and technology. SREC is known for its strong academic curriculum, research initiatives, and modern facilities, fostering a practical learning environment. The college also emphasizes extracurricular activities and industry collaborations, aiming to produce skilled professionals.
+                  </p>
+                  <a
+                    href="https://srec.ac.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#0f52ba', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
+                  >
+                    Visit SREC Official Website <ExternalLink size={14} />
+                  </a>
+                </div>
+
+                <div className="grid-2-col" style={{ gap: '2rem', marginBottom: '3.5rem', alignItems: 'stretch' }}>
+                  {/* Left: How to Reach & Mini Map */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                    {/* College Mini Map */}
+                    <motion.div
+                      initial={{ opacity: 0, x: -30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6 }}
+                      className="map-container"
+                      style={{ height: '320px', overflow: 'hidden', borderRadius: '1rem' }}
+                    >
+                      <iframe
+                        title="SREC Campus Map"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.150328964016!2d76.9632117754871!3d11.102171853099849!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8f7000afa766b%3A0x2b5757b8d520a3af!2sSri%20Ramakrishna%20Engineering%20College!5e0!3m2!1sen!2sin!4v1780992469751!5m2!1sen!2sin"
+                        allowFullScreen={true}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        style={{ width: '100%', height: '100%', border: 0 }}
+                      />
+                    </motion.div>
+                  </div>
+
+                  {/* Right: How to Reach details */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="glass-card"
+                    style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', background: '#f8fafc', border: '1px solid #e2e8f0' }}
+                  >
+                    <h3 style={{ fontSize: '1.4rem', color: '#091d36', marginBottom: '1.25rem', fontWeight: 700 }}>How to Reach</h3>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '1.5rem' }}>
+                      <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
+                        <div style={{ background: 'rgba(59, 130, 246, 0.08)', padding: '0.5rem', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0 }}>
+                          <MapPin size={20} />
+                        </div>
+                        <div>
+                          <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: '0 0 0.15rem', color: '#091d36' }}>Coimbatore International Airport</h4>
+                          <span style={{ fontSize: '0.88rem', color: '#475569' }}>Distance: ~20 km | Approx. 40 minutes travel time</span>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
+                        <div style={{ background: 'rgba(59, 130, 246, 0.08)', padding: '0.5rem', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0 }}>
+                          <MapPin size={20} />
+                        </div>
+                        <div>
+                          <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: '0 0 0.15rem', color: '#091d36' }}>Coimbatore Junction Railway Station</h4>
+                          <span style={{ fontSize: '0.88rem', color: '#475569' }}>Distance: ~15 km | Approx. 30 minutes travel time</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', padding: '1rem', borderRadius: '0.5rem', fontSize: '0.88rem', color: '#1e3a8a', lineHeight: '1.5' }}>
+                      <p style={{ margin: '0 0 0.5rem' }}>
+                        💡 <strong>Cab Hire Note:</strong> Candidates can hire a car (Red Taxi, Go Taxi, or OLA) directly from Coimbatore Airport or Railway Station to reach SREC.
+                      </p>
+                      <p style={{ margin: 0 }}>
+                        🚗 <strong>Auto-Rickshaw Note:</strong> Candidates can also hire an auto-rickshaw from <strong>Thudiyalur</strong> (nearest town, ~4 km away) to reach SREC.
+                      </p>
+                    </div>
+                  </motion.div>
+                </div>
+
+
+
+                {/* QR Navigation Cards */}
+                <div className="qr-section">
+                  <h3 style={{ fontSize: '1.75rem', color: '#091d36', fontWeight: 800, textAlign: 'center', marginBottom: '0.5rem' }}>
+                    Navigate with QR Codes: Find Your Way Easily!
+                  </h3>
+                  <p style={{ color: '#475569', fontSize: '0.95rem', textAlign: 'center', marginBottom: '2.5rem' }}>
+                    Scan the QR codes below on your mobile device to open live GPS directions directly in Google Maps.
+                  </p>
+
+                  <div className="qr-card-grid">
+                    {[
+                      {
+                        route: "Route Saravanampatti - SREC",
+                        url: "https://www.google.com/maps/dir/Saravanampatti,+Coimbatore,+Tamil+Nadu/Sri+Ramakrishna+Engineering+College,+Vattamalaipalayam,+Coimbatore,+Tamil+Nadu+641022/"
+                      },
+                      {
+                        route: "Route Gandhipuram - SREC",
+                        url: "https://www.google.com/maps/dir/Gandhipuram,+Coimbatore,+Tamil+Nadu/Sri+Ramakrishna+Engineering+College,+Vattamalaipalayam,+Coimbatore,+Tamil+Nadu+641022/"
+                      },
+                      {
+                        route: "Route CBE Railway Station - SREC",
+                        url: "https://www.google.com/maps/dir/Coimbatore+Junction,+State+Bank+Rd,+Gopalapuram,+Coimbatore,+Tamil+Nadu+641018/Sri+Ramakrishna+Engineering+College,+Vattamalaipalayam,+Coimbatore,+Tamil+Nadu+641022/"
+                      }
+                    ].map((qr, qidx) => (
+                      <motion.div
+                        key={qidx}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: qidx * 0.15 }}
+                        className="qr-card"
+                      >
+                        <a
+                          href={info.srec_url || "https://srec.ac.in/"}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Sri Ramakrishna Engineering College"
+                          className="qr-card-header"
+                          style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}
+                        >
+                          <img
+                            src={srecLogo}
+                            alt="SREC Logo"
+                            className="qr-card-header-logo"
+                          />
+                          <div className="qr-card-header-text" style={{ paddingLeft: '1rem', textAlign: 'left' }}>
+                            <h4 className="qr-card-header-title">Sri Ramakrishna</h4>
+                            <p className="qr-card-header-subtitle">Engineering College</p>
+                          </div>
+                        </a>
+
+                        <div className="qr-gold-container">
+                          <div className="qr-code-wrapper">
+                            <img
+                              src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(qr.url)}`}
+                              alt={`QR Code for ${qr.route}`}
+                              className="qr-code-img"
+                              loading="lazy"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="qr-card-footer">
+                          <p className="qr-card-footer-text">
+                            Scan the QR code for Route<br />
+                            <strong>{qr.route.replace('Route ', '')}</strong>
+                          </p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
           </motion.div>
         )}
       </AnimatePresence>
 
 
       {/* Footer */}
-      <Footer 
-        srecUrl={info.srec_url} 
-        copyright={info.footer_copyright} 
-        sponsor={info.footer_sponsor} 
+      <Footer
+        srecUrl={info.srec_url}
+        copyright={info.footer_copyright}
+        sponsor={info.footer_sponsor}
       />
 
 
@@ -3638,29 +3630,29 @@ export default function App() {
 
               {/* Grid content inside modal */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                
+
                 {/* 1. Calculator & Form Grid */}
                 <div className="grid-2-col" style={{ gap: '2rem', alignItems: 'start' }}>
-                  
+
                   {/* Left Column: Selections */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                     <h4 style={{ fontSize: '1.15rem', color: 'var(--text-primary)', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.5rem', fontWeight: 700 }}>1. Calculate Fee</h4>
-                    
+
                     {/* Indian vs International */}
                     <div>
                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 700, display: 'block', marginBottom: '0.35rem' }}>Are you Indian or International?*</label>
                       <div style={{ display: 'flex', gap: '0.75rem' }}>
-                        <button 
-                          type="button" 
-                          onClick={() => { setIsIndian(true); setRegOption('conference'); }} 
+                        <button
+                          type="button"
+                          onClick={() => { setIsIndian(true); setRegOption('conference'); }}
                           className={`btn ${isIndian ? 'btn-primary' : 'btn-secondary'}`}
                           style={{ flex: 1, borderRadius: '0.375rem', fontSize: '0.85rem', padding: '0.5rem 1rem' }}
                         >
                           Indian
                         </button>
-                        <button 
-                          type="button" 
-                          onClick={() => { setIsIndian(false); if (regOption === 'listener') setRegOption('conference'); }} 
+                        <button
+                          type="button"
+                          onClick={() => { setIsIndian(false); if (regOption === 'listener') setRegOption('conference'); }}
                           className={`btn ${!isIndian ? 'btn-primary' : 'btn-secondary'}`}
                           style={{ flex: 1, borderRadius: '0.375rem', fontSize: '0.85rem', padding: '0.5rem 1rem' }}
                         >
@@ -3673,17 +3665,17 @@ export default function App() {
                     <div>
                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 700, display: 'block', marginBottom: '0.35rem' }}>Are you a student or a professional?*</label>
                       <div style={{ display: 'flex', gap: '0.75rem' }}>
-                        <button 
-                          type="button" 
-                          onClick={() => setIsStudent(true)} 
+                        <button
+                          type="button"
+                          onClick={() => setIsStudent(true)}
                           className={`btn ${isStudent ? 'btn-primary' : 'btn-secondary'}`}
                           style={{ flex: 1, borderRadius: '0.375rem', fontSize: '0.85rem', padding: '0.5rem 1rem' }}
                         >
                           Student / Scholar
                         </button>
-                        <button 
-                          type="button" 
-                          onClick={() => setIsStudent(false)} 
+                        <button
+                          type="button"
+                          onClick={() => setIsStudent(false)}
                           className={`btn ${!isStudent ? 'btn-primary' : 'btn-secondary'}`}
                           style={{ flex: 1, borderRadius: '0.375rem', fontSize: '0.85rem', padding: '0.5rem 1rem' }}
                         >
@@ -3696,17 +3688,17 @@ export default function App() {
                     <div>
                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 700, display: 'block', marginBottom: '0.35rem' }}>Are you an IEEE member?*</label>
                       <div style={{ display: 'flex', gap: '0.75rem' }}>
-                        <button 
-                          type="button" 
-                          onClick={() => setIsIeeeMember(true)} 
+                        <button
+                          type="button"
+                          onClick={() => setIsIeeeMember(true)}
                           className={`btn ${isIeeeMember ? 'btn-primary' : 'btn-secondary'}`}
                           style={{ flex: 1, borderRadius: '0.375rem', fontSize: '0.85rem', padding: '0.5rem 1rem' }}
                         >
                           Yes (IEEE Member)
                         </button>
-                        <button 
-                          type="button" 
-                          onClick={() => setIsIeeeMember(false)} 
+                        <button
+                          type="button"
+                          onClick={() => setIsIeeeMember(false)}
                           className={`btn ${!isIeeeMember ? 'btn-primary' : 'btn-secondary'}`}
                           style={{ flex: 1, borderRadius: '0.375rem', fontSize: '0.85rem', padding: '0.5rem 1rem' }}
                         >
@@ -3718,9 +3710,9 @@ export default function App() {
                     {/* Registration Option */}
                     <div>
                       <label htmlFor="modal-reg-option" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 700, display: 'block', marginBottom: '0.35rem' }}>Select Registration Option*</label>
-                      <select 
+                      <select
                         id="modal-reg-option"
-                        value={regOption} 
+                        value={regOption}
                         onChange={(e) => setRegOption(e.target.value as 'conference' | 'tutorial' | 'both' | 'listener')}
                         className="form-input"
                         style={{ background: '#ffffff', color: 'var(--text-primary)', border: '1px solid #cbd5e1', padding: '0.5rem 0.75rem', fontSize: '0.85rem' }}
@@ -3737,12 +3729,12 @@ export default function App() {
                       <div>
                         <label htmlFor="modal-page-count" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 700, display: 'block', marginBottom: '0.35rem' }}>Number of Pages (Limit 1-12. Base covers 6 pages)*</label>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                          <input 
+                          <input
                             id="modal-page-count"
-                            type="number" 
-                            min="1" 
-                            max="12" 
-                            value={pageCount} 
+                            type="number"
+                            min="1"
+                            max="12"
+                            value={pageCount}
                             onChange={(e) => setPageCount(Math.max(1, Math.min(12, Number(e.target.value))))}
                             className="form-input"
                             style={{ maxWidth: '80px', padding: '0.5rem', fontSize: '0.85rem', background: '#ffffff', color: 'var(--text-primary)', border: '1px solid #cbd5e1' }}
@@ -3757,11 +3749,11 @@ export default function App() {
                     {/* Modifiers */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.25rem' }}>
                       <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 700 }}>Additional Settings</label>
-                      
+
                       <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                        <input 
-                          type="checkbox" 
-                          checked={isLate} 
+                        <input
+                          type="checkbox"
+                          checked={isLate}
                           onChange={(e) => setIsLate(e.target.checked)}
                           style={{ width: '14px', height: '14px' }}
                         />
@@ -3769,9 +3761,9 @@ export default function App() {
                       </label>
 
                       <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                        <input 
-                          type="checkbox" 
-                          checked={workshopAddon} 
+                        <input
+                          type="checkbox"
+                          checked={workshopAddon}
                           onChange={(e) => setWorkshopAddon(e.target.checked)}
                           style={{ width: '14px', height: '14px' }}
                         />
@@ -3779,9 +3771,9 @@ export default function App() {
                       </label>
 
                       <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                        <input 
-                          type="checkbox" 
-                          checked={virtualMode} 
+                        <input
+                          type="checkbox"
+                          checked={virtualMode}
                           onChange={(e) => setVirtualMode(e.target.checked)}
                           style={{ width: '14px', height: '14px' }}
                         />
@@ -3795,7 +3787,7 @@ export default function App() {
                     {/* Billing Summary Box */}
                     <div style={{ background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '0.75rem', padding: '1.25rem' }}>
                       <h4 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '0.75rem', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.35rem', fontWeight: 700 }}>Fee Breakdown</h4>
-                      
+
                       {(() => {
                         const bill = calculateTotalFees();
                         return (
@@ -3804,7 +3796,7 @@ export default function App() {
                               <span>Base Fee:</span>
                               <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{bill.currencySymbol}{bill.baseFee}</span>
                             </div>
-                            
+
                             {bill.penalty > 0 && (
                               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#dc2626' }}>
                                 <span>Late Penalty:</span>
@@ -3895,12 +3887,12 @@ export default function App() {
                       /* Submission Form (Bank Transfer) */
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                         <h4 style={{ fontSize: '1rem', color: 'var(--text-primary)', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.35rem', fontWeight: 700 }}>2. Submit Proof of Payment</h4>
-                        
+
                         {regSuccess ? (
-                          <div style={{ 
-                            background: 'rgba(34, 197, 94, 0.08)', 
-                            border: '1px solid rgba(34, 197, 94, 0.25)', 
-                            borderRadius: '0.5rem', 
+                          <div style={{
+                            background: 'rgba(34, 197, 94, 0.08)',
+                            border: '1px solid rgba(34, 197, 94, 0.25)',
+                            borderRadius: '0.5rem',
                             padding: '1rem',
                             textAlign: 'center',
                             color: '#22c55e',
@@ -3914,8 +3906,8 @@ export default function App() {
                             <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: 0 }}>
                               SREC finance coordinators will verify receipt reference AECTSD and send a confirmation email.
                             </p>
-                            <button 
-                              type="button" 
+                            <button
+                              type="button"
                               onClick={() => {
                                 setRegSuccess(false);
                                 setRegPaperId('');
@@ -3928,7 +3920,7 @@ export default function App() {
                                 setRegRegisterForTour(false);
                                 setRegPreferredTourPlace('');
                                 setShowRegValidation(false);
-                              }} 
+                              }}
                               className="btn btn-secondary"
                               style={{ marginTop: '0.5rem', padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}
                             >
@@ -3940,10 +3932,10 @@ export default function App() {
                             <div className="grid-2-col" style={{ gap: '0.75rem' }}>
                               <div>
                                 <label htmlFor="reg_paper_id" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>Paper ID*</label>
-                                <input 
+                                <input
                                   id="reg_paper_id"
-                                  type="text" 
-                                  required 
+                                  type="text"
+                                  required
                                   className={`form-input ${showRegValidation && !regPaperId ? 'is-invalid' : ''}`}
                                   style={{ padding: '0.4rem 0.6rem', fontSize: '0.8rem' }}
                                   placeholder="e.g. AECTSD-104"
@@ -3954,10 +3946,10 @@ export default function App() {
                               </div>
                               <div>
                                 <label htmlFor="reg_author_name" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>Author Name*</label>
-                                <input 
+                                <input
                                   id="reg_author_name"
-                                  type="text" 
-                                  required 
+                                  type="text"
+                                  required
                                   className={`form-input ${showRegValidation && !regAuthorName ? 'is-invalid' : ''}`}
                                   style={{ padding: '0.4rem 0.6rem', fontSize: '0.8rem' }}
                                   placeholder="Enter full name"
@@ -3970,10 +3962,10 @@ export default function App() {
 
                             <div>
                               <label htmlFor="reg_paper_title" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>Paper Title*</label>
-                              <input 
+                              <input
                                 id="reg_paper_title"
-                                type="text" 
-                                required 
+                                type="text"
+                                required
                                 className={`form-input ${showRegValidation && !regPaperTitle ? 'is-invalid' : ''}`}
                                 style={{ padding: '0.4rem 0.6rem', fontSize: '0.8rem' }}
                                 placeholder="e.g. A Secure VLSI Implementation for IoT Nodes"
@@ -3986,10 +3978,10 @@ export default function App() {
                             <div className="grid-2-col" style={{ gap: '0.75rem' }}>
                               <div>
                                 <label htmlFor="reg_email" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>Email Address*</label>
-                                <input 
+                                <input
                                   id="reg_email"
-                                  type="email" 
-                                  required 
+                                  type="email"
+                                  required
                                   className={`form-input ${showRegValidation && !regEmail ? 'is-invalid' : ''}`}
                                   style={{ padding: '0.4rem 0.6rem', fontSize: '0.8rem' }}
                                   placeholder="author@example.com"
@@ -4028,10 +4020,10 @@ export default function App() {
                                     <option value="+33" style={{ background: '#ffffff', color: '#0f172a' }}>🇫🇷 +33</option>
                                     <option value="+971" style={{ background: '#ffffff', color: '#0f172a' }}>🇦🇪 +971</option>
                                   </select>
-                                  <input 
+                                  <input
                                     id="reg_phone"
-                                    type="tel" 
-                                    required 
+                                    type="tel"
+                                    required
                                     className={`form-input ${showRegValidation && !regPhone ? 'is-invalid' : ''}`}
                                     style={{ flex: 1, padding: '0.4rem 0.6rem', fontSize: '0.8rem' }}
                                     placeholder="9876543210"
@@ -4046,9 +4038,9 @@ export default function App() {
                             {/* Explore Coimbatore / Tour Option */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.25rem' }}>
                               <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                                <input 
-                                  type="checkbox" 
-                                  checked={regRegisterForTour} 
+                                <input
+                                  type="checkbox"
+                                  checked={regRegisterForTour}
                                   onChange={(e) => {
                                     setRegRegisterForTour(e.target.checked);
                                     if (!e.target.checked) setRegPreferredTourPlace('');
@@ -4091,7 +4083,7 @@ export default function App() {
                             {/* Screenshot or URL */}
                             <div>
                               <label style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>Upload Payment Screenshot or enter payment proof URL</label>
-                              <div 
+                              <div
                                 style={{
                                   border: showRegValidation && !regScreenshot && !regPaymentUrl ? '2px dashed #ef4444' : '2px dashed #cbd5e1',
                                   borderRadius: '0.5rem',
@@ -4154,9 +4146,9 @@ export default function App() {
                               </div>
                             )}
 
-                            <button 
-                              type="submit" 
-                              className="btn btn-primary" 
+                            <button
+                              type="submit"
+                              className="btn btn-primary"
                               disabled={regSubmitting}
                               onClick={() => setShowRegValidation(true)}
                               style={{ marginTop: '0.35rem', width: '100%', padding: '0.65rem', background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent-cyan) 100%)', fontSize: '0.85rem', border: 'none', color: '#ffffff', borderRadius: '0.5rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(15, 82, 186, 0.25)' }}
@@ -4170,12 +4162,12 @@ export default function App() {
                       /* Online Checkout Gateway (Futuristic Mock) */
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                         <h4 style={{ fontSize: '1rem', color: 'var(--text-primary)', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.35rem', fontWeight: 700 }}>2. Online Payment Gateway</h4>
-                        
+
                         {onlineSuccess ? (
-                          <div style={{ 
-                            background: 'rgba(34, 197, 94, 0.08)', 
-                            border: '1px solid rgba(34, 197, 94, 0.25)', 
-                            borderRadius: '0.5rem', 
+                          <div style={{
+                            background: 'rgba(34, 197, 94, 0.08)',
+                            border: '1px solid rgba(34, 197, 94, 0.25)',
+                            borderRadius: '0.5rem',
                             padding: '1.25rem',
                             textAlign: 'center',
                             color: '#22c55e',
@@ -4192,8 +4184,8 @@ export default function App() {
                             <div style={{ fontSize: '0.75rem', fontFamily: 'monospace', padding: '0.4rem 0.8rem', background: '#f8fafc', borderRadius: '0.25rem', border: '1px solid #e2e8f0', marginTop: '0.25rem', color: 'var(--text-primary)' }}>
                               TxID: SREC-MOCK-{Math.floor(100000 + Math.random() * 900000)}
                             </div>
-                            <button 
-                              type="button" 
+                            <button
+                              type="button"
                               onClick={() => {
                                 setOnlineSuccess(false);
                                 setCardHolder('');
@@ -4202,7 +4194,7 @@ export default function App() {
                                 setCardCvv('');
                                 setSelectedUpi(null);
                                 setUpiId('');
-                              }} 
+                              }}
                               className="btn btn-secondary"
                               style={{ marginTop: '0.5rem', padding: '0.4rem 1rem', fontSize: '0.8rem' }}
                             >
@@ -4218,7 +4210,7 @@ export default function App() {
                               setOnlineSuccess(true);
                             }, 1500);
                           }} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            
+
                             {/* Futuristic Credit Card Graphic */}
                             <div style={{
                               width: '100%',
@@ -4432,9 +4424,9 @@ export default function App() {
                               </p>
                             </div>
 
-                            <button 
-                              type="submit" 
-                              className="btn btn-primary" 
+                            <button
+                              type="submit"
+                              className="btn btn-primary"
                               disabled={onlinePaying}
                               style={{ marginTop: '0.35rem', width: '100%', padding: '0.65rem', background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent-cyan) 100%)', fontSize: '0.85rem', border: 'none', color: '#ffffff', borderRadius: '0.5rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(15, 82, 186, 0.25)' }}
                             >
@@ -4473,7 +4465,7 @@ export default function App() {
                   <div style={{ display: 'inline-flex', background: 'rgba(59, 130, 246, 0.08)', padding: '1rem', borderRadius: '50%', marginBottom: '1.5rem', color: '#0f52ba' }}>
                     <Shield size={42} />
                   </div>
-                  
+
                   <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#091d36', marginBottom: '0.5rem' }}>
                     {adminRegMode ? 'Register Admin Account' : 'Admin Portal Login'}
                   </h3>
@@ -4484,11 +4476,11 @@ export default function App() {
                   <form onSubmit={handleAdminAuth} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', textAlign: 'left' }}>
                     <div>
                       <label htmlFor="admin_username" style={{ fontSize: '0.8rem', color: '#334155', fontWeight: 700, display: 'block', marginBottom: '0.35rem' }}>Username</label>
-                      <input 
+                      <input
                         id="admin_username"
-                        type="text" 
-                        required 
-                        className="form-input" 
+                        type="text"
+                        required
+                        className="form-input"
                         value={adminUsername}
                         onChange={(e) => setAdminUsername(e.target.value)}
                         placeholder="Enter admin username"
@@ -4498,11 +4490,11 @@ export default function App() {
 
                     <div>
                       <label htmlFor="admin_password" style={{ fontSize: '0.8rem', color: '#334155', fontWeight: 700, display: 'block', marginBottom: '0.35rem' }}>Password</label>
-                      <input 
+                      <input
                         id="admin_password"
-                        type="password" 
-                        required 
-                        className="form-input" 
+                        type="password"
+                        required
+                        className="form-input"
                         value={adminPassword}
                         onChange={(e) => setAdminPassword(e.target.value)}
                         placeholder="Enter password"
@@ -4514,11 +4506,11 @@ export default function App() {
                       <>
                         <div>
                           <label htmlFor="admin_confirm_password" style={{ fontSize: '0.8rem', color: '#334155', fontWeight: 700, display: 'block', marginBottom: '0.35rem' }}>Confirm Password</label>
-                          <input 
+                          <input
                             id="admin_confirm_password"
-                            type="password" 
-                            required 
-                            className="form-input" 
+                            type="password"
+                            required
+                            className="form-input"
                             value={adminConfirmPassword}
                             onChange={(e) => setAdminConfirmPassword(e.target.value)}
                             placeholder="Re-enter password"
@@ -4527,11 +4519,11 @@ export default function App() {
                         </div>
                         <div>
                           <label htmlFor="admin_master_key" style={{ fontSize: '0.8rem', color: '#334155', fontWeight: 700, display: 'block', marginBottom: '0.35rem' }}>Master Key</label>
-                          <input 
+                          <input
                             id="admin_master_key"
-                            type="password" 
-                            required 
-                            className="form-input" 
+                            type="password"
+                            required
+                            className="form-input"
                             value={adminMasterKey}
                             onChange={(e) => setAdminMasterKey(e.target.value)}
                             placeholder="Enter master key to register"
@@ -4564,10 +4556,10 @@ export default function App() {
                     </div>
                   </form>
 
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => setShowAdminPortal(false)}
-                    className="btn btn-secondary" 
+                    className="btn btn-secondary"
                     style={{ width: '100%', marginTop: '1.5rem' }}
                   >
                     Close Window & Return
@@ -4587,9 +4579,9 @@ export default function App() {
                         <span style={{ fontSize: '0.78rem', color: '#64748b' }}>Logged in as: <strong>{adminUser}</strong></span>
                       </div>
                     </div>
-                    
+
                     <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
-                      <button 
+                      <button
                         onClick={() => {
                           setCurrentPage('admin');
                           setShowAdminPortal(false);
@@ -4602,7 +4594,7 @@ export default function App() {
                         Open Full Dashboard
                       </button>
 
-                      <button 
+                      <button
                         onClick={() => fetchDbData().then(() => alert('Database content refreshed!'))}
                         className="btn btn-secondary"
                         style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', padding: '0.5rem 1rem', fontSize: '0.85rem' }}
@@ -4610,8 +4602,8 @@ export default function App() {
                         <RefreshCw size={14} />
                         Refresh
                       </button>
-                      
-                      <button 
+
+                      <button
                         onClick={handleAdminLogout}
                         className="btn btn-secondary"
                         style={{ color: '#dc2626', border: '1px solid rgba(220, 38, 38, 0.2)', display: 'flex', alignItems: 'center', gap: '0.25rem', padding: '0.5rem 1rem', fontSize: '0.85rem' }}
@@ -4620,7 +4612,7 @@ export default function App() {
                         Logout
                       </button>
 
-                      <button 
+                      <button
                         onClick={() => setShowAdminPortal(false)}
                         style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                       >
@@ -4652,7 +4644,7 @@ export default function App() {
 
                   {/* Dashboard Content */}
                   <div className="admin-body">
-                    
+
                     {/* TAB: Registrations */}
                     {adminTab === 'overview' && (
                       <div>
@@ -4662,7 +4654,7 @@ export default function App() {
                             <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>View proof of payments and reference files sent by authors.</p>
                           </div>
                           {submittedRegistrations.length > 0 && (
-                            <button 
+                            <button
                               onClick={handleClearAllRegistrations}
                               className="btn btn-secondary"
                               style={{ background: '#fef2f2', border: '1px solid #fca5a5', color: '#b91c1c' }}
@@ -4737,7 +4729,7 @@ export default function App() {
                                         </td>
                                         <td>{new Date(reg.created_at).toLocaleString()}</td>
                                         <td>
-                                          <button 
+                                          <button
                                             onClick={() => handleDeleteRegistration(reg.id)}
                                             style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '0.25rem' }}
                                             title="Delete log"
@@ -4758,7 +4750,7 @@ export default function App() {
                                 <div key={reg.id || idx} className="admin-mobile-card">
                                   <div className="admin-mobile-card-header">
                                     <span style={{ fontWeight: 700, color: '#0f52ba', fontSize: '0.9rem' }}>{reg.paper_id || 'N/A'}</span>
-                                    <button 
+                                    <button
                                       onClick={() => handleDeleteRegistration(reg.id)}
                                       style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '0.25rem' }}
                                       title="Delete log"
@@ -4825,15 +4817,15 @@ export default function App() {
                     {adminTab === 'info' && (
                       <div>
                         <h4 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', fontWeight: 700 }}>General Webpage Configurations</h4>
-                        
+
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                           <div className="admin-form-row" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '1.5rem', marginBottom: '0.5rem' }}>
                             <div className="admin-form-group" style={{ flex: 1 }}>
                               <label htmlFor="info_show_announcement">Show Announcement Banner</label>
-                              <select 
+                              <select
                                 id="info_show_announcement"
-                                className="form-input" 
-                                value={info.show_announcement !== 'false' ? 'true' : 'false'} 
+                                className="form-input"
+                                value={info.show_announcement !== 'false' ? 'true' : 'false'}
                                 onChange={(e) => handleSaveInfoSetting('show_announcement', e.target.value)}
                                 title="Show Announcement Banner"
                               >
@@ -4843,12 +4835,12 @@ export default function App() {
                             </div>
                             <div className="admin-form-group" style={{ flex: 3 }}>
                               <label htmlFor="info_announcement_text">Announcement Banner Text</label>
-                              <input 
+                              <input
                                 id="info_announcement_text"
-                                type="text" 
-                                className="form-input" 
-                                value={info.announcement_text || '📢 Call for Papers! Mark your calendars: The Call for Papers for AECTSD 2027 opens on 15th December 2026. Start preparing your submission'} 
-                                onChange={(e) => handleSaveInfoSetting('announcement_text', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.announcement_text || '📢 Call for Papers! Mark your calendars: The Call for Papers for AECTSD 2027 opens on 15th December 2026. Start preparing your submission'}
+                                onChange={(e) => handleSaveInfoSetting('announcement_text', e.target.value)}
                                 placeholder="Enter Banner Text"
                                 title="Announcement Banner Text"
                               />
@@ -4858,24 +4850,24 @@ export default function App() {
                           <div className="admin-form-row">
                             <div className="admin-form-group">
                               <label htmlFor="info_hero_title">Hero Conference Title</label>
-                              <input 
+                              <input
                                 id="info_hero_title"
-                                type="text" 
-                                className="form-input" 
-                                value={info.hero_title || ''} 
-                                onChange={(e) => handleSaveInfoSetting('hero_title', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.hero_title || ''}
+                                onChange={(e) => handleSaveInfoSetting('hero_title', e.target.value)}
                                 placeholder="Enter Hero Conference Title"
                                 title="Hero Conference Title"
                               />
                             </div>
                             <div className="admin-form-group">
                               <label htmlFor="info_hero_subtitle">Hero Conference Subtitle</label>
-                              <input 
+                              <input
                                 id="info_hero_subtitle"
-                                type="text" 
-                                className="form-input" 
-                                value={info.hero_subtitle || ''} 
-                                onChange={(e) => handleSaveInfoSetting('hero_subtitle', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.hero_subtitle || ''}
+                                onChange={(e) => handleSaveInfoSetting('hero_subtitle', e.target.value)}
                                 placeholder="Enter Hero Conference Subtitle"
                                 title="Hero Conference Subtitle"
                               />
@@ -4885,24 +4877,24 @@ export default function App() {
                           <div className="admin-form-row">
                             <div className="admin-form-group">
                               <label htmlFor="info_event_date">Event Date Display</label>
-                              <input 
+                              <input
                                 id="info_event_date"
-                                type="text" 
-                                className="form-input" 
-                                value={info.event_date_display || ''} 
-                                onChange={(e) => handleSaveInfoSetting('event_date_display', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.event_date_display || ''}
+                                onChange={(e) => handleSaveInfoSetting('event_date_display', e.target.value)}
                                 placeholder="Enter Event Date"
                                 title="Event Date Display"
                               />
                             </div>
                             <div className="admin-form-group">
                               <label htmlFor="info_event_location">Event Location Display</label>
-                              <input 
+                              <input
                                 id="info_event_location"
-                                type="text" 
-                                className="form-input" 
-                                value={info.event_location_display || ''} 
-                                onChange={(e) => handleSaveInfoSetting('event_location_display', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.event_location_display || ''}
+                                onChange={(e) => handleSaveInfoSetting('event_location_display', e.target.value)}
                                 placeholder="Enter Event Location"
                                 title="Event Location Display"
                               />
@@ -4912,25 +4904,25 @@ export default function App() {
                           <div className="admin-form-row">
                             <div className="admin-form-group">
                               <label htmlFor="info_countdown_target">Countdown Target Time (ISO 8601 Format)</label>
-                              <input 
+                              <input
                                 id="info_countdown_target"
-                                type="text" 
-                                className="form-input" 
+                                type="text"
+                                className="form-input"
                                 placeholder="YYYY-MM-DDTHH:MM:SS"
-                                value={info.countdown_target || ''} 
-                                onChange={(e) => handleSaveInfoSetting('countdown_target', e.target.value)} 
+                                value={info.countdown_target || ''}
+                                onChange={(e) => handleSaveInfoSetting('countdown_target', e.target.value)}
                                 title="Countdown Target Time"
                               />
                               <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Currently: {new Date(info.countdown_target).toLocaleString()}</span>
                             </div>
                             <div className="admin-form-group">
                               <label htmlFor="info_cmt_link">CMT Portal Link</label>
-                              <input 
+                              <input
                                 id="info_cmt_link"
-                                type="text" 
-                                className="form-input" 
-                                value={info.cmt_link || ''} 
-                                onChange={(e) => handleSaveInfoSetting('cmt_link', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.cmt_link || ''}
+                                onChange={(e) => handleSaveInfoSetting('cmt_link', e.target.value)}
                                 placeholder="Enter CMT Portal Link"
                                 title="CMT Portal Link"
                               />
@@ -4940,24 +4932,24 @@ export default function App() {
                           <div className="admin-form-row">
                             <div className="admin-form-group">
                               <label htmlFor="info_srec_url">SREC Website URL</label>
-                              <input 
+                              <input
                                 id="info_srec_url"
-                                type="text" 
-                                className="form-input" 
-                                value={info.srec_url || ''} 
-                                onChange={(e) => handleSaveInfoSetting('srec_url', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.srec_url || ''}
+                                onChange={(e) => handleSaveInfoSetting('srec_url', e.target.value)}
                                 placeholder="Enter SREC Website URL"
                                 title="SREC Website URL"
                               />
                             </div>
                             <div className="admin-form-group">
                               <label htmlFor="info_ieee_sb_url">IEEE SB Website URL</label>
-                              <input 
+                              <input
                                 id="info_ieee_sb_url"
-                                type="text" 
-                                className="form-input" 
-                                value={info.ieee_sb_url || ''} 
-                                onChange={(e) => handleSaveInfoSetting('ieee_sb_url', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.ieee_sb_url || ''}
+                                onChange={(e) => handleSaveInfoSetting('ieee_sb_url', e.target.value)}
                                 placeholder="Enter IEEE SB Website URL"
                                 title="IEEE SB Website URL"
                               />
@@ -4967,24 +4959,24 @@ export default function App() {
                           <div className="admin-form-row">
                             <div className="admin-form-group">
                               <label htmlFor="info_snr_url">SNR Sons Website URL</label>
-                              <input 
+                              <input
                                 id="info_snr_url"
-                                type="text" 
-                                className="form-input" 
-                                value={info.snr_url || ''} 
-                                onChange={(e) => handleSaveInfoSetting('snr_url', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.snr_url || ''}
+                                onChange={(e) => handleSaveInfoSetting('snr_url', e.target.value)}
                                 placeholder="Enter SNR Sons Website URL"
                                 title="SNR Sons Website URL"
                               />
                             </div>
                             <div className="admin-form-group">
                               <label htmlFor="info_snr_trust_url">SNR Trust Website URL</label>
-                              <input 
+                              <input
                                 id="info_snr_trust_url"
-                                type="text" 
-                                className="form-input" 
-                                value={info.snr_trust_url || ''} 
-                                onChange={(e) => handleSaveInfoSetting('snr_trust_url', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.snr_trust_url || ''}
+                                onChange={(e) => handleSaveInfoSetting('snr_trust_url', e.target.value)}
                                 placeholder="Enter SNR Trust Website URL"
                                 title="SNR Trust Website URL"
                               />
@@ -4993,12 +4985,12 @@ export default function App() {
 
                           <div className="admin-form-group">
                             <label htmlFor="info_hero_bg_url">Hero Background Image URL</label>
-                            <input 
+                            <input
                               id="info_hero_bg_url"
-                              type="text" 
-                              className="form-input" 
-                              value={info.hero_bg_url || ''} 
-                              onChange={(e) => handleSaveInfoSetting('hero_bg_url', e.target.value)} 
+                              type="text"
+                              className="form-input"
+                              value={info.hero_bg_url || ''}
+                              onChange={(e) => handleSaveInfoSetting('hero_bg_url', e.target.value)}
                               placeholder="Enter Hero Background Image URL"
                               title="Hero Background Image URL"
                             />
@@ -5007,24 +4999,24 @@ export default function App() {
                           <div className="admin-form-row">
                             <div className="admin-form-group">
                               <label htmlFor="info_bank_acc_name">Bank Account Name</label>
-                              <input 
+                              <input
                                 id="info_bank_acc_name"
-                                type="text" 
-                                className="form-input" 
-                                value={info.bank_account_name || ''} 
-                                onChange={(e) => handleSaveInfoSetting('bank_account_name', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.bank_account_name || ''}
+                                onChange={(e) => handleSaveInfoSetting('bank_account_name', e.target.value)}
                                 placeholder="Enter Bank Account Name"
                                 title="Bank Account Name"
                               />
                             </div>
                             <div className="admin-form-group">
                               <label htmlFor="info_bank_name">Bank Name</label>
-                              <input 
+                              <input
                                 id="info_bank_name"
-                                type="text" 
-                                className="form-input" 
-                                value={info.bank_name || ''} 
-                                onChange={(e) => handleSaveInfoSetting('bank_name', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.bank_name || ''}
+                                onChange={(e) => handleSaveInfoSetting('bank_name', e.target.value)}
                                 placeholder="Enter Bank Name"
                                 title="Bank Name"
                               />
@@ -5034,24 +5026,24 @@ export default function App() {
                           <div className="admin-form-row">
                             <div className="admin-form-group">
                               <label htmlFor="info_bank_acc_number">Account Number</label>
-                              <input 
+                              <input
                                 id="info_bank_acc_number"
-                                type="text" 
-                                className="form-input" 
-                                value={info.bank_account_number || ''} 
-                                onChange={(e) => handleSaveInfoSetting('bank_account_number', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.bank_account_number || ''}
+                                onChange={(e) => handleSaveInfoSetting('bank_account_number', e.target.value)}
                                 placeholder="Enter Account Number"
                                 title="Account Number"
                               />
                             </div>
                             <div className="admin-form-group">
                               <label htmlFor="info_bank_ifsc">Bank IFSC Code</label>
-                              <input 
+                              <input
                                 id="info_bank_ifsc"
-                                type="text" 
-                                className="form-input" 
-                                value={info.bank_ifsc_code || ''} 
-                                onChange={(e) => handleSaveInfoSetting('bank_ifsc_code', e.target.value)} 
+                                type="text"
+                                className="form-input"
+                                value={info.bank_ifsc_code || ''}
+                                onChange={(e) => handleSaveInfoSetting('bank_ifsc_code', e.target.value)}
                                 placeholder="Enter Bank IFSC Code"
                                 title="Bank IFSC Code"
                               />
@@ -5060,12 +5052,12 @@ export default function App() {
 
                           <div className="admin-form-group">
                             <label htmlFor="info_about_conference">About the Conference Description</label>
-                            <textarea 
+                            <textarea
                               id="info_about_conference"
-                              rows={4} 
-                              className="form-input" 
-                              value={info.about_conference || ''} 
-                              onChange={(e) => handleSaveInfoSetting('about_conference', e.target.value)} 
+                              rows={4}
+                              className="form-input"
+                              value={info.about_conference || ''}
+                              onChange={(e) => handleSaveInfoSetting('about_conference', e.target.value)}
                               placeholder="Enter About the Conference Description"
                               title="About the Conference Description"
                             />
@@ -5073,12 +5065,12 @@ export default function App() {
 
                           <div className="admin-form-group">
                             <label htmlFor="info_about_trust">SNR Sons Trust Description</label>
-                            <textarea 
+                            <textarea
                               id="info_about_trust"
-                              rows={3} 
-                              className="form-input" 
-                              value={info.about_trust || ''} 
-                              onChange={(e) => handleSaveInfoSetting('about_trust', e.target.value)} 
+                              rows={3}
+                              className="form-input"
+                              value={info.about_trust || ''}
+                              onChange={(e) => handleSaveInfoSetting('about_trust', e.target.value)}
                               placeholder="Enter SNR Sons Trust Description"
                               title="SNR Sons Trust Description"
                             />
@@ -5086,12 +5078,12 @@ export default function App() {
 
                           <div className="admin-form-group">
                             <label htmlFor="info_advisory_committee_desc">Advisory Committee Description</label>
-                            <textarea 
+                            <textarea
                               id="info_advisory_committee_desc"
-                              rows={3} 
-                              className="form-input" 
-                              value={info.advisory_committee_desc || ''} 
-                              onChange={(e) => handleSaveInfoSetting('advisory_committee_desc', e.target.value)} 
+                              rows={3}
+                              className="form-input"
+                              value={info.advisory_committee_desc || ''}
+                              onChange={(e) => handleSaveInfoSetting('advisory_committee_desc', e.target.value)}
                               placeholder="Enter Advisory Committee Description"
                               title="Advisory Committee Description"
                             />
@@ -5099,12 +5091,12 @@ export default function App() {
 
                           <div className="admin-form-group">
                             <label htmlFor="info_technical_committee_desc">Technical Committee Description</label>
-                            <textarea 
+                            <textarea
                               id="info_technical_committee_desc"
-                              rows={3} 
-                              className="form-input" 
-                              value={info.technical_committee_desc || ''} 
-                              onChange={(e) => handleSaveInfoSetting('technical_committee_desc', e.target.value)} 
+                              rows={3}
+                              className="form-input"
+                              value={info.technical_committee_desc || ''}
+                              onChange={(e) => handleSaveInfoSetting('technical_committee_desc', e.target.value)}
                               placeholder="Enter Technical Committee Description"
                               title="Technical Committee Description"
                             />
@@ -5112,12 +5104,12 @@ export default function App() {
 
                           <div className="admin-form-group">
                             <label htmlFor="info_about_inst">SREC Institution Description</label>
-                            <textarea 
+                            <textarea
                               id="info_about_inst"
-                              rows={3} 
-                              className="form-input" 
-                              value={info.about_institution || ''} 
-                              onChange={(e) => handleSaveInfoSetting('about_institution', e.target.value)} 
+                              rows={3}
+                              className="form-input"
+                              value={info.about_institution || ''}
+                              onChange={(e) => handleSaveInfoSetting('about_institution', e.target.value)}
                               placeholder="Enter SREC Institution Description"
                               title="SREC Institution Description"
                             />
@@ -5125,12 +5117,12 @@ export default function App() {
 
                           <div className="admin-form-group">
                             <label htmlFor="info_sec_address">Secretariat Address</label>
-                            <textarea 
+                            <textarea
                               id="info_sec_address"
-                              rows={3} 
-                              className="form-input" 
-                              value={info.secretariat_address || ''} 
-                              onChange={(e) => handleSaveInfoSetting('secretariat_address', e.target.value)} 
+                              rows={3}
+                              className="form-input"
+                              value={info.secretariat_address || ''}
+                              onChange={(e) => handleSaveInfoSetting('secretariat_address', e.target.value)}
                               placeholder="Enter Secretariat Address"
                               title="Secretariat Address"
                             />
@@ -5138,12 +5130,12 @@ export default function App() {
 
                           <div className="admin-form-group">
                             <label htmlFor="info_coimbatore_desc">About Coimbatore Description</label>
-                            <textarea 
+                            <textarea
                               id="info_coimbatore_desc"
-                              rows={4} 
-                              className="form-input" 
-                              value={info.about_coimbatore_desc || ''} 
-                              onChange={(e) => handleSaveInfoSetting('about_coimbatore_desc', e.target.value)} 
+                              rows={4}
+                              className="form-input"
+                              value={info.about_coimbatore_desc || ''}
+                              onChange={(e) => handleSaveInfoSetting('about_coimbatore_desc', e.target.value)}
                               placeholder="Enter Coimbatore Description"
                               title="About Coimbatore Description"
                             />
@@ -5151,12 +5143,12 @@ export default function App() {
 
                           <div className="admin-form-group">
                             <label htmlFor="info_coimbatore_tour">Coimbatore Tour Info Alert</label>
-                            <textarea 
+                            <textarea
                               id="info_coimbatore_tour"
-                              rows={2} 
-                              className="form-input" 
-                              value={info.about_coimbatore_tour_info || ''} 
-                              onChange={(e) => handleSaveInfoSetting('about_coimbatore_tour_info', e.target.value)} 
+                              rows={2}
+                              className="form-input"
+                              value={info.about_coimbatore_tour_info || ''}
+                              onChange={(e) => handleSaveInfoSetting('about_coimbatore_tour_info', e.target.value)}
                               placeholder="Enter Tour Info Notice"
                               title="Coimbatore Tour Info Alert"
                             />
@@ -5167,28 +5159,28 @@ export default function App() {
                             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1.25rem', lineHeight: 1.4 }}>
                               Configure your client-side EmailJS integration keys to automatically receive email alerts with attached payment screenshot receipts upon new registrations.
                             </p>
-                            
+
                             <div className="admin-form-row">
                               <div className="admin-form-group">
                                 <label htmlFor="emailjs_service_id">EmailJS Service ID</label>
-                                <input 
+                                <input
                                   id="emailjs_service_id"
-                                  type="text" 
-                                  className="form-input" 
-                                  value={info.emailjs_service_id || ''} 
-                                  onChange={(e) => handleSaveInfoSetting('emailjs_service_id', e.target.value)} 
+                                  type="text"
+                                  className="form-input"
+                                  value={info.emailjs_service_id || ''}
+                                  onChange={(e) => handleSaveInfoSetting('emailjs_service_id', e.target.value)}
                                   placeholder="e.g. service_xxxx"
                                   title="EmailJS Service ID"
                                 />
                               </div>
                               <div className="admin-form-group">
                                 <label htmlFor="emailjs_template_id">EmailJS Template ID</label>
-                                <input 
+                                <input
                                   id="emailjs_template_id"
-                                  type="text" 
-                                  className="form-input" 
-                                  value={info.emailjs_template_id || ''} 
-                                  onChange={(e) => handleSaveInfoSetting('emailjs_template_id', e.target.value)} 
+                                  type="text"
+                                  className="form-input"
+                                  value={info.emailjs_template_id || ''}
+                                  onChange={(e) => handleSaveInfoSetting('emailjs_template_id', e.target.value)}
                                   placeholder="e.g. template_xxxx"
                                   title="EmailJS Template ID"
                                 />
@@ -5198,24 +5190,24 @@ export default function App() {
                             <div className="admin-form-row" style={{ marginTop: '1rem' }}>
                               <div className="admin-form-group">
                                 <label htmlFor="emailjs_public_key">EmailJS Public Key (User ID)</label>
-                                <input 
+                                <input
                                   id="emailjs_public_key"
-                                  type="text" 
-                                  className="form-input" 
-                                  value={info.emailjs_public_key || ''} 
-                                  onChange={(e) => handleSaveInfoSetting('emailjs_public_key', e.target.value)} 
+                                  type="text"
+                                  className="form-input"
+                                  value={info.emailjs_public_key || ''}
+                                  onChange={(e) => handleSaveInfoSetting('emailjs_public_key', e.target.value)}
                                   placeholder="e.g. user_xxxx or public_key"
                                   title="EmailJS Public Key"
                                 />
                               </div>
                               <div className="admin-form-group">
                                 <label htmlFor="emailjs_recipient">Notification Recipient Email</label>
-                                <input 
+                                <input
                                   id="emailjs_recipient"
-                                  type="email" 
-                                  className="form-input" 
-                                  value={info.emailjs_recipient || ''} 
-                                  onChange={(e) => handleSaveInfoSetting('emailjs_recipient', e.target.value)} 
+                                  type="email"
+                                  className="form-input"
+                                  value={info.emailjs_recipient || ''}
+                                  onChange={(e) => handleSaveInfoSetting('emailjs_recipient', e.target.value)}
                                   placeholder="e.g. finance@srec.ac.in"
                                   title="Notification Recipient Email"
                                 />
@@ -5246,10 +5238,10 @@ export default function App() {
                               <div className="admin-form-row">
                                 <div className="admin-form-group">
                                   <label htmlFor="speaker_name">Speaker Name</label>
-                                  <input 
+                                  <input
                                     id="speaker_name"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingSpeaker.name}
                                     onChange={(e) => setEditingSpeaker({ ...editingSpeaker, name: e.target.value })}
@@ -5259,10 +5251,10 @@ export default function App() {
                                 </div>
                                 <div className="admin-form-group">
                                   <label htmlFor="speaker_title">Speaker Title / Institution</label>
-                                  <input 
+                                  <input
                                     id="speaker_title"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingSpeaker.title}
                                     onChange={(e) => setEditingSpeaker({ ...editingSpeaker, title: e.target.value })}
@@ -5275,10 +5267,10 @@ export default function App() {
                               <div className="admin-form-row">
                                 <div className="admin-form-group">
                                   <label htmlFor="speaker_role">Conference Role / Bio Tag</label>
-                                  <input 
+                                  <input
                                     id="speaker_role"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingSpeaker.role}
                                     onChange={(e) => setEditingSpeaker({ ...editingSpeaker, role: e.target.value })}
@@ -5288,10 +5280,10 @@ export default function App() {
                                 </div>
                                 <div className="admin-form-group">
                                   <label htmlFor="speaker_color">Theme Card Color (Hex)</label>
-                                  <input 
+                                  <input
                                     id="speaker_color"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingSpeaker.color}
                                     onChange={(e) => setEditingSpeaker({ ...editingSpeaker, color: e.target.value })}
@@ -5303,9 +5295,9 @@ export default function App() {
 
                               <div className="admin-form-group">
                                 <label htmlFor="speaker_image">Speaker Image URL</label>
-                                <input 
+                                <input
                                   id="speaker_image"
-                                  type="text" 
+                                  type="text"
                                   className="form-input"
                                   value={editingSpeaker.image_url || ''}
                                   onChange={(e) => setEditingSpeaker({ ...editingSpeaker, image_url: e.target.value })}
@@ -5316,10 +5308,10 @@ export default function App() {
 
                               <div className="admin-form-group">
                                 <label htmlFor="speaker_talk">Talk Title & Synopsis</label>
-                                <textarea 
+                                <textarea
                                   id="speaker_talk"
-                                  rows={3} 
-                                  required 
+                                  rows={3}
+                                  required
                                   className="form-input"
                                   value={editingSpeaker.talk}
                                   onChange={(e) => setEditingSpeaker({ ...editingSpeaker, talk: e.target.value })}
@@ -5350,7 +5342,7 @@ export default function App() {
                               <div style={{ fontSize: '0.8rem', background: '#ffffff', padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid #e2e8f0', marginTop: '0.5rem' }}>
                                 <strong>Talk:</strong> "{sp.talk}"
                               </div>
-                              
+
                               <div className="admin-action-row">
                                 <button onClick={() => setEditingSpeaker(sp)} className="btn btn-secondary" style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem' }}>
                                   Edit
@@ -5384,10 +5376,10 @@ export default function App() {
                               <div className="admin-form-row">
                                 <div className="admin-form-group" style={{ flex: 3 }}>
                                   <label htmlFor="dept_name">Department / Track Name</label>
-                                  <input 
+                                  <input
                                     id="dept_name"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingDept.name}
                                     onChange={(e) => setEditingDept({ ...editingDept, name: e.target.value })}
@@ -5397,10 +5389,10 @@ export default function App() {
                                 </div>
                                 <div className="admin-form-group">
                                   <label htmlFor="dept_sort_order">Sort Order Index</label>
-                                  <input 
+                                  <input
                                     id="dept_sort_order"
-                                    type="number" 
-                                    required 
+                                    type="number"
+                                    required
                                     className="form-input"
                                     value={editingDept.sort_order || 1}
                                     onChange={(e) => setEditingDept({ ...editingDept, sort_order: Number(e.target.value) })}
@@ -5412,10 +5404,10 @@ export default function App() {
 
                               <div className="admin-form-group">
                                 <label htmlFor="dept_desc">Department Scope / Call-For-Papers Track Description</label>
-                                <textarea 
+                                <textarea
                                   id="dept_desc"
-                                  rows={5} 
-                                  required 
+                                  rows={5}
+                                  required
                                   className="form-input"
                                   value={editingDept.description}
                                   onChange={(e) => setEditingDept({ ...editingDept, description: e.target.value })}
@@ -5446,7 +5438,7 @@ export default function App() {
                               <p style={{ fontSize: '0.82rem', color: '#64748b', marginTop: '0.75rem', lineHeight: '1.5' }}>
                                 {dept.description.length > 180 ? dept.description.substring(0, 180) + '...' : dept.description}
                               </p>
-                              
+
                               <div className="admin-action-row">
                                 <button onClick={() => setEditingDept(dept)} className="btn btn-secondary" style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem' }}>
                                   Edit
@@ -5475,37 +5467,37 @@ export default function App() {
 
                         {editingCommittee && (
                           <div className="glass-card" style={{ marginBottom: '2rem', background: '#f8fafc', borderColor: '#3b82f6' }}>
-                              <h5 style={{ fontSize: '1.1rem', marginBottom: '1rem', fontWeight: 700 }}>{editingCommittee.id ? 'Edit Committee Member' : 'Add New Member'}</h5>
-                              <form onSubmit={handleSaveCommittee} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <div className="admin-form-row">
-                                  <div className="admin-form-group">
-                                    <label htmlFor="committee_name">Full Name</label>
-                                    <input
-                                      id="committee_name"
-                                      type="text"
-                                      required
-                                      className="form-input"
-                                      value={editingCommittee.name}
-                                      onChange={(e) => setEditingCommittee({ ...editingCommittee, name: e.target.value })}
-                                      placeholder="Enter Full Name"
-                                      title="Full Name" />
-                                  </div>
-                                  <div className="admin-form-group">
-                                    <label htmlFor="committee_category">Committee Category</label>
-                                    <select
-                                      id="committee_category"
-                                      value={editingCommittee.category}
-                                      onChange={(e) => setEditingCommittee({ ...editingCommittee, category: e.target.value })}
-                                      className="form-input"
-                                      style={{ background: '#ffffff' }}
-                                      title="Committee Category"
-                                    >
-                                      <option value="organizing">Organizing Committee</option>
-                                      <option value="advisory">Advisory Committee</option>
-                                      <option value="technical">Technical Program Committee</option>
-                                    </select>
-                                  </div>
+                            <h5 style={{ fontSize: '1.1rem', marginBottom: '1rem', fontWeight: 700 }}>{editingCommittee.id ? 'Edit Committee Member' : 'Add New Member'}</h5>
+                            <form onSubmit={handleSaveCommittee} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                              <div className="admin-form-row">
+                                <div className="admin-form-group">
+                                  <label htmlFor="committee_name">Full Name</label>
+                                  <input
+                                    id="committee_name"
+                                    type="text"
+                                    required
+                                    className="form-input"
+                                    value={editingCommittee.name}
+                                    onChange={(e) => setEditingCommittee({ ...editingCommittee, name: e.target.value })}
+                                    placeholder="Enter Full Name"
+                                    title="Full Name" />
                                 </div>
+                                <div className="admin-form-group">
+                                  <label htmlFor="committee_category">Committee Category</label>
+                                  <select
+                                    id="committee_category"
+                                    value={editingCommittee.category}
+                                    onChange={(e) => setEditingCommittee({ ...editingCommittee, category: e.target.value })}
+                                    className="form-input"
+                                    style={{ background: '#ffffff' }}
+                                    title="Committee Category"
+                                  >
+                                    <option value="organizing">Organizing Committee</option>
+                                    <option value="advisory">Advisory Committee</option>
+                                    <option value="technical">Technical Program Committee</option>
+                                  </select>
+                                </div>
+                              </div>
 
                               <div className="admin-form-row">
                                 <div className="admin-form-group">
@@ -5555,7 +5547,7 @@ export default function App() {
                                       } else {
                                         setEditingCommittee({ ...editingCommittee, role: val || null });
                                       }
-                                    } }
+                                    }}
                                   >
                                     <option value="">Leave blank (Standard Member)</option>
                                     <optgroup label="Steering & Advisory">
@@ -5687,7 +5679,7 @@ export default function App() {
                                 </span>
                               )}
                               <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.5rem', marginInline: 0 }}>{c.desc}</p>
-                              
+
                               <div className="admin-action-row">
                                 <button onClick={() => setEditingCommittee(c)} className="btn btn-secondary" style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem' }}>
                                   Edit
@@ -5721,10 +5713,10 @@ export default function App() {
                               <div className="admin-form-row">
                                 <div className="admin-form-group">
                                   <label htmlFor="date_title">Event Name / Title</label>
-                                  <input 
+                                  <input
                                     id="date_title"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingDate.title}
                                     onChange={(e) => setEditingDate({ ...editingDate, title: e.target.value })}
@@ -5734,10 +5726,10 @@ export default function App() {
                                 </div>
                                 <div className="admin-form-group">
                                   <label htmlFor="date_event_date">Date String (e.g. October 15, 2026)</label>
-                                  <input 
+                                  <input
                                     id="date_event_date"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingDate.event_date}
                                     onChange={(e) => setEditingDate({ ...editingDate, event_date: e.target.value })}
@@ -5750,10 +5742,10 @@ export default function App() {
                               <div className="admin-form-row">
                                 <div className="admin-form-group">
                                   <label htmlFor="date_desc">Short Description</label>
-                                  <input 
+                                  <input
                                     id="date_desc"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingDate.desc}
                                     onChange={(e) => setEditingDate({ ...editingDate, desc: e.target.value })}
@@ -5763,10 +5755,10 @@ export default function App() {
                                 </div>
                                 <div className="admin-form-group">
                                   <label htmlFor="date_sort_order">Sort Order Index</label>
-                                  <input 
+                                  <input
                                     id="date_sort_order"
-                                    type="number" 
-                                    required 
+                                    type="number"
+                                    required
                                     className="form-input"
                                     value={editingDate.sort_order || 1}
                                     onChange={(e) => setEditingDate({ ...editingDate, sort_order: Number(e.target.value) })}
@@ -5794,7 +5786,7 @@ export default function App() {
                               <h5 style={{ fontSize: '1.1rem', color: '#091d36', margin: '0 0 0.25rem', fontWeight: 800 }}>{dt.title}</h5>
                               <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#0f52ba' }}>Date: {dt.event_date}</span>
                               <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.5rem', marginInline: 0 }}>{dt.desc}</p>
-                              
+
                               <div className="admin-action-row">
                                 <button onClick={() => setEditingDate(dt)} className="btn btn-secondary" style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem' }}>
                                   Edit
@@ -5828,10 +5820,10 @@ export default function App() {
                               <div className="admin-form-row">
                                 <div className="admin-form-group">
                                   <label htmlFor="workshop_title">Tutorial Title</label>
-                                  <input 
+                                  <input
                                     id="workshop_title"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingWorkshop.title}
                                     onChange={(e) => setEditingWorkshop({ ...editingWorkshop, title: e.target.value })}
@@ -5841,10 +5833,10 @@ export default function App() {
                                 </div>
                                 <div className="admin-form-group">
                                   <label htmlFor="workshop_instructor">Lead Instructor Name & Institution</label>
-                                  <input 
+                                  <input
                                     id="workshop_instructor"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingWorkshop.instructor}
                                     onChange={(e) => setEditingWorkshop({ ...editingWorkshop, instructor: e.target.value })}
@@ -5857,10 +5849,10 @@ export default function App() {
                               <div className="admin-form-row">
                                 <div className="admin-form-group">
                                   <label htmlFor="workshop_duration">Duration / Time Block</label>
-                                  <input 
+                                  <input
                                     id="workshop_duration"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingWorkshop.duration}
                                     onChange={(e) => setEditingWorkshop({ ...editingWorkshop, duration: e.target.value })}
@@ -5870,10 +5862,10 @@ export default function App() {
                                 </div>
                                 <div className="admin-form-group">
                                   <label htmlFor="workshop_price">Price Display String</label>
-                                  <input 
+                                  <input
                                     id="workshop_price"
-                                    type="text" 
-                                    required 
+                                    type="text"
+                                    required
                                     className="form-input"
                                     value={editingWorkshop.price}
                                     onChange={(e) => setEditingWorkshop({ ...editingWorkshop, price: e.target.value })}
@@ -5885,10 +5877,10 @@ export default function App() {
 
                               <div className="admin-form-group">
                                 <label htmlFor="workshop_details">Detailed Description & Syllabus</label>
-                                <textarea 
+                                <textarea
                                   id="workshop_details"
-                                  rows={4} 
-                                  required 
+                                  rows={4}
+                                  required
                                   className="form-input"
                                   value={editingWorkshop.details}
                                   onChange={(e) => setEditingWorkshop({ ...editingWorkshop, details: e.target.value })}
@@ -5916,7 +5908,7 @@ export default function App() {
                               <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#f58220' }}>Instructor: {w.instructor}</span>
                               <p style={{ fontSize: '0.8rem', color: '#64748b', margin: '0.25rem 0' }}><strong>Duration:</strong> {w.duration} | <strong>Price:</strong> {w.price}</p>
                               <p style={{ fontSize: '0.82rem', color: '#475569', marginTop: '0.5rem', lineHeight: '1.5' }}>{w.details}</p>
-                              
+
                               <div className="admin-action-row">
                                 <button onClick={() => setEditingWorkshop(w)} className="btn btn-secondary" style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem' }}>
                                   Edit
@@ -6110,205 +6102,205 @@ export default function App() {
       {/* Nexus Agent Chatbot Floating Widget */}
       {currentPage !== 'admin' && (
         <><div className="nexus-chat-container">
-  {!showNexusChat && showNexusTooltip && (
-    <div className="nexus-chat-tooltip">
-      <span className="nexus-chat-tooltip-dot">●</span>
-      How can I help you?
-    </div>
-  )}
-
-  <div
-    className="nexus-chat-trigger"
-    onClick={() => setShowNexusChat(!showNexusChat)}
-    title="Chat with Nexus AI Agent"
-  >
-    {showNexusChat ? (
-      <div className="nexus-chat-close-btn">
-        <X size={24} />
-      </div>
-    ) : (
-      <img
-        src={chatbotIcon}
-        alt="Nexus Agent"
-        className="nexus-chat-mascot-img" />
-    )}
-  </div>
-</div><AnimatePresence>
-    {showNexusChat && (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        transition={{ duration: 0.2 }}
-        className="nexus-chat-window"
-      >
-        {/* Header */}
-        <div className="nexus-chat-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <img
-              src={chatbotIcon}
-              alt="Nexus Agent Avatar"
-              style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(255, 255, 255, 0.2)', display: 'block' }} />
-            <div>
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 800, margin: 0 }}>Nexus AI Assistant</h4>
-              <span style={{ fontSize: '0.7rem', opacity: 0.8, display: 'block' }}>SREC Conference Agent</span>
-            </div>
-          </div>
-          <button
-            onClick={() => setShowNexusChat(false)}
-            style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <X size={18} />
-          </button>
-        </div>
-
-        {/* Message List */}
-        <div className="nexus-chat-messages" id="nexus-chat-messages-container">
-          {chatMessages.map((msg, index) => (
-            <div key={index} className={`nexus-chat-message ${msg.sender}`}>
-              <p style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '0.85rem' }}>{msg.text}</p>
-            </div>
-          ))}
-          {isAgentTyping && (
-            <div className="nexus-chat-message agent" style={{ display: 'inline-flex', alignItems: 'center' }}>
-              <div className="nexus-typing-dots">
-                <div className="nexus-typing-dot"></div>
-                <div className="nexus-typing-dot"></div>
-                <div className="nexus-typing-dot"></div>
-              </div>
+          {!showNexusChat && showNexusTooltip && (
+            <div className="nexus-chat-tooltip">
+              <span className="nexus-chat-tooltip-dot">●</span>
+              How can I help you?
             </div>
           )}
-        </div>
 
-        {/* Suggested Prompts */}
-        <div className="nexus-chat-suggested">
-          {[
-            { label: 'Dates 📅', text: 'What are the important dates/deadlines?' },
-            { label: 'Fees 💳', text: 'How much are the registration fees?' },
-            { label: 'Submission 📝', text: 'How do I submit my paper?' },
-            { label: 'Speakers 🎙️', text: 'Who are the keynote speakers?' }
-          ].map((p, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleSendChatMessage(p.text)}
-              className="nexus-chat-suggested-btn"
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Input Area */}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSendChatMessage(chatInput);
-          } }
-          className="nexus-chat-input-area"
-        >
-          <input
-            type="text"
-            value={chatInput}
-            onChange={(e) => setChatInput(e.target.value)}
-            placeholder="Ask Nexus a question..."
-            className="nexus-chat-input"
-            title="Chat Input" />
-          <button type="submit" className="nexus-chat-send">
-            Send
-          </button>
-        </form>
-      </motion.div>
-    )}
-  </AnimatePresence>
-
-  <AnimatePresence>
-    {showCmtToast && (
-      <motion.div
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 100 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        style={{
-          position: 'fixed',
-          bottom: '95px',
-          right: '20px',
-          width: '320px',
-          background: '#58111A',
-          borderBottom: '4px solid #d4af37',
-          borderRadius: '12px',
-          padding: '1.25rem',
-          boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3)',
-          zIndex: 9998,
-          display: 'flex',
-          gap: '1rem',
-          alignItems: 'start'
-        }}
-      >
-        <div style={{
-          width: '40px',
-          height: '40px',
-          borderRadius: '10px',
-          background: '#d4af37',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-          boxShadow: '0 2px 8px rgba(212, 175, 55, 0.3)'
-        }}>
-          <FileText size={20} style={{ color: '#58111A' }} />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', textAlign: 'left', flexGrow: 1, paddingRight: '0.75rem' }}>
-          <span style={{ color: '#f59e0b', fontSize: '0.78rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-            CMT PORTAL LIVE
-          </span>
-          <p style={{ color: '#f8fafc', fontSize: '0.8rem', margin: 0, lineHeight: 1.4 }}>
-            Submissions are now open. Upload your manuscript for peer review.
-          </p>
-          <div style={{ marginTop: '0.5rem' }}>
-            <a
-              href={info.cmt_link || 'https://cmt3.research.microsoft.com/aectsd2025'}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                background: '#ffffff',
-                color: '#58111A',
-                padding: '0.4rem 0.85rem',
-                borderRadius: '20px',
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.25rem',
-                transition: 'all 0.2s ease',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }}
-            >
-              SUBMIT PAPER &rarr;
-            </a>
+          <div
+            className="nexus-chat-trigger"
+            onClick={() => setShowNexusChat(!showNexusChat)}
+            title="Chat with Nexus AI Agent"
+          >
+            {showNexusChat ? (
+              <div className="nexus-chat-close-btn">
+                <X size={24} />
+              </div>
+            ) : (
+              <img
+                src={chatbotIcon}
+                alt="Nexus Agent"
+                className="nexus-chat-mascot-img" />
+            )}
           </div>
-        </div>
+        </div><AnimatePresence>
+            {showNexusChat && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ duration: 0.2 }}
+                className="nexus-chat-window"
+              >
+                {/* Header */}
+                <div className="nexus-chat-header">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                    <img
+                      src={chatbotIcon}
+                      alt="Nexus Agent Avatar"
+                      style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(255, 255, 255, 0.2)', display: 'block' }} />
+                    <div>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 800, margin: 0 }}>Nexus AI Assistant</h4>
+                      <span style={{ fontSize: '0.7rem', opacity: 0.8, display: 'block' }}>SREC Conference Agent</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowNexusChat(false)}
+                    style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
 
-        <button
-          onClick={() => setShowCmtToast(false)}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'rgba(255, 255, 255, 0.6)',
-            cursor: 'pointer',
-            padding: 0,
-            position: 'absolute',
-            top: '10px',
-            right: '10px'
-          }}
-          title="Close"
-        >
-          <X size={16} />
-        </button>
-      </motion.div>
-    )}
-  </AnimatePresence></>
+                {/* Message List */}
+                <div className="nexus-chat-messages" id="nexus-chat-messages-container">
+                  {chatMessages.map((msg, index) => (
+                    <div key={index} className={`nexus-chat-message ${msg.sender}`}>
+                      <p style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '0.85rem' }}>{msg.text}</p>
+                    </div>
+                  ))}
+                  {isAgentTyping && (
+                    <div className="nexus-chat-message agent" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                      <div className="nexus-typing-dots">
+                        <div className="nexus-typing-dot"></div>
+                        <div className="nexus-typing-dot"></div>
+                        <div className="nexus-typing-dot"></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Suggested Prompts */}
+                <div className="nexus-chat-suggested">
+                  {[
+                    { label: 'Dates 📅', text: 'What are the important dates/deadlines?' },
+                    { label: 'Fees 💳', text: 'How much are the registration fees?' },
+                    { label: 'Submission 📝', text: 'How do I submit my paper?' },
+                    { label: 'Speakers 🎙️', text: 'Who are the keynote speakers?' }
+                  ].map((p, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleSendChatMessage(p.text)}
+                      className="nexus-chat-suggested-btn"
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Input Area */}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSendChatMessage(chatInput);
+                  }}
+                  className="nexus-chat-input-area"
+                >
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    placeholder="Ask Nexus a question..."
+                    className="nexus-chat-input"
+                    title="Chat Input" />
+                  <button type="submit" className="nexus-chat-send">
+                    Send
+                  </button>
+                </form>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {showCmtToast && (
+              <motion.div
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 100 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                style={{
+                  position: 'fixed',
+                  bottom: '95px',
+                  right: '20px',
+                  width: '320px',
+                  background: '#58111A',
+                  borderBottom: '4px solid #d4af37',
+                  borderRadius: '12px',
+                  padding: '1.25rem',
+                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3)',
+                  zIndex: 9998,
+                  display: 'flex',
+                  gap: '1rem',
+                  alignItems: 'start'
+                }}
+              >
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '10px',
+                  background: '#d4af37',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  boxShadow: '0 2px 8px rgba(212, 175, 55, 0.3)'
+                }}>
+                  <FileText size={20} style={{ color: '#58111A' }} />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', textAlign: 'left', flexGrow: 1, paddingRight: '0.75rem' }}>
+                  <span style={{ color: '#f59e0b', fontSize: '0.78rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                    CMT PORTAL LIVE
+                  </span>
+                  <p style={{ color: '#f8fafc', fontSize: '0.8rem', margin: 0, lineHeight: 1.4 }}>
+                    Submissions are now open. Upload your manuscript for peer review.
+                  </p>
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <a
+                      href={info.cmt_link || 'https://cmt3.research.microsoft.com/aectsd2025'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        background: '#ffffff',
+                        color: '#58111A',
+                        padding: '0.4rem 0.85rem',
+                        borderRadius: '20px',
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        transition: 'all 0.2s ease',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                      }}
+                    >
+                      SUBMIT PAPER &rarr;
+                    </a>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setShowCmtToast(false)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'rgba(255, 255, 255, 0.6)',
+                    cursor: 'pointer',
+                    padding: 0,
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px'
+                  }}
+                  title="Close"
+                >
+                  <X size={16} />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence></>
       )}
     </div>
   );
