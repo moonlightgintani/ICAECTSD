@@ -2112,6 +2112,7 @@ export default function AdminPage({
         </div>
       </div>
     );
+  }
 
   return (
     <div className="admin-layout">
