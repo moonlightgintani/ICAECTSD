@@ -20,7 +20,8 @@ import {
   Briefcase,
   Eye,
   X,
-  Menu
+  Menu,
+  MapPin
 } from 'lucide-react';
 
 const ADMIN_MASTER_KEY = "MRBB2026";
@@ -237,6 +238,218 @@ export default function AdminPage({
       setIsSavingInfo(false);
     }
   };
+  // Explore Page data states
+  const [touristPlaces, setTouristPlaces] = useState<any[]>([]);
+  const [weekendStays, setWeekendStays] = useState<any[]>([]);
+  const [hotels, setHotels] = useState<any[]>([]);
+  const [exploreSubTab, setExploreSubTab] = useState<'sights' | 'getaways' | 'hotels'>('sights');
+
+  const [editingTouristPlace, setEditingTouristPlace] = useState<any | null>(null);
+  const [editingWeekendStay, setEditingWeekendStay] = useState<any | null>(null);
+  const [editingHotel, setEditingHotel] = useState<any | null>(null);
+
+  const fetchExploreData = async () => {
+    try {
+      if (isSupabaseConfigured && supabase) {
+        const { data: touristData } = await supabase.from('tourist_places').select('*').order('sort_order');
+        if (touristData) setTouristPlaces(touristData);
+
+        const { data: weekendData } = await supabase.from('weekend_stays').select('*').order('sort_order');
+        if (weekendData) setWeekendStays(weekendData);
+
+        const { data: hotelsData } = await supabase.from('hotels_to_stay').select('*').order('sort_order');
+        if (hotelsData) setHotels(hotelsData);
+      } else {
+        setTouristPlaces(JSON.parse(localStorage.getItem('srec_offline_tourist_places') || '[]'));
+        setWeekendStays(JSON.parse(localStorage.getItem('srec_offline_weekend_stays') || '[]'));
+        setHotels(JSON.parse(localStorage.getItem('srec_offline_hotels') || '[]'));
+      }
+    } catch (e) {
+      console.warn('Failed to fetch Explore data inside AdminPage', e);
+    }
+  };
+
+  useEffect(() => {
+    if (adminUser) {
+      fetchExploreData();
+    }
+  }, [adminUser]);
+
+  // tourist_places CRUD
+  const handleSaveTouristPlace = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingTouristPlace) return;
+    try {
+      const payload = {
+        name: editingTouristPlace.name,
+        category: editingTouristPlace.category,
+        description: editingTouristPlace.description,
+        image_url: editingTouristPlace.image_url || '',
+        map_url: editingTouristPlace.map_url || '',
+        sort_order: Number(editingTouristPlace.sort_order || 0)
+      };
+
+      if (isSupabaseConfigured && supabase) {
+        let error;
+        if (editingTouristPlace.id) {
+          const res = await supabase.from('tourist_places').update(payload).eq('id', editingTouristPlace.id);
+          error = res.error;
+        } else {
+          const res = await supabase.from('tourist_places').insert(payload);
+          error = res.error;
+        }
+        if (error) throw error;
+      } else {
+        let list = [...touristPlaces];
+        if (editingTouristPlace.id) {
+          list = list.map(t => t.id === editingTouristPlace.id ? editingTouristPlace : t);
+        } else {
+          list.push({ ...editingTouristPlace, id: Date.now() });
+        }
+        localStorage.setItem('srec_offline_tourist_places', JSON.stringify(list));
+      }
+      setEditingTouristPlace(null);
+      await fetchExploreData();
+      alert('Tourist place saved successfully!');
+    } catch (err: any) {
+      alert('Save tourist place failed: ' + err.message);
+    }
+  };
+
+  const handleDeleteTouristPlace = async (id: any) => {
+    if (!window.confirm('Delete this tourist place?')) return;
+    try {
+      if (isSupabaseConfigured && supabase) {
+        const { error } = await supabase.from('tourist_places').delete().eq('id', id);
+        if (error) throw error;
+      } else {
+        const list = touristPlaces.filter(t => t.id !== id);
+        localStorage.setItem('srec_offline_tourist_places', JSON.stringify(list));
+      }
+      await fetchExploreData();
+      alert('Tourist place deleted!');
+    } catch (err: any) {
+      alert('Delete tourist place failed: ' + err.message);
+    }
+  };
+
+  // weekend_stays CRUD
+  const handleSaveWeekendStay = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingWeekendStay) return;
+    try {
+      const payload = {
+        name: editingWeekendStay.name,
+        category: editingWeekendStay.category,
+        description: editingWeekendStay.description,
+        image_url: editingWeekendStay.image_url || '',
+        map_url: editingWeekendStay.map_url || '',
+        sort_order: Number(editingWeekendStay.sort_order || 0)
+      };
+
+      if (isSupabaseConfigured && supabase) {
+        let error;
+        if (editingWeekendStay.id) {
+          const res = await supabase.from('weekend_stays').update(payload).eq('id', editingWeekendStay.id);
+          error = res.error;
+        } else {
+          const res = await supabase.from('weekend_stays').insert(payload);
+          error = res.error;
+        }
+        if (error) throw error;
+      } else {
+        let list = [...weekendStays];
+        if (editingWeekendStay.id) {
+          list = list.map(s => s.id === editingWeekendStay.id ? editingWeekendStay : s);
+        } else {
+          list.push({ ...editingWeekendStay, id: Date.now() });
+        }
+        localStorage.setItem('srec_offline_weekend_stays', JSON.stringify(list));
+      }
+      setEditingWeekendStay(null);
+      await fetchExploreData();
+      alert('Weekend getaway saved successfully!');
+    } catch (err: any) {
+      alert('Save weekend getaway failed: ' + err.message);
+    }
+  };
+
+  const handleDeleteWeekendStay = async (id: any) => {
+    if (!window.confirm('Delete this weekend getaway?')) return;
+    try {
+      if (isSupabaseConfigured && supabase) {
+        const { error } = await supabase.from('weekend_stays').delete().eq('id', id);
+        if (error) throw error;
+      } else {
+        const list = weekendStays.filter(s => s.id !== id);
+        localStorage.setItem('srec_offline_weekend_stays', JSON.stringify(list));
+      }
+      await fetchExploreData();
+      alert('Weekend getaway deleted!');
+    } catch (err: any) {
+      alert('Delete weekend getaway failed: ' + err.message);
+    }
+  };
+
+  // hotels_to_stay CRUD
+  const handleSaveHotel = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingHotel) return;
+    try {
+      const payload = {
+        name: editingHotel.name,
+        category: editingHotel.category,
+        address: editingHotel.address,
+        description: editingHotel.description,
+        map_url: editingHotel.map_url || '',
+        image_url: editingHotel.image_url || '',
+        sort_order: Number(editingHotel.sort_order || 0)
+      };
+
+      if (isSupabaseConfigured && supabase) {
+        let error;
+        if (editingHotel.id) {
+          const res = await supabase.from('hotels_to_stay').update(payload).eq('id', editingHotel.id);
+          error = res.error;
+        } else {
+          const res = await supabase.from('hotels_to_stay').insert(payload);
+          error = res.error;
+        }
+        if (error) throw error;
+      } else {
+        let list = [...hotels];
+        if (editingHotel.id) {
+          list = list.map(h => h.id === editingHotel.id ? editingHotel : h);
+        } else {
+          list.push({ ...editingHotel, id: Date.now() });
+        }
+        localStorage.setItem('srec_offline_hotels', JSON.stringify(list));
+      }
+      setEditingHotel(null);
+      await fetchExploreData();
+      alert('Hotel saved successfully!');
+    } catch (err: any) {
+      alert('Save hotel failed: ' + err.message);
+    }
+  };
+
+  const handleDeleteHotel = async (id: any) => {
+    if (!window.confirm('Delete this hotel stay?')) return;
+    try {
+      if (isSupabaseConfigured && supabase) {
+        const { error } = await supabase.from('hotels_to_stay').delete().eq('id', id);
+        if (error) throw error;
+      } else {
+        const list = hotels.filter(h => h.id !== id);
+        localStorage.setItem('srec_offline_hotels', JSON.stringify(list));
+      }
+      await fetchExploreData();
+      alert('Hotel deleted!');
+    } catch (err: any) {
+      alert('Delete hotel failed: ' + err.message);
+    }
+  };
+
   // Refresh helper
   const handleRefresh = async () => {
     setAdminLoading(true);
@@ -1054,10 +1267,11 @@ export default function AdminPage({
     { id: 'committee', label: 'Committee List', icon: <Briefcase size={16} /> },
     { id: 'workshops', label: 'Tutorial Workshops', icon: <BookOpen size={16} /> },
     { id: 'coordinators', label: 'Coordinators & Contacts', icon: <Users size={16} /> },
-    { id: 'stats', label: 'Dashboard Stats', icon: <BarChart2 size={16} /> }
+    { id: 'stats', label: 'Dashboard Stats', icon: <BarChart2 size={16} /> },
+    { id: 'explore', label: 'Explore Sights & Stays', icon: <MapPin size={16} /> }
   ];
 
-  const isEditingAny = editingSpeaker || editingWorkshop || editingCommittee || editingDept || editingMilestone || editingCoordinator || editingStat;
+  const isEditingAny = editingSpeaker || editingWorkshop || editingCommittee || editingDept || editingMilestone || editingCoordinator || editingStat || editingTouristPlace || editingWeekendStay || editingHotel;
 
   if (isEditingAny) {
     return (
