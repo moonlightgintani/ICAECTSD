@@ -1692,13 +1692,15 @@ export default function App() {
       {currentPage !== 'admin' && (
         <header className="main-header">
           <a
-            href={info.srec_url || "https://srec.ac.in/"}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Sri Ramakrishna Engineering College"
+            href="#home"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('home');
+            }}
+            title="AECTSD 2027"
             style={{ display: 'inline-flex', cursor: 'pointer', textDecoration: 'none', flexShrink: 0, flexGrow: 0 }}
           >
-            <SrecLogo lightText={false} className="srec-logo" />
+            <img src={acLogo} alt="AECTSD Logo" style={{ height: '48px', width: 'auto', display: 'block', borderRadius: '50%' }} />
           </a>
 
           {/* Desktop Navigation Links */}
@@ -2064,11 +2066,11 @@ export default function App() {
                 }}
               />
 
-              {/* Dark overlay for exact styling match */}
+              {/* Light overlay for exact styling and readability match */}
               <div style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'linear-gradient(to bottom, rgba(44, 8, 13, 0.97) 0%, rgba(88, 17, 26, 0.92) 50%, rgba(44, 8, 13, 0.99) 100%)',
+                background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.75) 60%, rgba(255, 255, 255, 1) 100%)',
                 zIndex: 1
               }} />
 
@@ -2083,22 +2085,22 @@ export default function App() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '1.5rem',
+                    gap: '2.5rem',
                     background: '#fcfbf7', // light cream
                     border: '1px solid rgba(255, 255, 255, 0.8)',
-                    borderRadius: '16px',
-                    padding: '0.85rem 1.75rem',
-                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.35)',
+                    borderRadius: '24px',
+                    padding: '1.25rem 3.5rem',
+                    boxShadow: '0 12px 30px rgba(0, 0, 0, 0.25)',
                     margin: '0 auto 1rem',
                     flexWrap: 'wrap',
-                    maxWidth: '90%'
+                    maxWidth: '95%'
                   }}
                 >
-                  <img src={logo1} alt="IEEE India Council" style={{ height: '36px', width: 'auto', display: 'block' }} />
-                  <div style={{ height: '24px', width: '1px', background: '#cbd5e1' }} />
-                  <img src={logo2} alt="IEEE Madras Section" style={{ height: '40px', width: 'auto', display: 'block' }} />
-                  <div style={{ height: '24px', width: '1px', background: '#cbd5e1' }} />
-                  <img src={srecLogo} alt="Sri Ramakrishna Engineering College" style={{ height: '36px', width: 'auto', display: 'block' }} />
+                  <img src={srecLogo} alt="Sri Ramakrishna Engineering College" style={{ height: '55px', width: 'auto', display: 'block' }} />
+                  <div style={{ height: '36px', width: '1px', background: '#cbd5e1' }} />
+                  <img src={logo1} alt="AECTSD Logo" style={{ height: '55px', width: 'auto', display: 'block' }} />
+                  <div style={{ height: '36px', width: '1px', background: '#cbd5e1' }} />
+                  <img src={logo2} alt="SNR Trust" style={{ height: '60px', width: 'auto', display: 'block' }} />
                 </motion.div>
 
                 {/* Banner Subtext */}
@@ -2107,14 +2109,14 @@ export default function App() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2, duration: 0.6 }}
                   style={{
-                    color: '#fbbf24', // yellow/gold
-                    fontSize: '0.82rem',
+                    color: '#58111A', // deep burgundy
+                    fontSize: '0.85rem',
                     fontWeight: 800,
                     letterSpacing: '0.18em',
                     textTransform: 'uppercase',
                     display: 'block',
                     marginBottom: '2.5rem',
-                    textShadow: '0 2px 4px rgba(0,0,0,0.6)'
+                    textShadow: '0 1px 2px rgba(255, 255, 255, 0.8)'
                   }}
                 >
                   AN IEEE INDIA COUNCIL CONFERENCE
@@ -2128,47 +2130,47 @@ export default function App() {
                   style={{
                     padding: '3rem 2.5rem',
                     borderRadius: '1.5rem',
-                    background: 'rgba(88, 17, 26, 0.45)', // dark burgundy tint
+                    background: 'rgba(255, 255, 255, 0.85)',
                     backdropFilter: 'blur(16px)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    boxShadow: '0 20px 45px rgba(0, 0, 0, 0.3)',
+                    border: '1px solid rgba(255, 255, 255, 0.4)',
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
                     textAlign: 'center',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     gap: '1.5rem',
-                    color: '#ffffff'
+                    color: '#0f172a'
                   }}
                 >
                   {/* Title */}
-                  <h1 className="hero-title" style={{ margin: 0, fontSize: '3rem', fontWeight: 800, background: 'linear-gradient(135deg, #ffffff 40%, #fbbf24 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 1.2 }}>
+                  <h1 className="hero-title" style={{ margin: 0, fontSize: '3rem', fontWeight: 800, background: 'linear-gradient(135deg, #091d36 40%, #0f52ba 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 1.2 }}>
                     {info.hero_title || 'Welcome to ICAECTSD 2027'}
                   </h1>
 
                   {/* Subtitle */}
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#f1f5f9', opacity: 0.95, maxWidth: '800px', margin: 0, lineHeight: 1.5, textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 600, color: '#334155', maxWidth: '800px', margin: 0, lineHeight: 1.5 }}>
                     {info.hero_subtitle || 'Second IEEE International Conference on Advances in Engineering and Computing Technologies for Sustainable Development (ICAECTSD) 2027'}
-                  </h2>
+                  </p>
 
                   {/* Date & Location */}
-                  <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', margin: '0.5rem 0 1rem', fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>
+                  <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', margin: '0.5rem 0 1rem', fontSize: '1rem', fontWeight: 700, color: '#1e293b' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <Calendar size={20} style={{ color: '#fbbf24' }} />
+                      <Calendar size={20} className="text-blue-600" />
                       <span>{renderDateWithSuperscript(info.event_date_display || '17th and 18th December 2027')}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <MapPin size={20} style={{ color: '#fbbf24' }} />
+                      <MapPin size={20} className="text-blue-600" />
                       <span>{info.event_location_display || 'Sri Ramakrishna Engineering College, Coimbatore, Tamilnadu, India'}</span>
                     </div>
                   </div>
 
                   {/* Countdown Clock */}
-                  <div className="countdown-container" style={{ width: '100%', maxWidth: '600px', padding: '1rem', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '1rem', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#ffffff' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: '#fbbf24', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
+                  <div className="countdown-container" style={{ width: '100%', maxWidth: '600px', padding: '1rem', background: 'rgba(15, 82, 186, 0.05)', borderRadius: '1rem', border: '1px solid rgba(15, 82, 186, 0.1)', color: '#0f172a' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: '#1e3a8a', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
                       <Clock size={16} />
                       <span>{info.hero_countdown_title || 'Conference Countdown'}</span>
                     </div>
-                    <div className="countdown-row" style={{ color: '#ffffff' }}>
+                    <div className="countdown-row" style={{ color: '#0f172a' }}>
                       {[
                         { label: info.label_days || 'Days', value: timeLeft.days },
                         { label: info.label_hours || 'Hours', value: timeLeft.hours },
@@ -2176,7 +2178,7 @@ export default function App() {
                         { label: info.label_secs || 'Seconds', value: timeLeft.seconds }
                       ].map((t, idx) => (
                         <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                          <span className="countdown-val" style={{ display: 'inline-flex', overflow: 'hidden', height: '2.5rem', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontSize: '1.8rem', fontWeight: 800 }}>
+                          <span className="countdown-val" style={{ display: 'inline-flex', overflow: 'hidden', height: '2.5rem', alignItems: 'center', justifyContent: 'center', color: '#091d36', fontSize: '1.8rem', fontWeight: 800 }}>
                             <AnimatePresence mode="popLayout" initial={false}>
                               <motion.span
                                 key={t.value}
@@ -2190,7 +2192,7 @@ export default function App() {
                               </motion.span>
                             </AnimatePresence>
                           </span>
-                          <span className="countdown-lbl" style={{ color: '#94a3b8', fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 600 }}>
+                          <span className="countdown-lbl" style={{ color: '#475569', fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 600 }}>
                             {t.label}
                           </span>
                         </div>
@@ -2233,8 +2235,8 @@ export default function App() {
                       style={{
                         fontSize: '0.95rem',
                         padding: '0.8rem 1.75rem',
-                        background: 'rgba(255, 255, 255, 0.08)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        background: '#0b2240',
+                        border: '1px solid rgba(0,0,0,0.1)',
                         color: '#ffffff',
                         borderRadius: '30px',
                         cursor: 'pointer',
@@ -2252,9 +2254,9 @@ export default function App() {
                       style={{
                         fontSize: '0.95rem',
                         padding: '0.8rem 1.75rem',
-                        background: 'rgba(255, 255, 255, 0.08)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        color: '#ffffff',
+                        background: 'transparent',
+                        border: '1px solid #cbd5e1',
+                        color: '#0f172a',
                         borderRadius: '30px',
                         cursor: 'pointer',
                         display: 'flex',
