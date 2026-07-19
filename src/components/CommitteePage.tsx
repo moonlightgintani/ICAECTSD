@@ -46,7 +46,7 @@ const getMemberImage = (name: string, imageUrl?: string): string => {
   if (imageUrl && imageUrl !== 'no_file' && imageUrl !== '') {
     return imageUrl;
   }
-  return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=58111a,eab308&textColor=ffffff`;
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=0b4f30,eab308&textColor=ffffff`;
 };
 
 export default function CommitteePage({ committeeMembers, info, getMemberImage: getMemberImageProp, onBackToHome }: CommitteePageProps) {
@@ -133,7 +133,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
             style={{ 
               background: 'none', 
               border: 'none', 
-              color: '#58111A', 
+              color: '#0b4f30', 
               cursor: 'pointer', 
               fontWeight: 700, 
               display: 'flex', 
@@ -154,7 +154,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
           <span style={{ color: '#eab308', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.85rem', letterSpacing: '0.12em', display: 'block', marginBottom: '0.5rem' }}>
             {headerData.badge}
           </span>
-          <h2 style={{ fontSize: '2.5rem', color: '#58111A', fontWeight: 800, margin: 0 }}>
+          <h2 style={{ fontSize: '2.5rem', color: '#0b4f30', fontWeight: 800, margin: 0 }}>
             {headerData.title}
           </h2>
           <div style={{ height: '3.5px', width: '80px', background: '#fbbf24', margin: '0.85rem auto 0', borderRadius: '2px' }} />
@@ -175,15 +175,15 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
               onClick={() => setCommitteeTab(tab.id)}
               className="committee-tab-btn"
               style={{
-                background: committeeTab === tab.id ? '#58111A' : '#ffffff',
-                color: committeeTab === tab.id ? '#ffffff' : '#58111A',
+                background: committeeTab === tab.id ? '#0b4f30' : '#ffffff',
+                color: committeeTab === tab.id ? '#ffffff' : '#0b4f30',
                 border: '1px solid #e2e8f0',
                 padding: '0.6rem 1.5rem',
                 fontWeight: 700,
                 fontSize: '0.9rem',
                 borderRadius: '30px',
                 cursor: 'pointer',
-                boxShadow: committeeTab === tab.id ? '0 4px 12px rgba(88, 17, 26, 0.15)' : 'none',
+                boxShadow: committeeTab === tab.id ? '0 4px 12px rgba(11, 79, 48, 0.15)' : 'none',
                 transition: 'all 0.2s ease'
               }}
             >
@@ -194,7 +194,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
 
         {/* Active Panel Subtitle */}
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <h3 style={{ fontSize: '1.45rem', color: '#58111A', fontWeight: 800, margin: 0 }}>
+          <h3 style={{ fontSize: '1.45rem', color: '#0b4f30', fontWeight: 800, margin: 0 }}>
             {committeeTab === 'organizing' 
               ? `The ${SUBCOMMITTEES.find(s => s.id === activeSubcommittee)?.label} Committee`
               : committeeTab === 'steering'
@@ -252,13 +252,13 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                         <img 
                           src={resolveMemberImage(member.name, member.image_url)}
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=58111a,eab308&textColor=ffffff`;
+                            (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0b4f30,eab308&textColor=ffffff`;
                           }}
                           alt={member.name}
                           style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
                         />
                       </div>
-                      <h4 style={{ fontSize: '1.2rem', color: '#58111A', fontWeight: 800, margin: '0 0 0.75rem' }}>{member.name}</h4>
+                      <h4 style={{ fontSize: '1.2rem', color: '#0b4f30', fontWeight: 800, margin: '0 0 0.75rem' }}>{member.name}</h4>
                       <div style={{ color: '#475569', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', lineHeight: '1.4' }}>
                         {member.role && member.role !== 'Steering Member' && (
                           <div style={{ fontWeight: 700, color: '#091d36' }}>{member.role}</div>
@@ -287,7 +287,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                           }}
                           className="subcommittee-btn"
                           style={{
-                            background: activeSubcommittee === group.id ? '#58111A' : '#ffffff',
+                            background: activeSubcommittee === group.id ? '#0b4f30' : '#ffffff',
                             color: activeSubcommittee === group.id ? '#ffffff' : '#64748b',
                             border: '1px solid #e2e8f0',
                             borderRadius: '20px',
@@ -316,7 +316,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                           }}
                           className="subcommittee-btn"
                           style={{
-                            background: activeSubcommittee === group.id ? '#58111A' : '#ffffff',
+                            background: activeSubcommittee === group.id ? '#0b4f30' : '#ffffff',
                             color: activeSubcommittee === group.id ? '#ffffff' : '#64748b',
                             border: '1px solid #e2e8f0',
                             borderRadius: '20px',
@@ -345,7 +345,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                         background: '#ffffff',
                         border: '1px solid #cbd5e1',
                         borderRadius: '0.5rem',
-                        color: '#58111A',
+                        color: '#0b4f30',
                         fontWeight: 700,
                         display: 'flex',
                         alignItems: 'center',
@@ -393,9 +393,9 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                               style={{
                                 width: '100%',
                                 padding: '0.75rem 1.25rem',
-                                background: activeSubcommittee === group.id ? 'rgba(88, 17, 26, 0.08)' : 'transparent',
+                                background: activeSubcommittee === group.id ? 'rgba(11, 79, 48, 0.08)' : 'transparent',
                                 border: 'none',
-                                color: '#58111A',
+                                color: '#0b4f30',
                                 textAlign: 'left',
                                 fontSize: '0.9rem',
                                 fontWeight: activeSubcommittee === group.id ? 700 : 500,
@@ -461,13 +461,13 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                             background: 'rgba(255, 255, 255, 0.45)',
                             borderRadius: '2rem',
                             padding: '2.5rem 1.5rem',
-                            border: '1px solid rgba(88, 17, 26, 0.04)',
+                            border: '1px solid rgba(11, 79, 48, 0.04)',
                             boxShadow: '0 10px 30px rgba(0, 0, 0, 0.01)'
                           }}
                         >
                           <h4 style={{ 
                             fontSize: '1.45rem', 
-                            color: '#58111A', 
+                            color: '#0b4f30', 
                             fontWeight: 800, 
                             textAlign: 'center', 
                             marginBottom: '2rem' 
@@ -511,13 +511,13 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                                   <img 
                                     src={resolveMemberImage(member.name, member.image_url)}
                                     onError={(e) => {
-                                      (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=58111a,eab308&textColor=ffffff`;
+                                      (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0b4f30,eab308&textColor=ffffff`;
                                     }}
                                     alt={member.name}
                                     style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
                                   />
                                 </div>
-                                <h4 style={{ fontSize: '1.2rem', color: '#58111A', fontWeight: 800, margin: '0 0 0.75rem' }}>{member.name}</h4>
+                                <h4 style={{ fontSize: '1.2rem', color: '#0b4f30', fontWeight: 800, margin: '0 0 0.75rem' }}>{member.name}</h4>
                                 <div style={{ color: '#475569', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', lineHeight: '1.4' }}>
                                   {member.role && member.role !== 'Organizing Member' && member.role !== 'Member' && (
                                     <div style={{ fontWeight: 700, color: '#091d36' }}>{member.role}</div>
@@ -574,13 +574,13 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                         <img 
                           src={resolveMemberImage(adviser.name, adviser.image_url)}
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(adviser.name)}&backgroundColor=58111a,eab308&textColor=ffffff`;
+                            (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(adviser.name)}&backgroundColor=0b4f30,eab308&textColor=ffffff`;
                           }}
                           alt={adviser.name}
                           style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
                         />
                       </div>
-                      <h4 style={{ fontSize: '1.2rem', color: '#58111A', fontWeight: 800, margin: '0 0 0.75rem' }}>{adviser.name}</h4>
+                      <h4 style={{ fontSize: '1.2rem', color: '#0b4f30', fontWeight: 800, margin: '0 0 0.75rem' }}>{adviser.name}</h4>
                       <div style={{ color: '#475569', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', lineHeight: '1.4' }}>
                         {adviser.role && adviser.role !== 'Advisory Member' && (
                           <div style={{ fontWeight: 700, color: '#091d36' }}>{adviser.role}</div>

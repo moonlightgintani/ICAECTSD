@@ -2540,7 +2540,7 @@ h2, h3, h4, h5, h6, td {
 /* Yellow Contact Us Button */
 .contact-btn-nav {
   background: #fbbf24 !important;
-  color: #58111A !important;
+  color: #0b4f30 !important;
   padding: 0.5rem 1.25rem !important;
   border-radius: 30px !important;
   font-weight: 700 !important;
@@ -2580,7 +2580,7 @@ h2, h3, h4, h5, h6, td {
 .committee-profile-card:hover {
   transform: translateY(-8px) !important;
   border-color: #eab308 !important;
-  box-shadow: 0 15px 35px rgba(88, 17, 26, 0.08) !important;
+  box-shadow: 0 15px 35px rgba(11, 79, 48, 0.08) !important;
 }
 
 @media (max-width: 767px) {
