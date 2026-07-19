@@ -3159,20 +3159,29 @@ td {
 
 @media (max-width: 640px) {
   .indicon-logo-banner {
-    padding: 0.85rem 1.35rem !important;
-    gap: 1.15rem !important;
-    border-radius: 40px !important;
-    max-width: 98% !important;
+    padding: 0.5rem 0.85rem !important;
+    gap: 0.6rem !important;
+    border-radius: 9999px !important;
+    width: fit-content !important;
+    max-width: 95% !important;
     background: #ffffff !important;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
+    box-sizing: border-box !important;
+    margin: 0 auto 0.75rem !important;
   }
 
   .indicon-banner-logo {
-    height: 58px !important;
+    height: 38px !important;
+    max-height: 38px !important;
+    width: auto !important;
+    object-fit: contain !important;
   }
 
   .indicon-logo-divider {
-    height: 38px !important;
+    height: 26px !important;
+    width: 1px !important;
+    background: #cbd5e1 !important;
+    flex-shrink: 0 !important;
   }
 
   .indicon-hero-title {
