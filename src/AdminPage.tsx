@@ -205,7 +205,38 @@ export default function AdminPage({
       setIsSavingPricing(false);
     }
   };
+  // Local state copy of general configurations
+  const [localInfo, setLocalInfo] = useState<Record<string, string>>({});
+  const [isSavingInfo, setIsSavingInfo] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (info) {
+      setLocalInfo(info);
+    }
+  }, [info]);
+
+  const handleSaveAllInfo = async () => {
+    setIsSavingInfo(true);
+    try {
+      if (isSupabaseConfigured && supabase) {
+        // Upsert all info settings in parallel
+        const promises = Object.entries(localInfo).map(([key, val]) => 
+          supabase.from('conference_info').upsert({ key, value: val })
+        );
+        const results = await Promise.all(promises);
+        const firstError = results.find(r => r.error);
+        if (firstError) throw firstError.error;
+      } else {
+        localStorage.setItem('srec_offline_info', JSON.stringify(localInfo));
+      }
+      setInfo(localInfo);
+      alert('All general configurations saved successfully to database!');
+    } catch (err: any) {
+      alert('Save general configurations failed: ' + (err.message || err));
+    } finally {
+      setIsSavingInfo(false);
+    }
+  };
   // Refresh helper
   const handleRefresh = async () => {
     setAdminLoading(true);
@@ -369,22 +400,7 @@ export default function AdminPage({
     setAdminPassword('');
   };
 
-  // General Settings save helper
-  const handleSaveInfoSetting = async (key: string, val: string) => {
-    try {
-      if (isSupabaseConfigured && supabase) {
-        const { error } = await supabase.from('conference_info').upsert({ key, value: val });
-        if (error) throw error;
-      } else {
-        const local = JSON.parse(localStorage.getItem('srec_offline_info') || '{}');
-        local[key] = val;
-        localStorage.setItem('srec_offline_info', JSON.stringify(local));
-      }
-      setInfo(prev => ({ ...prev, [key]: val }));
-    } catch (err: any) {
-      alert('Save setting failed: ' + err.message);
-    }
-  };
+
 
   // Generic Speaker Save/Delete
   const handleSaveSpeaker = async (e: React.FormEvent) => {
@@ -2254,7 +2270,7 @@ export default function AdminPage({
         {/* TAB 2: General Configurations */}
         {activeTab === 'general' && (
           <div className="admin-glass-card" style={{ padding: '2rem' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1.5rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.75rem', color: '#0f172a' }}>Webpage Settings & Strings</h3>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1.5rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.75rem', color: '#0b4f30' }}>Webpage Settings & Strings</h3>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <div className="admin-form-grid" style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: '1.5rem' }}>
@@ -2262,8 +2278,8 @@ export default function AdminPage({
                   <label htmlFor="show_banner">Show Announcement Banner</label>
                   <select
                     id="show_banner"
-                    value={info.show_announcement !== 'false' ? 'true' : 'false'}
-                    onChange={(e) => handleSaveInfoSetting('show_announcement', e.target.value)}
+                    value={localInfo.show_announcement !== 'false' ? 'true' : 'false'}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, show_announcement: e.target.value }))}
                     className="form-input"
                   >
                     <option value="true">Show Banner</option>
@@ -2275,8 +2291,8 @@ export default function AdminPage({
                   <input
                     id="banner_txt"
                     type="text"
-                    value={info.announcement_text || ''}
-                    onChange={(e) => handleSaveInfoSetting('announcement_text', e.target.value)}
+                    value={localInfo.announcement_text || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, announcement_text: e.target.value }))}
                     placeholder="Enter announcement text"
                     className="form-input"
                   />
@@ -2289,8 +2305,8 @@ export default function AdminPage({
                   <input
                     id="ht"
                     type="text"
-                    value={info.hero_title || ''}
-                    onChange={(e) => handleSaveInfoSetting('hero_title', e.target.value)}
+                    value={localInfo.hero_title || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, hero_title: e.target.value }))}
                     className="form-input"
                   />
                 </div>
@@ -2299,8 +2315,8 @@ export default function AdminPage({
                   <input
                     id="hs"
                     type="text"
-                    value={info.hero_subtitle || ''}
-                    onChange={(e) => handleSaveInfoSetting('hero_subtitle', e.target.value)}
+                    value={localInfo.hero_subtitle || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, hero_subtitle: e.target.value }))}
                     className="form-input"
                   />
                 </div>
@@ -2312,8 +2328,8 @@ export default function AdminPage({
                   <input
                     id="ed"
                     type="text"
-                    value={info.event_date_display || ''}
-                    onChange={(e) => handleSaveInfoSetting('event_date_display', e.target.value)}
+                    value={localInfo.event_date_display || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, event_date_display: e.target.value }))}
                     className="form-input"
                   />
                 </div>
@@ -2322,8 +2338,8 @@ export default function AdminPage({
                   <input
                     id="el"
                     type="text"
-                    value={info.event_location_display || ''}
-                    onChange={(e) => handleSaveInfoSetting('event_location_display', e.target.value)}
+                    value={localInfo.event_location_display || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, event_location_display: e.target.value }))}
                     className="form-input"
                   />
                 </div>
@@ -2335,8 +2351,8 @@ export default function AdminPage({
                   <input
                     id="cc"
                     type="text"
-                    value={info.countdown_target || ''}
-                    onChange={(e) => handleSaveInfoSetting('countdown_target', e.target.value)}
+                    value={localInfo.countdown_target || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, countdown_target: e.target.value }))}
                     placeholder="YYYY-MM-DDTHH:MM:SS"
                     className="form-input"
                   />
@@ -2346,8 +2362,8 @@ export default function AdminPage({
                   <input
                     id="cl"
                     type="text"
-                    value={info.cmt_link || ''}
-                    onChange={(e) => handleSaveInfoSetting('cmt_link', e.target.value)}
+                    value={localInfo.cmt_link || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, cmt_link: e.target.value }))}
                     className="form-input"
                   />
                 </div>
@@ -2359,8 +2375,8 @@ export default function AdminPage({
                   <input
                     id="srec_url"
                     type="text"
-                    value={info.srec_url || ''}
-                    onChange={(e) => handleSaveInfoSetting('srec_url', e.target.value)}
+                    value={localInfo.srec_url || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, srec_url: e.target.value }))}
                     className="form-input"
                   />
                 </div>
@@ -2369,8 +2385,8 @@ export default function AdminPage({
                   <input
                     id="ieee_sb_url"
                     type="text"
-                    value={info.ieee_sb_url || ''}
-                    onChange={(e) => handleSaveInfoSetting('ieee_sb_url', e.target.value)}
+                    value={localInfo.ieee_sb_url || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, ieee_sb_url: e.target.value }))}
                     className="form-input"
                   />
                 </div>
@@ -2380,8 +2396,8 @@ export default function AdminPage({
                 <label htmlFor="about_conf">About The Conference Description</label>
                 <textarea
                   id="about_conf"
-                  value={info.about_conference || ''}
-                  onChange={(e) => handleSaveInfoSetting('about_conference', e.target.value)}
+                  value={localInfo.about_conference || ''}
+                  onChange={(e) => setLocalInfo(prev => ({ ...prev, about_conference: e.target.value }))}
                   rows={4}
                   className="form-input"
                   style={{ fontFamily: 'inherit', resize: 'vertical' }}
@@ -2392,8 +2408,8 @@ export default function AdminPage({
                 <label htmlFor="about_inst">About Sri Ramakrishna Engineering College</label>
                 <textarea
                   id="about_inst"
-                  value={info.about_institution || ''}
-                  onChange={(e) => handleSaveInfoSetting('about_institution', e.target.value)}
+                  value={localInfo.about_institution || ''}
+                  onChange={(e) => setLocalInfo(prev => ({ ...prev, about_institution: e.target.value }))}
                   rows={4}
                   className="form-input"
                   style={{ fontFamily: 'inherit', resize: 'vertical' }}
@@ -2406,8 +2422,8 @@ export default function AdminPage({
                   <input
                     id="bank_acc_name"
                     type="text"
-                    value={info.bank_account_name || ''}
-                    onChange={(e) => handleSaveInfoSetting('bank_account_name', e.target.value)}
+                    value={localInfo.bank_account_name || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, bank_account_name: e.target.value }))}
                     className="form-input"
                   />
                 </div>
@@ -2416,8 +2432,8 @@ export default function AdminPage({
                   <input
                     id="bank_name_inp"
                     type="text"
-                    value={info.bank_name || ''}
-                    onChange={(e) => handleSaveInfoSetting('bank_name', e.target.value)}
+                    value={localInfo.bank_name || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, bank_name: e.target.value }))}
                     className="form-input"
                   />
                 </div>
@@ -2429,8 +2445,8 @@ export default function AdminPage({
                   <input
                     id="bank_acc_no"
                     type="text"
-                    value={info.bank_account_number || ''}
-                    onChange={(e) => handleSaveInfoSetting('bank_account_number', e.target.value)}
+                    value={localInfo.bank_account_number || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, bank_account_number: e.target.value }))}
                     className="form-input"
                   />
                 </div>
@@ -2439,11 +2455,38 @@ export default function AdminPage({
                   <input
                     id="bank_ifsc"
                     type="text"
-                    value={info.bank_ifsc_code || ''}
-                    onChange={(e) => handleSaveInfoSetting('bank_ifsc_code', e.target.value)}
+                    value={localInfo.bank_ifsc_code || ''}
+                    onChange={(e) => setLocalInfo(prev => ({ ...prev, bank_ifsc_code: e.target.value }))}
                     className="form-input"
                   />
                 </div>
+              </div>
+
+              {/* Save Button */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '2rem', borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem' }}>
+                <button
+                  type="button"
+                  onClick={handleSaveAllInfo}
+                  disabled={isSavingInfo}
+                  style={{
+                    background: 'linear-gradient(135deg, #0b4f30 0%, #198754 100%)',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    padding: '0.75rem 2rem',
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(11, 79, 48, 0.25)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    transition: 'opacity 0.2s',
+                    opacity: isSavingInfo ? 0.7 : 1
+                  }}
+                >
+                  {isSavingInfo ? 'Saving configurations...' : 'Save General Configurations'}
+                </button>
               </div>
             </div>
           </div>
