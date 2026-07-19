@@ -661,18 +661,7 @@ export default function AdminPage({
     }
   };
 
-  // NEW: Edit Pricing Rule (upsert registration_pricing)
-  const handleSavePricingRule = async (key: string, val: number) => {
-    try {
-      if (isSupabaseConfigured && supabase) {
-        const { error } = await supabase.from('registration_pricing').upsert({ key, value: val });
-        if (error) throw error;
-      }
-      setPricing(prev => ({ ...prev, [key]: val }));
-    } catch (err: any) {
-      alert('Save pricing rule failed: ' + err.message);
-    }
-  };
+
 
   // NEW: CRUD for Coordinators (coordinators)
   const handleSaveCoordinator = async (e: React.FormEvent) => {
