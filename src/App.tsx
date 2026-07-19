@@ -2149,7 +2149,7 @@ export default function App() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2, duration: 0.6 }}
                   style={{
-                    color: '#58111A', // deep burgundy
+                    color: '#0b4f30', // deep green
                     fontSize: '0.85rem',
                     fontWeight: 800,
                     letterSpacing: '0.18em',
@@ -2249,7 +2249,7 @@ export default function App() {
                         fontSize: '0.95rem',
                         padding: '0.8rem 1.75rem',
                         background: '#fbbf24',
-                        color: '#58111A',
+                        color: '#0b4f30',
                         fontWeight: 800,
                         border: 'none',
                         borderRadius: '30px',
@@ -2645,7 +2645,20 @@ export default function App() {
                 </motion.div>
 
                 {/* Departments grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '3rem' }}>
+                <motion.div 
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={{
+                    hidden: {},
+                    visible: {
+                      transition: {
+                        staggerChildren: 0.08
+                      }
+                    }
+                  }}
+                  style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '3rem' }}
+                >
                   {departments.map((dept, index) => {
                     const getTrackIcon = (idx: number) => {
                       switch (idx) {
@@ -2659,8 +2672,18 @@ export default function App() {
                     };
 
                     return (
-                      <div
+                      <motion.div
                         key={index}
+                        variants={{
+                          hidden: { opacity: 0, y: 30, scale: 0.96 },
+                          visible: { 
+                            opacity: 1, 
+                            y: 0, 
+                            scale: 1,
+                            transition: { type: 'spring', stiffness: 90, damping: 14 }
+                          }
+                        }}
+                        whileHover={{ y: -6, scale: 1.015 }}
                         className="track-redesign-card"
                         onClick={() => setSelectedDept(dept)}
                       >
@@ -2691,10 +2714,10 @@ export default function App() {
                           <span>View Scope Details</span>
                           <ChevronRight size={16} />
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
-                </div>
+                </motion.div>
 
                 {/* Template Downloads */}
                 <div style={{ marginTop: '3.5rem', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -2722,8 +2745,8 @@ export default function App() {
                   variants={fadeInUp}
                   style={{ textAlign: 'center', marginBottom: '4rem' }}
                 >
-                  <span style={{ color: '#58111A', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.12em' }}>{info.dates_badge || "TIMELINE"}</span>
-                  <h2 style={{ fontSize: '2.5rem', color: '#58111A', marginTop: '0.5rem', fontWeight: 800 }}>{info.dates_title || "Important Dates"}</h2>
+                  <span style={{ color: '#0b4f30', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.12em' }}>{info.dates_badge || "TIMELINE"}</span>
+                  <h2 style={{ fontSize: '2.5rem', color: '#0b4f30', marginTop: '0.5rem', fontWeight: 800 }}>{info.dates_title || "Important Dates"}</h2>
                   <div style={{ height: '3.5px', width: '80px', background: '#fbbf24', margin: '1rem auto 0', borderRadius: '2px' }} />
                 </motion.div>
 
@@ -2930,7 +2953,7 @@ export default function App() {
                   variants={fadeInUp}
                   style={{ textAlign: 'center' }}
                 >
-                  <span style={{ color: '#58111A', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.15em' }}>REGISTRATION</span>
+                  <span style={{ color: '#0b4f30', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.15em' }}>REGISTRATION</span>
                   <h2 style={{ fontSize: '2.5rem', color: '#091d36', marginTop: '0.5rem', fontWeight: 800 }}>Guidelines & Registration Details</h2>
                   <div style={{ height: '3px', width: '60px', background: '#fbbf24', margin: '1rem auto 0' }} />
                 </motion.div>
@@ -2948,11 +2971,11 @@ export default function App() {
                     padding: '1.25rem 3rem',
                     fontSize: '1.1rem',
                     fontWeight: 800,
-                    background: 'linear-gradient(135deg, #58111A 0%, #7d1c26 100%)',
+                    background: 'linear-gradient(135deg, #0b4f30 0%, #198754 100%)',
                     color: '#ffffff',
                     border: 'none',
                     borderRadius: '50px',
-                    boxShadow: '0 10px 25px rgba(88, 17, 26, 0.25)',
+                    boxShadow: '0 10px 25px rgba(11, 79, 48, 0.25)',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
