@@ -38,7 +38,6 @@ import {
   Cpu,
   Handshake
 } from 'lucide-react';
-import { SrecLogo } from './components/SrecLogo';
 import Footer from './components/Footer';
 import acLogo from './assets/logo.png';
 import srecLogo from './assets/srec-logo.png';
