@@ -20,25 +20,38 @@ interface CommitteePageProps {
 
 export const renderFormattedDesc = (descText: string | undefined | null) => {
   if (!descText) return '';
+  // Clean raw escape characters if present
+  let cleanedText = descText
+    .replace(/\\'/g, "'")
+    .replace(/\\"/g, '"')
+    .replace(/\\n/g, ' ')
+    .replace(/\bnice\b/gi, '');
+
   const phrases = [
     "SNR Sons Charitable Trust",
     "Sri Ramakrishna Engineering College",
     "Professor & Head - AI&DS",
+    "Professor & Head - AI & DS",
     "Professor & Head - Artificial Intelligence and Data Science",
     "Organizing Secretary, Professor & Head - AI&DS",
+    "Organizing Secretary, Professor & Head - AI & DS",
     "Chairman, IEEE Madras Section"
   ];
   const regex = new RegExp(`(${phrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
-  const parts = descText.split(regex);
+  const parts = cleanedText.split(regex);
   return (
-    <>
+    <span style={{ display: 'block', width: '100%', wordBreak: 'break-word', textAlign: 'center', lineHeight: 1.45 }}>
       {parts.map((part, index) => {
         if (phrases.includes(part)) {
-          return <span key={index}>{part}</span>;
+          return (
+            <span key={index} style={{ fontWeight: 600, color: '#0f172a', display: 'inline' }}>
+              {part}
+            </span>
+          );
         }
         return part;
       })}
-    </>
+    </span>
   );
 };
 

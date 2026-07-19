@@ -41,7 +41,6 @@ import {
 import Footer from './components/Footer';
 import acLogo from './assets/logo.png';
 import srecLogo from './assets/srec-logo.png';
-import logo1 from './assets/logo1.png';
 import logo2 from './assets/logo2.png';
 import chatbotIcon from './assets/chatbot.gif';
 import heroBg from './assets/hero.png';
@@ -73,7 +72,8 @@ const NAV_ITEMS = [
   { id: 'committee', label: 'Committee' },
   { id: 'explore', label: 'Explore' },
   { id: 'location', label: 'Venue' },
-  { id: 'admin', label: 'Admin' }
+  { id: 'admin', label: 'Admin' },
+  { id: 'ieee-sb', label: 'IEEE SREC SB', external: true }
 ];
 
 
@@ -146,7 +146,7 @@ interface Coordinator {
 }
 
 
-const parseDateDisplay = (dateStr: string) => {
+export const parseDateDisplay = (dateStr: string) => {
   const cleaned = dateStr.trim();
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const shortMonths: Record<string, string> = {
@@ -189,39 +189,61 @@ const parseDateDisplay = (dateStr: string) => {
 };
 
 export const renderDateWithSuperscript = (text: string | undefined | null) => {
-  if (!text) return '';
-  const parts = text.split(/(\d+)(st|nd|rd|th)\b/gi);
-  return (
-    <>
-      {parts.map((part, index) => {
-        if (index % 3 === 1) {
-          return <span key={index}>{part}<sup>{parts[index + 1]}</sup></span>;
-        } else if (index % 3 === 2) {
-          return null;
-        }
-        return part;
-      })}
-    </>
-  );
+  if (!text) return null;
+  const regex = /(\d+)(st|nd|rd|th)/gi;
+  const parts = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.substring(lastIndex, match.index));
+    }
+    parts.push(
+      <span key={match.index}>
+        {match[1]}<sup style={{ fontSize: '0.7em', verticalAlign: 'super', lineHeight: 0 }}>{match[2]}</sup>
+      </span>
+    );
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
+  }
+
+  return <>{parts}</>;
 };
 
 export const renderFormattedDesc = (descText: string | undefined | null) => {
   if (!descText) return '';
+  // Clean raw escape characters if present
+  let cleanedText = descText
+    .replace(/\\'/g, "'")
+    .replace(/\\"/g, '"')
+    .replace(/\\n/g, ' ')
+    .replace(/\bnice\b/gi, '');
+
   const phrases = [
     "SNR Sons Charitable Trust",
     "Sri Ramakrishna Engineering College",
     "Professor & Head - AI&DS",
+    "Professor & Head - AI & DS",
     "Professor & Head - Artificial Intelligence and Data Science",
     "Organizing Secretary, Professor & Head - AI&DS",
+    "Organizing Secretary, Professor & Head - AI & DS",
     "Chairman, IEEE Madras Section"
   ];
   const regex = new RegExp(`(${phrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
-  const parts = descText.split(regex);
+  const parts = cleanedText.split(regex);
   return (
     <>
       {parts.map((part, index) => {
         if (phrases.includes(part)) {
-          return <span key={index}>{part}</span>;
+          return (
+            <span key={index} style={{ whiteSpace: 'nowrap', display: 'inline-block' }}>
+              {part}
+            </span>
+          );
         }
         return part;
       })}
@@ -394,6 +416,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<'main' | 'explore' | 'admin' | 'committee' | 'guidelines' | 'payment'>('main');
   const [initialRegTab, setInitialRegTab] = useState<'submission' | 'fees' | 'form'>('submission');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const isSeparatePage = (id: string) => ['committee', 'guidelines', 'call-for-papers-main', 'registration', 'explore', 'admin'].includes(id);
 
   // Database content states
@@ -1237,6 +1260,8 @@ export default function App() {
   const heroBgScaleRaw = useTransform(scrollY, [0, 600], [1, 1.15]);
   const heroBgScale = useSpring(heroBgScaleRaw, { stiffness: 80, damping: 20 });
 
+  const [toastOpen, setToastOpen] = useState(true);
+
   // Countdown timer calculation
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -1258,7 +1283,20 @@ export default function App() {
     if (localSpeakers) setSpeakers(JSON.parse(localSpeakers));
 
     const localDates = localStorage.getItem('srec_offline_important_dates');
-    if (localDates) setImportantDates(JSON.parse(localDates));
+    if (localDates) {
+      setImportantDates(JSON.parse(localDates));
+    } else {
+      const defaultMockDates = [
+        { id: 1, title: 'Full Paper Submission Deadline', event_date: 'May 2nd, 2027', desc: 'Submission deadline for initial full paper review via Microsoft CMT portal.', sort_order: 1 },
+        { id: 2, title: 'Notification of Acceptance', event_date: 'June 15th, 2027', desc: 'Acceptance/rejection decisions notified to authors.', sort_order: 2 },
+        { id: 3, title: 'Camera-Ready Paper Submission', event_date: 'August 1st, 2027', desc: 'Final camera-ready paper and copyright form upload deadline.', sort_order: 3 },
+        { id: 4, title: 'Early Bird Registration Deadline', event_date: 'September 15th, 2027', desc: 'Early registration deadline for accepted paper authors.', sort_order: 4 },
+        { id: 5, title: 'Pre-Conference Tutorial & Workshops', event_date: 'December 16th, 2027', desc: 'Hands-on pre-conference technical tutorials and domain workshops.', sort_order: 5 },
+        { id: 6, title: 'Main Conference Days', event_date: 'December 17th – 18th, 2027', desc: 'Main conference tracks, keynote sessions, and technical paper presentations.', sort_order: 6 }
+      ];
+      setImportantDates(defaultMockDates);
+      localStorage.setItem('srec_offline_important_dates', JSON.stringify(defaultMockDates));
+    }
 
     const localWorkshops = localStorage.getItem('srec_offline_workshops');
     if (localWorkshops) setWorkshops(JSON.parse(localWorkshops));
@@ -1445,6 +1483,12 @@ export default function App() {
   // Track active section on scroll
   useEffect(() => {
     const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+
       const scrollPosition = window.scrollY + 200; // Offset for header
 
       for (const item of NAV_ITEMS) {
@@ -1531,8 +1575,7 @@ export default function App() {
     setTimeout(() => {
       const el = document.getElementById(id);
       if (el) {
-        const headerEl = document.querySelector('.main-header');
-        const offset = headerEl ? headerEl.clientHeight : 95;
+        const offset = 85;
         window.scrollTo({
           top: el.offsetTop - offset,
           behavior: 'smooth'
@@ -1715,106 +1758,86 @@ export default function App() {
         </div>
       )}
 
-      {/* Header / Navbar */}
+      {/* Header / Navbar (Single Floating Capsule) */}
       {currentPage !== 'admin' && (
-        <header className="main-header">
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('home');
-            }}
-            title="AECTSD 2027"
-            style={{ display: 'inline-flex', cursor: 'pointer', textDecoration: 'none', flexShrink: 0, flexGrow: 0 }}
-          >
-            <img src={acLogo} alt="AECTSD Logo" style={{ height: '60px', width: 'auto', display: 'block', borderRadius: '50%' }} />
-          </a>
+        <header className={`main-header ${scrolled ? 'header-scrolled' : ''}`}>
+          {/* Nav Capsule Row */}
+          <div className="nav-capsule-container">
+            <div className="nav-capsule">
+              {/* Mobile Navigation Toggle (Positioned on Left for Mobile) */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="mobile-nav-toggle mobile-toggle-left"
+                aria-label="Toggle Navigation Menu"
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={mobileMenuOpen ? 'close' : 'menu'}
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                    style={{ display: 'inline-flex' }}
+                  >
+                    {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                  </motion.div>
+                </AnimatePresence>
+              </button>
 
-          {/* Desktop Navigation Links */}
-          <nav className="desktop-nav" style={{ flex: 1, justifyContent: 'center', minWidth: 0, padding: '0 1rem' }}>
-            <ul style={{ display: 'flex', listStyle: 'none', alignItems: 'center', margin: 0, padding: 0, gap: '0.25rem', justifyContent: 'center', width: '100%' }}>
-              {NAV_ITEMS.map((item: any) => (
-                <li key={item.id}>
-                  {isSeparatePage(item.id) ? (
-                    <a
-                      href={`/?page=${item.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
-                      style={{ position: 'relative', textDecoration: 'none', display: 'inline-block' }}
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
-                    <button
-                      onClick={() => scrollToSection(item.id)}
-                      className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
-                      style={{ position: 'relative' }}
-                    >
-                      {item.label}
-                      {activeSection === item.id && (
-                        <motion.div
-                          layoutId="activeIndicator"
-                          style={{
-                            position: 'absolute',
-                            bottom: '-4px',
-                            left: '10%',
-                            right: '10%',
-                            height: '2px',
-                            background: '#fbbf24',
-                            borderRadius: '2px'
-                          }}
-                        />
+              {/* Desktop Navigation Links */}
+              <nav className="desktop-nav">
+                <ul>
+                  {NAV_ITEMS.filter((item: any) => item.id !== 'ieee-sb').map((item: any) => (
+                    <li key={item.id}>
+                      {isSeparatePage(item.id) ? (
+                        <a
+                          href={`/?page=${item.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+                        >
+                          {item.label}
+                        </a>
+                      ) : (
+                        <button
+                          onClick={() => scrollToSection(item.id)}
+                          className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+                        >
+                          {item.label}
+                          {activeSection === item.id && (
+                            <motion.div
+                              layoutId="activeIndicator"
+                              className="active-indicator-bar"
+                            />
+                          )}
+                        </button>
                       )}
-                    </button>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </nav>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
 
-          {/* AC Logo and Mobile Navigation Toggle Container */}
-          <div className="header-right-container" style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
-            {/* Contact Us Button on Desktop */}
-            <button
-              onClick={() => scrollToSection('contact-us')}
-              className="contact-btn-nav desktop-contact-btn"
-            >
-              CONTACT US
-            </button>
-
-            {/* Mobile Navigation Toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                borderRadius: '0.375rem',
-                padding: '0.5rem',
-                color: '#ffffff',
-                cursor: 'pointer',
-                overflow: 'hidden',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '38px',
-                height: '38px'
-              }}
-              className="mobile-nav-toggle"
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={mobileMenuOpen ? 'close' : 'menu'}
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                  style={{ display: 'inline-flex' }}
+              {/* Desktop Navigation Action Buttons */}
+              <div className="header-right-container">
+                {/* IEEE SREC SB Portal Link */}
+                <a
+                  href={info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ieee-sb-btn-nav desktop-btn"
                 >
-                  {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-                </motion.div>
-              </AnimatePresence>
-            </button>
+                  IEEE SREC SB
+                </a>
+
+                {/* Contact Us Button */}
+                <button
+                  onClick={() => scrollToSection('contact-us')}
+                  className="contact-btn-nav desktop-btn"
+                >
+                  CONTACT US
+                </button>
+              </div>
+            </div>
           </div>
         </header>
       )}
@@ -1824,20 +1847,20 @@ export default function App() {
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, y: -20, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.96 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="mobile-nav-drawer"
             >
-              {NAV_ITEMS.map((item: any, idx) => (
+              {NAV_ITEMS.filter((item: any) => item.id !== 'ieee-sb').map((item: any, idx) => (
                 <motion.div
                   key={item.id}
                   initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{
-                    duration: 0.3,
-                    delay: idx * 0.035,
+                    duration: 0.25,
+                    delay: idx * 0.03,
                     ease: [0.16, 1, 0.3, 1]
                   }}
                   style={{ width: '100%' }}
@@ -1847,52 +1870,11 @@ export default function App() {
                       href={`/?page=${item.id}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{
-                        background: 'transparent',
-                        border: 'none',
-                        color: '#1e293b',
-                        textAlign: 'left',
-                        padding: '0.75rem 1rem',
-                        borderRadius: '0.5rem',
-                        fontSize: '1rem',
-                        fontWeight: '600',
-                        cursor: 'pointer',
-                        width: '100%',
-                        textDecoration: 'none',
-                        display: 'block',
-                        transition: 'all 0.2s ease'
-                      }}
+                      className={`mobile-link-item ${activeSection === item.id ? 'active' : ''}`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      {navLabelMap[item.id] || item.label}
-                    </a>
-                  ) : item.external ? (
-                    <a
-                      href={
-                        item.id === 'ieee-sb'
-                          ? (info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/")
-                          : (info.snr_url || info.snr_trust_url || "https://www.snrst.org")
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        background: 'transparent',
-                        border: 'none',
-                        color: '#1e293b',
-                        textAlign: 'left',
-                        padding: '0.75rem 1rem',
-                        borderRadius: '0.5rem',
-                        fontSize: '1rem',
-                        fontWeight: '600',
-                        cursor: 'pointer',
-                        width: '100%',
-                        textDecoration: 'none',
-                        display: 'block',
-                        transition: 'all 0.2s ease'
-                      }}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {navLabelMap[item.id] || item.label}
+                      <span>{navLabelMap[item.id] || item.label}</span>
+                      <ChevronRight size={16} />
                     </a>
                   ) : (
                     <button
@@ -1900,25 +1882,37 @@ export default function App() {
                         scrollToSection(item.id);
                         setMobileMenuOpen(false);
                       }}
-                      style={{
-                        background: activeSection === item.id ? 'rgba(59, 130, 246, 0.08)' : 'transparent',
-                        border: 'none',
-                        color: activeSection === item.id ? '#3b82f6' : '#1e293b',
-                        textAlign: 'left',
-                        padding: '0.75rem 1rem',
-                        borderRadius: '0.5rem',
-                        fontSize: '1rem',
-                        fontWeight: activeSection === item.id ? '700' : '600',
-                        cursor: 'pointer',
-                        width: '100%',
-                        transition: 'all 0.2s ease'
-                      }}
+                      className={`mobile-link-item ${activeSection === item.id ? 'active' : ''}`}
                     >
-                      {navLabelMap[item.id] || item.label}
+                      <span>{navLabelMap[item.id] || item.label}</span>
+                      <ChevronRight size={16} />
                     </button>
                   )}
                 </motion.div>
               ))}
+
+              {/* Action Buttons inside Mobile Drawer */}
+              <div className="mobile-action-row">
+                <a
+                  href={info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ieee-sb-btn-nav"
+                  style={{ width: '100%', justifyContent: 'center', padding: '0.75rem 1rem' }}
+                >
+                  IEEE SREC SB
+                </a>
+                <button
+                  onClick={() => {
+                    scrollToSection('contact-us');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="contact-btn-nav"
+                  style={{ width: '100%', justifyContent: 'center', padding: '0.75rem 1rem' }}
+                >
+                  CONTACT US
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -2090,7 +2084,6 @@ export default function App() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 position: 'relative',
-                padding: 'calc(8rem + var(--banner-height, 0px)) 1.5rem 6rem',
                 textAlign: 'center',
                 overflow: 'hidden'
               }}
@@ -2109,211 +2102,175 @@ export default function App() {
                 }}
               />
 
-              {/* Light overlay for exact styling and readability match */}
+              {/* Dark overlay for rich high-contrast golden INDICON typography */}
               <div style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.35) 60%, rgba(255, 255, 255, 0.65) 100%)',
+                background: 'linear-gradient(to bottom, rgba(15, 5, 10, 0.72) 0%, rgba(20, 5, 12, 0.85) 60%, rgba(15, 5, 10, 0.92) 100%)',
                 zIndex: 1
               }} />
 
-              <div style={{ position: 'relative', zIndex: 2, maxWidth: '960px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-
-                {/* Sponsoring/Organizing Logos Floating Banner */}
+              <div className="indicon-hero-wrapper">
+                {/* 1. Floating 3-Logo White Banner */}
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="floating-logo-banner"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '2.5rem',
-                    background: 'rgba(252, 251, 247, 0.85)', // semi-transparent cream
-                    border: '1px solid rgba(255, 255, 255, 0.8)',
-                    borderRadius: '24px',
-                    padding: '1.25rem 3.5rem',
-                    boxShadow: '0 12px 30px rgba(0, 0, 0, 0.25)',
-                    margin: '0 auto 1rem',
-                    flexWrap: 'nowrap',
-                    maxWidth: '95%'
-                  }}
+                  className="indicon-logo-banner"
                 >
-                  <img src={srecLogo} alt="Sri Ramakrishna Engineering College" style={{ height: '55px', width: 'auto', display: 'block' }} />
-                  <div className="logo-separator" style={{ height: '36px', width: '1px', background: '#cbd5e1' }} />
-                  <img src={logo1} alt="AECTSD Logo" style={{ height: '55px', width: 'auto', display: 'block' }} />
-                  <div className="logo-separator" style={{ height: '36px', width: '1px', background: '#cbd5e1' }} />
-                  <img src={logo2} alt="SNR Trust" style={{ height: '60px', width: 'auto', display: 'block' }} />
+                  <img src={srecLogo} alt="SREC Logo" className="indicon-banner-logo" />
+                  <div className="indicon-logo-divider" />
+                  <img src={acLogo} alt="AECTSD Logo" className="indicon-banner-logo" />
+                  <div className="indicon-logo-divider" />
+                  <img src={logo2} alt="SNR Trust Logo" className="indicon-banner-logo" />
                 </motion.div>
 
-                {/* Banner Subtext */}
-                <motion.span
+
+
+                {/* 3. Massive Golden Serif Title */}
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.8 }}
+                  className="indicon-hero-title"
+                >
+                  {info.hero_title ? (
+                    info.hero_title.includes(' ') ? (
+                      <>
+                        {info.hero_title.split(' ')[0]}
+                        <br />
+                        {info.hero_title.split(' ').slice(1).join(' ')}
+                      </>
+                    ) : info.hero_title
+                  ) : (
+                    <>IEEE<br />ICAECTSD 2027</>
+                  )}
+                </motion.h1>
+
+                {/* 4. Conference Subtitle */}
+                <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
-                  style={{
-                    color: '#0b4f30', // deep green
-                    fontSize: '0.85rem',
-                    fontWeight: 800,
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    display: 'block',
-                    marginBottom: '2.5rem',
-                    textShadow: '0 1px 2px rgba(255, 255, 255, 0.8)'
-                  }}
+                  transition={{ delay: 0.4, duration: 0.8 }}
+                  className="indicon-hero-subtitle"
                 >
-                  AN IEEE INDIA COUNCIL CONFERENCE
-                </motion.span>
+                  {info.hero_subtitle || 'SECOND INTERNATIONAL CONFERENCE ON ADVANCES IN ENGINEERING AND COMPUTING TECHNOLOGIES FOR SUSTAINABLE DEVELOPMENT'}
+                </motion.p>
 
+                {/* 5. Golden Date & Location Pill */}
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="glass-card"
-                  style={{
-                    padding: '3rem 2.5rem',
-                    borderRadius: '1.5rem',
-                    background: 'rgba(255, 255, 255, 0.65)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255, 255, 255, 0.4)',
-                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-                    textAlign: 'center',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '1.5rem',
-                    color: '#0f172a'
-                  }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5, duration: 0.6 }}
+                  className="indicon-date-pill"
                 >
-                  {/* Title */}
-                  <h1 className="hero-title" style={{ margin: 0, fontSize: '3rem', fontWeight: 800, background: 'linear-gradient(135deg, #091d36 40%, #0f52ba 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 1.2 }}>
-                    {info.hero_title || 'Welcome to ICAECTSD 2027'}
-                  </h1>
+                  <Calendar size={18} />
+                  <span>
+                    {renderDateWithSuperscript(info.event_date_display || '17th and 18th December 2027')} &nbsp;|&nbsp; {info.event_location_display || 'Sri Ramakrishna Engineering College, Coimbatore, Tamilnadu, India'}
+                  </span>
+                </motion.div>
 
-                  {/* Subtitle */}
-                  <p style={{ fontSize: '1.25rem', fontWeight: 600, color: '#334155', maxWidth: '800px', margin: 0, lineHeight: 1.5 }}>
-                    {info.hero_subtitle || 'Second IEEE International Conference on Advances in Engineering and Computing Technologies for Sustainable Development (ICAECTSD) 2027'}
-                  </p>
-
-                  {/* Date & Location */}
-                  <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', margin: '0.5rem 0 1rem', fontSize: '1rem', fontWeight: 700, color: '#1e293b' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <Calendar size={20} className="text-blue-600" />
-                      <span>{renderDateWithSuperscript(info.event_date_display || '17th and 18th December 2027')}</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <MapPin size={20} className="text-blue-600" />
-                      <span>{info.event_location_display || 'Sri Ramakrishna Engineering College, Coimbatore, Tamilnadu, India'}</span>
-                    </div>
+                {/* Live Countdown Timer Bar */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.55, duration: 0.6 }}
+                  className="indicon-countdown-bar"
+                >
+                  <div className="indicon-countdown-title">
+                    <Clock size={15} />
+                    <span>{info.hero_countdown_title || 'CONFERENCE COUNTDOWN'}</span>
                   </div>
-
-                  {/* Countdown Clock */}
-                  <div className="countdown-container" style={{ width: '100%', maxWidth: '600px', padding: '1rem', background: 'rgba(15, 82, 186, 0.05)', borderRadius: '1rem', border: '1px solid rgba(15, 82, 186, 0.1)', color: '#0f172a' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: '#1e3a8a', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
-                      <Clock size={16} />
-                      <span>{info.hero_countdown_title || 'Conference Countdown'}</span>
-                    </div>
-                    <div className="countdown-row" style={{ color: '#0f172a' }}>
-                      {[
-                        { label: info.label_days || 'Days', value: timeLeft.days },
-                        { label: info.label_hours || 'Hours', value: timeLeft.hours },
-                        { label: info.label_mins || 'Minutes', value: timeLeft.minutes },
-                        { label: info.label_secs || 'Seconds', value: timeLeft.seconds }
-                      ].map((t, idx) => (
-                        <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                          <span className="countdown-val" style={{ display: 'inline-flex', overflow: 'hidden', height: '2.5rem', alignItems: 'center', justifyContent: 'center', color: '#091d36', fontSize: '1.8rem', fontWeight: 800 }}>
-                            <AnimatePresence mode="popLayout" initial={false}>
-                              <motion.span
-                                key={t.value}
-                                initial={{ y: 20, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                exit={{ y: -20, opacity: 0 }}
-                                transition={{ duration: 0.2, ease: 'easeOut' }}
-                                style={{ display: 'inline-block' }}
-                              >
-                                {String(t.value).padStart(2, '0')}
-                              </motion.span>
-                            </AnimatePresence>
-                          </span>
-                          <span className="countdown-lbl" style={{ color: '#475569', fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 600 }}>
-                            {t.label}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', width: '100%', marginTop: '0.5rem' }}>
-                    <button
-                      onClick={() => scrollToSection('paper-submission')}
-                      className="btn btn-primary"
-                      style={{
-                        fontSize: '0.95rem',
-                        padding: '0.8rem 1.75rem',
-                        background: '#fbbf24',
-                        color: '#0b4f30',
-                        fontWeight: 800,
-                        border: 'none',
-                        borderRadius: '30px',
-                        boxShadow: '0 4px 12px rgba(251, 191, 36, 0.25)',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                      }}
-                    >
-                      <FileText size={18} />
-                      {info.hero_btn_submit || 'Submit Paper'}
-                    </button>
-                    <button
-                      onClick={() => {
-                        alert('Brochure download starting...');
-                        const link = document.createElement('a');
-                        link.href = '#';
-                        link.setAttribute('download', 'ICAECTSD_2027_Brochure.pdf');
-                        document.body.appendChild(link);
-                      }}
-                      className="btn btn-secondary"
-                      style={{
-                        fontSize: '0.95rem',
-                        padding: '0.8rem 1.75rem',
-                        background: '#0b2240',
-                        border: '1px solid rgba(0,0,0,0.1)',
-                        color: '#ffffff',
-                        borderRadius: '30px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                      }}
-                    >
-                      <Download size={18} />
-                      Download Brochure
-                    </button>
-                    <button
-                      onClick={() => setShowCalcModal(true)}
-                      className="btn btn-secondary"
-                      style={{
-                        fontSize: '0.95rem',
-                        padding: '0.8rem 1.75rem',
-                        background: 'transparent',
-                        border: '1px solid #cbd5e1',
-                        color: '#0f172a',
-                        borderRadius: '30px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                      }}
-                    >
-                      {info.hero_btn_register || 'Calculate Fees'}
-                      <ChevronRight size={18} />
-                    </button>
+                  <div className="indicon-countdown-units">
+                    {[
+                      { label: info.label_days || 'Days', value: timeLeft.days },
+                      { label: info.label_hours || 'Hours', value: timeLeft.hours },
+                      { label: info.label_mins || 'Mins', value: timeLeft.minutes },
+                      { label: info.label_secs || 'Secs', value: timeLeft.seconds }
+                    ].map((t, idx) => (
+                      <div key={idx} className="indicon-countdown-box">
+                        <span className="indicon-countdown-val">
+                          {String(t.value).padStart(2, '0')}
+                        </span>
+                        <span className="indicon-countdown-lbl">{t.label}</span>
+                      </div>
+                    ))}
                   </div>
                 </motion.div>
+
+                {/* 6. Action Buttons */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.6 }}
+                  className="indicon-action-row"
+                >
+                  <button
+                    onClick={() => scrollToSection('paper-submission')}
+                    className="indicon-btn-yellow"
+                  >
+                    {info.hero_btn_submit || 'Submit Paper'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      alert('Brochure download starting...');
+                      const link = document.createElement('a');
+                      link.href = '#';
+                      link.setAttribute('download', 'ICAECTSD_2027_Brochure.pdf');
+                      document.body.appendChild(link);
+                    }}
+                    className="indicon-btn-outline"
+                  >
+                    {info.hero_btn_brochure || 'Download Brochure'}
+                  </button>
+                </motion.div>
               </div>
+
+              {/* 7. CMT/Portal Pop-Up Toast Floating Card (Bottom Left Corner) */}
+              <AnimatePresence>
+                {toastOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 60, scale: 0.85 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 60, scale: 0.85 }}
+                    transition={{ delay: 0.8, duration: 0.6, type: 'spring', stiffness: 120 }}
+                    className="indicon-toast-card"
+                  >
+                    {/* Close X Button for Mobile & Desktop */}
+                    <button
+                      onClick={() => setToastOpen(false)}
+                      className="indicon-toast-close-btn"
+                      title="Dismiss notification"
+                    >
+                      <X size={15} />
+                    </button>
+
+                    <div className="indicon-toast-header">
+                      <div className="indicon-toast-icon">
+                        <FileText size={18} />
+                      </div>
+                      <div style={{ flex: 1, paddingRight: '1rem' }}>
+                        <div className="indicon-toast-title">{info.cmt_portal_badge || 'CMT PORTAL LIVE'}</div>
+                        <div className="indicon-toast-desc">{info.cmt_portal_desc || 'Paper submission for ICAECTSD 2027 is now open via Microsoft CMT.'}</div>
+                      </div>
+                    </div>
+                    <a
+                      href={info.cmt_portal_url || '#paper-submission'}
+                      onClick={(e) => {
+                        if (!info.cmt_portal_url || info.cmt_portal_url === '#paper-submission') {
+                          e.preventDefault();
+                          scrollToSection('paper-submission');
+                        }
+                      }}
+                      target={info.cmt_portal_url ? "_blank" : "_self"}
+                      rel="noopener noreferrer"
+                      className="indicon-toast-btn"
+                    >
+                      {info.cmt_portal_btn_label || 'SUBMIT PAPER →'}
+                    </a>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </section>
 
             {/* About Section */}
@@ -2754,8 +2711,8 @@ export default function App() {
                   <div style={{ height: '3.5px', width: '80px', background: '#fbbf24', margin: '1rem auto 0', borderRadius: '2px' }} />
                 </motion.div>
 
-                {/* Blocks Layout with Colorful Outlines and Highlights */}
-                <div className="grid-3-col" style={{ marginTop: '2rem', gap: '2rem' }}>
+                {/* Blocks Layout with Colorful Outlines and Highlights (4 Cards per Row) */}
+                <div className="grid-4-col" style={{ marginTop: '2rem', gap: '1.25rem' }}>
                   {(() => {
                     const CARD_PALETTES = [
                       {
@@ -2826,7 +2783,6 @@ export default function App() {
                     });
 
                     return importantDates.map((evt, idx) => {
-                      const { month, day, year } = parseDateDisplay(evt.event_date);
                       const isPassed = isPassedArray[idx];
                       const palette = CARD_PALETTES[idx % CARD_PALETTES.length];
 
@@ -2865,7 +2821,7 @@ export default function App() {
                               textTransform: 'uppercase',
                               letterSpacing: '0.05em'
                             }}>
-                              {month} {day}, {year}
+                              {renderDateWithSuperscript(evt.event_date)}
                             </span>
 
                             {isPassed ? (
