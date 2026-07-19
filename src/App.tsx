@@ -2928,277 +2928,48 @@ export default function App() {
             {/* Guidelines & CMT Submission are now standalone at src/components/GuidelinesPage.tsx */}
 
             {/* Registration Section */}
-            <section id="registration" className="section">
-              <div className="container">
+            <section id="registration" className="section" style={{ background: '#faf9f6', padding: '5rem 1.5rem', textAlign: 'center' }}>
+              <div className="container" style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}>
                 <motion.div
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
                   variants={fadeInUp}
-                  style={{ textAlign: 'center', marginBottom: '3.5rem' }}
+                  style={{ textAlign: 'center' }}
                 >
-                  <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.reg_badge}</span>
-                  <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.reg_title}</h2>
-                  <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
+                  <span style={{ color: '#58111A', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.15em' }}>REGISTRATION</span>
+                  <h2 style={{ fontSize: '2.5rem', color: '#091d36', marginTop: '0.5rem', fontWeight: 800 }}>Guidelines & Registration Details</h2>
+                  <div style={{ height: '3px', width: '60px', background: '#fbbf24', margin: '1rem auto 0' }} />
                 </motion.div>
 
-                {/* General Guidelines Card */}
-                <div className="glass-card" style={{ padding: '2rem', marginBottom: '3.5rem' }}>
-                  <h3 style={{ fontSize: '1.4rem', color: 'white', marginBottom: '1.25rem', fontWeight: 700 }}>Registration Guidelines</h3>
-                  <div style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.7', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <p style={{ margin: 0 }}>
-                      <strong>At least one of the authors</strong> of each accepted paper must register for the conference for the paper to be included in the conference proceedings and published through <strong>IEEE Xplore (Scopus Indexed)</strong>.
-                    </p>
-                    <p style={{ margin: 0 }}>
-                      All accepted and presented papers of AECTSD 2027 will be submitted for possible publication in the <strong>IEEE Xplore® Digital Library</strong>.
-                    </p>
-                    <p style={{ margin: 0 }}>
-                      Full registration includes the registration of one paper. Additional papers for a single registration come with an additional fee. The maximum length of the paper is <strong>6 pages</strong> including figures, tables, and references.
-                    </p>
-                    <p style={{ margin: 0 }}>
-                      Registration fee covers admission to all sessions, cost of publishing the article in IEEE Xplore digital library, conference proceedings, welcome reception, conference kit, refreshments, working lunch, banquet dinner and half-a-day tour to nearby places.
-                    </p>
-                    <p style={{ margin: 0, color: '#d97706', fontWeight: 600 }}>
-                      * A fee of Rs. 500 will be applied for each additional page (with a maximum of 2 pages).
-                    </p>
-                  </div>
-                </div>
+                <p style={{ color: '#475569', fontSize: '1.1rem', lineHeight: '1.6', margin: '1rem 0 0', maxWidth: '600px' }}>
+                  Find important instructions, eligibility criteria, student/professional fee tables, and bank details for AECTSD 2027 registration.
+                </p>
 
-                {/* Registration Tables Side-by-Side */}
-                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '3.5rem' }}>
-
-                  {/* Indian Authors Table */}
-                  <div style={{ flex: '1 1 500px', minWidth: '0' }}>
-                    <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '1.25rem', fontWeight: 700 }}>
-                      Indian Authors (Fees in INR, GST Inclusive)
-                    </h3>
-                    <div className="registration-table-container" style={{ width: '100%', overflowX: 'auto' }}>
-                      <table className="registration-table">
-                        <thead>
-                          <tr>
-                            <th rowSpan={2} style={{ width: '30%', verticalAlign: 'middle', textAlign: 'left' }}>Categories</th>
-                            <th colSpan={2}>Graduate Student / Research Scholar</th>
-                            <th colSpan={2}>Professionals</th>
-                          </tr>
-                          <tr>
-                            <th>IEEE Member</th>
-                            <th>Non-IEEE Member</th>
-                            <th>IEEE Member</th>
-                            <th>Non-IEEE Member</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference only</td>
-                            <td>₹6,000*</td>
-                            <td>₹7,000*</td>
-                            <td>₹7,000*</td>
-                            <td>₹8,000*</td>
-                          </tr>
-                          <tr>
-                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Tutorial only</td>
-                            <td>₹1,000</td>
-                            <td>₹1,250</td>
-                            <td>₹1,250</td>
-                            <td>₹1,500</td>
-                          </tr>
-                          <tr>
-                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference plus Tutorial</td>
-                            <td>₹6,500*</td>
-                            <td>₹7,500*</td>
-                            <td>₹7,500*</td>
-                            <td>₹8,500*</td>
-                          </tr>
-                          <tr>
-                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Indian Non-Author Attendee</td>
-                            <td>₹3,500</td>
-                            <td>₹5,000</td>
-                            <td>₹4,500</td>
-                            <td>₹6,000</td>
-                          </tr>
-                          <tr>
-                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Rate per Additional Paper</td>
-                            <td>₹3,000</td>
-                            <td>₹3,000</td>
-                            <td>₹3,000</td>
-                            <td>₹3,000</td>
-                          </tr>
-                          <tr>
-                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Extra Page (after 6 pages)</td>
-                            <td>₹500</td>
-                            <td>₹500</td>
-                            <td>₹500</td>
-                            <td>₹500</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  {/* Foreign Authors Table */}
-                  <div style={{ flex: '1 1 500px', minWidth: '0' }}>
-                    <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '1.25rem', fontWeight: 700 }}>
-                      Foreign Authors (Fees in USD, GST Inclusive)
-                    </h3>
-                    <div className="registration-table-container" style={{ width: '100%', overflowX: 'auto' }}>
-                      <table className="registration-table">
-                        <thead>
-                          <tr>
-                            <th rowSpan={2} style={{ width: '30%', verticalAlign: 'middle', textAlign: 'left' }}>Categories</th>
-                            <th colSpan={2}>Graduate Student / Research Scholar</th>
-                            <th colSpan={2}>Professionals</th>
-                          </tr>
-                          <tr>
-                            <th>IEEE Member</th>
-                            <th>Non-IEEE Member</th>
-                            <th>IEEE Member</th>
-                            <th>Non-IEEE Member</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference only</td>
-                            <td>$150*</td>
-                            <td>$200*</td>
-                            <td>$200*</td>
-                            <td>$250*</td>
-                          </tr>
-                          <tr>
-                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Tutorial only</td>
-                            <td>$40</td>
-                            <td>$50</td>
-                            <td>$50</td>
-                            <td>$75</td>
-                          </tr>
-                          <tr>
-                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Conference plus Tutorial</td>
-                            <td>$175*</td>
-                            <td>$225*</td>
-                            <td>$225*</td>
-                            <td>$300*</td>
-                          </tr>
-                          <tr>
-                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Rate per Additional Paper</td>
-                            <td>$50</td>
-                            <td>$50</td>
-                            <td>$50</td>
-                            <td>$50</td>
-                          </tr>
-                          <tr>
-                            <td style={{ fontWeight: 600, textAlign: 'left' }}>Extra Page (after 6 pages)</td>
-                            <td>$20</td>
-                            <td>$20</td>
-                            <td>$20</td>
-                            <td>$20</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                </div>
-
-                {/* Bank Account Details */}
-                <div className="glass-card" style={{ padding: '2rem', marginBottom: '3.5rem', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#0f172a' }}>
-                  <h3 style={{ fontSize: '1.4rem', color: '#091d36', marginBottom: '0.5rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ color: '#0f52ba', fontSize: '1.5rem', fontWeight: 900 }}>$</span> Bank Account Details
-                  </h3>
-                  <p style={{ color: '#475569', fontSize: '0.95rem', marginBottom: '2rem', lineHeight: '1.5' }}>
-                    Please find the official banking channels to process registration fees. Bank transfer references must include your Paper ID.
-                  </p>
-
-                  <div className="grid-2-col" style={{ gap: '2.5rem', alignItems: 'stretch' }}>
-                    {/* Left Column: Bank Parameters Table */}
-                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'center' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        {[
-                          { label: 'Account Name', value: 'Sri Ramakrishna Engineering College - AECTSD' },
-                          { label: 'Bank Name', value: 'ICICI Bank, Coimbatore' },
-                          { label: 'Account Number', value: '058705008310' },
-                          { label: 'IFSC Code', value: 'ICIC0000587' },
-                          { label: 'Branch Location', value: 'SREC Campus Branch, Coimbatore' }
-                        ].map((row, rIdx) => (
-                          <div
-                            key={rIdx}
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              paddingBottom: '0.75rem',
-                              borderBottom: rIdx < 4 ? '1px solid #e2e8f0' : 'none',
-                              gap: '1rem'
-                            }}
-                          >
-                            <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.95rem', flexShrink: 0 }}>{row.label}</span>
-                            <span style={{ color: '#1e293b', fontSize: '0.95rem', fontWeight: 500, textAlign: 'right' }}>{row.value}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Right Column: Important Payment Note Card */}
-                    <div
-                      style={{
-                        background: '#fffbeb',
-                        border: '1px solid #fef3c7',
-                        borderRadius: '1rem',
-                        padding: '1.75rem',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '0.75rem'
-                      }}
-                    >
-                      <h4 style={{ fontSize: '0.95rem', color: '#b45309', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
-                        IMPORTANT PAYMENT NOTE
-                      </h4>
-                      <p style={{ color: '#78350f', fontSize: '0.92rem', lineHeight: '1.6', margin: 0, fontWeight: 500 }}>
-                        Please include your Paper ID in the payment reference. Once the wire transfer transaction completes successfully, authors are requested to upload the scanned payment receipt copy in the registration form below.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Modifiers Box & Calculator Callout */}
-                <div className="grid-2-col" style={{ gap: '2rem', alignItems: 'stretch', marginBottom: '3rem' }}>
-                  {/* Notes box */}
-                  <div className="glass-card" style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1rem', borderLeft: '4px solid #f58220' }}>
-                    <h4 style={{ fontSize: '1.1rem', color: 'white', fontWeight: 700, margin: 0 }}>Fee Modifiers & Addons</h4>
-                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.88rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                      <li>
-                        <strong style={{ color: '#f58220' }}>* Early Bird Registration:</strong>
-                        <ul style={{ paddingLeft: '1.2rem', marginTop: '0.25rem' }}>
-                          <li>Discount of <strong>INR 1,000</strong> on Indian conference & conference plus tutorial registration fees.</li>
-                          <li>Discount of <strong>INR 500</strong> on the Indian non-author attendee fee.</li>
-                          <li>Discount of <strong>USD 25</strong> on Foreign conference & conference plus tutorial registration fees.</li>
-                        </ul>
-                      </li>
-                      <li>
-                        <strong style={{ color: 'white' }}>* Late Registration Fee:</strong> Additional surcharge fee of <strong>INR 1,000 / USD 25</strong> applies on conference and conference plus tutorial registration fees.
-                      </li>
-                      <li>
-                        <strong style={{ color: 'white' }}>* Virtual Mode Presentation:</strong> Additional addon charge of <strong>INR 1,000 / USD 25</strong> applies on the conference registration fee.
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Interactive portal callout */}
-                  <div className="glass-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-                    <div style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', padding: '1rem', borderRadius: '50%', marginBottom: '1.25rem' }}>
-                      <CheckCircle size={32} />
-                    </div>
-                    <h4 style={{ fontSize: '1.25rem', color: 'white', fontWeight: 700, marginBottom: '0.5rem' }}>Dynamic Fee Calculator</h4>
-                    <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', maxWidth: '350px' }}>
-                      Instantly calculate your total registration fees including extra pages and optional pre-conference tutorial addons.
-                    </p>
-                    <button
-                      className="btn btn-primary"
-                      style={{ padding: '0.75rem 2.5rem', fontSize: '1rem' }}
-                      onClick={() => setShowCalcModal(true)}
-                    >
-                      Launch Fee Calculator
-                    </button>
-                  </div>
-                </div>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => window.open('/?page=registration', '_blank')}
+                  className="btn btn-primary"
+                  style={{
+                    padding: '1.25rem 3rem',
+                    fontSize: '1.1rem',
+                    fontWeight: 800,
+                    background: 'linear-gradient(135deg, #58111A 0%, #7d1c26 100%)',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '50px',
+                    boxShadow: '0 10px 25px rgba(88, 17, 26, 0.25)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    marginTop: '1rem'
+                  }}
+                >
+                  <FileText size={20} style={{ color: '#fbbf24' }} />
+                  View Registration Details & Fees
+                </motion.button>
               </div>
             </section>
 
