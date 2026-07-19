@@ -512,6 +512,9 @@ export default function App() {
     } else if (pageParam === 'explore') {
       setCurrentPage('explore');
       setActiveSection('explore');
+    } else if (pageParam === 'admin') {
+      setCurrentPage('admin');
+      setActiveSection('admin');
     }
   }, []);
 
