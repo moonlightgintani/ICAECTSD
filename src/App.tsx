@@ -1743,18 +1743,6 @@ export default function App() {
               CONTACT US
             </button>
 
-            <img
-              src={acLogo}
-              alt="Admin Portal"
-              onClick={() => {
-                setCurrentPage('admin');
-                setActiveSection('admin');
-                setShowAdminPortal(false);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              style={{ width: '36px', height: '36px', borderRadius: '50%', cursor: 'pointer', display: 'block' }}
-            />
-
             {/* Mobile Navigation Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
