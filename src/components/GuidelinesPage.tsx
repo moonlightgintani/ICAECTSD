@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, FileText } from 'lucide-react';
 
 interface GuidelinesPageProps {
   info: Record<string, string>;
@@ -121,6 +121,29 @@ export default function GuidelinesPage({ info, onBackToHome }: GuidelinesPagePro
                       <li>Upload your paper and other files (if needed).</li>
                       <li>Click “Submit” to submit your paper.</li>
                     </ol>
+                    <button
+                      onClick={() => window.open(info.cmt_link || "https://cmt3.research.microsoft.com/aectsd2025", "_blank")}
+                      className="btn btn-primary"
+                      style={{
+                        alignSelf: 'flex-start',
+                        marginTop: '1.5rem',
+                        padding: '0.8rem 2rem',
+                        fontSize: '0.95rem',
+                        fontWeight: 700,
+                        background: 'linear-gradient(135deg, #58111A 0%, #7d1c26 100%)',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '30px',
+                        cursor: 'pointer',
+                        boxShadow: '0 8px 20px rgba(88, 17, 26, 0.25)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                    >
+                      <FileText size={16} style={{ color: '#fbbf24' }} />
+                      Submit Initial Manuscript (CMT)
+                    </button>
                   </div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -135,6 +158,29 @@ export default function GuidelinesPage({ info, onBackToHome }: GuidelinesPagePro
                       <li>Answer any additional questions.</li>
                       <li>Click “Submit” to submit your paper.</li>
                     </ol>
+                    <button
+                      onClick={() => window.open(info.cmt_link || "https://cmt3.research.microsoft.com/aectsd2025", "_blank")}
+                      className="btn btn-primary"
+                      style={{
+                        alignSelf: 'flex-start',
+                        marginTop: '1.5rem',
+                        padding: '0.8rem 2rem',
+                        fontSize: '0.95rem',
+                        fontWeight: 700,
+                        background: 'linear-gradient(135deg, #58111A 0%, #7d1c26 100%)',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '30px',
+                        cursor: 'pointer',
+                        boxShadow: '0 8px 20px rgba(88, 17, 26, 0.25)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                    >
+                      <FileText size={16} style={{ color: '#fbbf24' }} />
+                      Submit Camera-Ready Manuscript (CMT)
+                    </button>
                   </div>
                 )}
               </motion.div>
