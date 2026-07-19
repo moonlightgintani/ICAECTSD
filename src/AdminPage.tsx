@@ -107,6 +107,38 @@ async function sha256(message: string): Promise<string> {
   return sha256Fallback(message);
 }
 
+const DEFAULT_PRICING: Record<string, number> = {
+  base_conf_student_ieee_inr: 9000,
+  base_conf_student_non_ieee_inr: 10000,
+  base_conf_prof_ieee_inr: 10000,
+  base_conf_prof_non_ieee_inr: 11000,
+  base_tut_student_ieee_inr: 1000,
+  base_tut_student_non_ieee_inr: 1250,
+  base_tut_prof_ieee_inr: 1250,
+  base_tut_prof_non_ieee_inr: 1500,
+  base_both_student_ieee_inr: 9500,
+  base_both_student_non_ieee_inr: 10750,
+  base_both_prof_ieee_inr: 10750,
+  base_both_prof_non_ieee_inr: 12000,
+  base_listener_student_ieee_inr: 3500,
+  base_listener_student_non_ieee_inr: 5000,
+  base_listener_prof_ieee_inr: 4500,
+  base_listener_prof_non_ieee_inr: 6000,
+
+  base_conf_student_ieee_usd: 150,
+  base_conf_student_non_ieee_usd: 200,
+  base_conf_prof_ieee_usd: 200,
+  base_conf_prof_non_ieee_usd: 250,
+  base_tut_student_ieee_usd: 40,
+  base_tut_student_non_ieee_usd: 50,
+  base_tut_prof_ieee_usd: 50,
+  base_tut_prof_non_ieee_usd: 75,
+  base_both_student_ieee_usd: 175,
+  base_both_student_non_ieee_usd: 225,
+  base_both_prof_ieee_usd: 225,
+  base_both_prof_non_ieee_usd: 300
+};
+
 interface AdminPageProps {
   supabase: any;
   isSupabaseConfigured: boolean;
@@ -182,7 +214,7 @@ export default function AdminPage({
 
   useEffect(() => {
     if (pricing) {
-      setLocalPricing(pricing);
+      setLocalPricing({ ...DEFAULT_PRICING, ...pricing });
     }
   }, [pricing]);
 
