@@ -223,9 +223,10 @@ export default function AdminPage({
     try {
       if (isSupabaseConfigured && supabase) {
         // Upsert all pricing rules in parallel
-        const promises = Object.entries(localPricing).map(([key, val]) => 
-          supabase.from('registration_pricing').upsert({ key, value: val })
-        );
+        const promises = Object.entries(localPricing).map(([key, val]) => {
+          const currency = key.endsWith('_usd') ? 'USD' : 'INR';
+          return supabase.from('registration_pricing').upsert({ key, value: val, currency });
+        });
         const results = await Promise.all(promises);
         const firstError = results.find(r => r.error);
         if (firstError) throw firstError.error;
