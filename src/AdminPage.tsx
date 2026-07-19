@@ -1863,11 +1863,255 @@ export default function AdminPage({
                 </div>
               </form>
             )}
+
+            {/* Explore Page - Tourist Place Form */}
+            {editingTouristPlace && (
+              <form onSubmit={handleSaveTouristPlace}>
+                <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingTouristPlace.id ? 'Edit Tourist Place' : 'Add New Tourist Place'}</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                  <div>
+                    <label htmlFor="tp_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Name</label>
+                    <input
+                      id="tp_name"
+                      type="text"
+                      required
+                      value={editingTouristPlace.name || ''}
+                      onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, name: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="tp_category" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Category (e.g. Temples, Parks, Sightseeing)</label>
+                    <input
+                      id="tp_category"
+                      type="text"
+                      required
+                      value={editingTouristPlace.category || ''}
+                      onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, category: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                  <label htmlFor="tp_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Description</label>
+                  <textarea
+                    id="tp_desc"
+                    required
+                    rows={3}
+                    value={editingTouristPlace.description || ''}
+                    onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, description: e.target.value })}
+                    style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', fontFamily: 'inherit' }}
+                  />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                  <div>
+                    <label htmlFor="tp_img" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Image URL</label>
+                    <input
+                      id="tp_img"
+                      type="text"
+                      value={editingTouristPlace.image_url || ''}
+                      onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, image_url: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="tp_map" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Google Maps URL</label>
+                    <input
+                      id="tp_map"
+                      type="text"
+                      value={editingTouristPlace.map_url || ''}
+                      onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, map_url: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="tp_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
+                    <input
+                      id="tp_sort"
+                      type="number"
+                      value={editingTouristPlace.sort_order || 0}
+                      onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, sort_order: Number(e.target.value) })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                  <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Place</button>
+                  <button type="button" onClick={() => setEditingTouristPlace(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                </div>
+              </form>
+            )}
+
+            {/* Explore Page - Weekend Stay Form */}
+            {editingWeekendStay && (
+              <form onSubmit={handleSaveWeekendStay}>
+                <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingWeekendStay.id ? 'Edit Weekend Getaway' : 'Add New Weekend Getaway'}</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                  <div>
+                    <label htmlFor="ws_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Name</label>
+                    <input
+                      id="ws_name"
+                      type="text"
+                      required
+                      value={editingWeekendStay.name || ''}
+                      onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, name: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="ws_category" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Category (e.g. Hill Station, Wildlife)</label>
+                    <input
+                      id="ws_category"
+                      type="text"
+                      required
+                      value={editingWeekendStay.category || ''}
+                      onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, category: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                  <label htmlFor="ws_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Description</label>
+                  <textarea
+                    id="ws_desc"
+                    required
+                    rows={3}
+                    value={editingWeekendStay.description || ''}
+                    onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, description: e.target.value })}
+                    style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', fontFamily: 'inherit' }}
+                  />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                  <div>
+                    <label htmlFor="ws_img" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Image URL</label>
+                    <input
+                      id="ws_img"
+                      type="text"
+                      value={editingWeekendStay.image_url || ''}
+                      onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, image_url: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="ws_map" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Google Maps URL</label>
+                    <input
+                      id="ws_map"
+                      type="text"
+                      value={editingWeekendStay.map_url || ''}
+                      onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, map_url: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="ws_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
+                    <input
+                      id="ws_sort"
+                      type="number"
+                      value={editingWeekendStay.sort_order || 0}
+                      onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, sort_order: Number(e.target.value) })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                  <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Getaway</button>
+                  <button type="button" onClick={() => setEditingWeekendStay(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                </div>
+              </form>
+            )}
+
+            {/* Explore Page - Hotel Form */}
+            {editingHotel && (
+              <form onSubmit={handleSaveHotel}>
+                <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingHotel.id ? 'Edit Hotel Stay' : 'Add New Hotel Stay'}</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                  <div>
+                    <label htmlFor="h_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Hotel Name</label>
+                    <input
+                      id="h_name"
+                      type="text"
+                      required
+                      value={editingHotel.name || ''}
+                      onChange={(e) => setEditingHotel({ ...editingHotel, name: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="h_category" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Category (e.g. Luxury Hotels, Budget Stay)</label>
+                    <input
+                      id="h_category"
+                      type="text"
+                      required
+                      value={editingHotel.category || ''}
+                      onChange={(e) => setEditingHotel({ ...editingHotel, category: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                  <label htmlFor="h_addr" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Address / Location details</label>
+                  <input
+                    id="h_addr"
+                    type="text"
+                    required
+                    value={editingHotel.address || ''}
+                    onChange={(e) => setEditingHotel({ ...editingHotel, address: e.target.value })}
+                    style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                  />
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                  <label htmlFor="h_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Description</label>
+                  <textarea
+                    id="h_desc"
+                    required
+                    rows={3}
+                    value={editingHotel.description || ''}
+                    onChange={(e) => setEditingHotel({ ...editingHotel, description: e.target.value })}
+                    style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', fontFamily: 'inherit' }}
+                  />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                  <div>
+                    <label htmlFor="h_img" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Image URL</label>
+                    <input
+                      id="h_img"
+                      type="text"
+                      value={editingHotel.image_url || ''}
+                      onChange={(e) => setEditingHotel({ ...editingHotel, image_url: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="h_map" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Google Maps / Booking Link</label>
+                    <input
+                      id="h_map"
+                      type="text"
+                      value={editingHotel.map_url || ''}
+                      onChange={(e) => setEditingHotel({ ...editingHotel, map_url: e.target.value })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="h_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
+                    <input
+                      id="h_sort"
+                      type="number"
+                      value={editingHotel.sort_order || 0}
+                      onChange={(e) => setEditingHotel({ ...editingHotel, sort_order: Number(e.target.value) })}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                    />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                  <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Hotel</button>
+                  <button type="button" onClick={() => setEditingHotel(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </div>
     );
-  }
 
   return (
     <div className="admin-layout">
@@ -3896,6 +4140,169 @@ export default function AdminPage({
                           <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
                             <button onClick={() => setEditingStat(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
                             <button onClick={() => handleDeleteStat(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 11: Explore Sights & Stays */}
+        {activeTab === 'explore' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '0.75rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.02)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0, color: '#0b4f30' }}>Explore Page Settings</h3>
+                  <p style={{ fontSize: '0.8rem', color: '#64748b', margin: '0.25rem 0 0 0' }}>Manage local sights, weekend getaways, and hotels shown on the Explore page.</p>
+                </div>
+                <button
+                  onClick={() => {
+                    if (exploreSubTab === 'sights') {
+                      setEditingTouristPlace({ name: '', category: '', description: '', image_url: '', map_url: '', sort_order: touristPlaces.length + 1 });
+                    } else if (exploreSubTab === 'getaways') {
+                      setEditingWeekendStay({ name: '', category: '', description: '', image_url: '', map_url: '', sort_order: weekendStays.length + 1 });
+                    } else {
+                      setEditingHotel({ name: '', category: '', address: '', description: '', map_url: '', image_url: '', sort_order: hotels.length + 1 });
+                    }
+                  }}
+                  style={{
+                    background: 'linear-gradient(135deg, #0b4f30 0%, #198754 100%)',
+                    color: '#ffffff',
+                    border: 'none',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '0.375rem',
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    boxShadow: '0 4px 12px rgba(11, 79, 48, 0.2)'
+                  }}
+                >
+                  <Plus size={14} /> Add New {exploreSubTab === 'sights' ? 'Sight' : exploreSubTab === 'getaways' ? 'Getaway' : 'Hotel'}
+                </button>
+              </div>
+
+              {/* Sub-tabs Selection */}
+              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.75rem' }}>
+                {[
+                  { id: 'sights', label: `Sights to See (${touristPlaces.length})` },
+                  { id: 'getaways', label: `Weekend Getaways (${weekendStays.length})` },
+                  { id: 'hotels', label: `Hotels & Stays (${hotels.length})` }
+                ].map((subTab) => (
+                  <button
+                    key={subTab.id}
+                    onClick={() => setExploreSubTab(subTab.id as any)}
+                    style={{
+                      padding: '0.4rem 1rem',
+                      borderRadius: '0.375rem',
+                      border: 'none',
+                      fontSize: '0.8rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      background: exploreSubTab === subTab.id ? '#0b4f30' : '#f1f5f9',
+                      color: exploreSubTab === subTab.id ? '#ffffff' : '#475569',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    {subTab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Data Table */}
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid #e2e8f0', color: '#475569' }}>
+                      <th style={{ padding: '0.5rem', width: '60px' }}>Order</th>
+                      <th style={{ padding: '0.5rem', width: '220px' }}>Name / Category</th>
+                      <th style={{ padding: '0.5rem' }}>Details / Coordinates</th>
+                      <th style={{ padding: '0.5rem', width: '120px' }}>Map Links</th>
+                      <th style={{ padding: '0.5rem', textAlign: 'center', width: '100px' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {exploreSubTab === 'sights' && touristPlaces.map((item, idx) => (
+                      <tr key={item.id || idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ padding: '0.75rem 0.5rem', fontWeight: 700 }}>{item.sort_order || 0}</td>
+                        <td style={{ padding: '0.75rem 0.5rem' }}>
+                          <div style={{ fontWeight: 700, color: '#0b4f30' }}>{item.name}</div>
+                          <span style={{ fontSize: '0.75rem', background: '#e2e8f0', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', color: '#475569' }}>{item.category}</span>
+                        </td>
+                        <td style={{ padding: '0.75rem 0.5rem', maxWidth: '300px', whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                          {item.description}
+                        </td>
+                        <td style={{ padding: '0.75rem 0.5rem' }}>
+                          {item.map_url ? (
+                            <a href={item.map_url} target="_blank" rel="noreferrer" style={{ color: '#3b82f6', fontWeight: 600 }}>Maps Link</a>
+                          ) : (
+                            <span style={{ color: '#94a3b8' }}>None</span>
+                          )}
+                        </td>
+                        <td style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>
+                          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                            <button onClick={() => setEditingTouristPlace(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
+                            <button onClick={() => handleDeleteTouristPlace(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+
+                    {exploreSubTab === 'getaways' && weekendStays.map((item, idx) => (
+                      <tr key={item.id || idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ padding: '0.75rem 0.5rem', fontWeight: 700 }}>{item.sort_order || 0}</td>
+                        <td style={{ padding: '0.75rem 0.5rem' }}>
+                          <div style={{ fontWeight: 700, color: '#0b4f30' }}>{item.name}</div>
+                          <span style={{ fontSize: '0.75rem', background: '#e2e8f0', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', color: '#475569' }}>{item.category}</span>
+                        </td>
+                        <td style={{ padding: '0.75rem 0.5rem', maxWidth: '300px', whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                          {item.description}
+                        </td>
+                        <td style={{ padding: '0.75rem 0.5rem' }}>
+                          {item.map_url ? (
+                            <a href={item.map_url} target="_blank" rel="noreferrer" style={{ color: '#3b82f6', fontWeight: 600 }}>Maps Link</a>
+                          ) : (
+                            <span style={{ color: '#94a3b8' }}>None</span>
+                          )}
+                        </td>
+                        <td style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>
+                          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                            <button onClick={() => setEditingWeekendStay(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
+                            <button onClick={() => handleDeleteWeekendStay(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+
+                    {exploreSubTab === 'hotels' && hotels.map((item, idx) => (
+                      <tr key={item.id || idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ padding: '0.75rem 0.5rem', fontWeight: 700 }}>{item.sort_order || 0}</td>
+                        <td style={{ padding: '0.75rem 0.5rem' }}>
+                          <div style={{ fontWeight: 700, color: '#0b4f30' }}>{item.name}</div>
+                          <span style={{ fontSize: '0.75rem', background: '#e2e8f0', padding: '0.15rem 0.4rem', borderRadius: '0.25rem', color: '#475569' }}>{item.category}</span>
+                        </td>
+                        <td style={{ padding: '0.75rem 0.5rem', maxWidth: '300px', whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                          <div style={{ fontWeight: 600, fontSize: '0.75rem', color: '#475569' }}>{item.address}</div>
+                          <div style={{ fontSize: '0.8rem', marginTop: '0.25rem' }}>{item.description}</div>
+                        </td>
+                        <td style={{ padding: '0.75rem 0.5rem' }}>
+                          {item.map_url ? (
+                            <a href={item.map_url} target="_blank" rel="noreferrer" style={{ color: '#3b82f6', fontWeight: 600 }}>Link</a>
+                          ) : (
+                            <span style={{ color: '#94a3b8' }}>None</span>
+                          )}
+                        </td>
+                        <td style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>
+                          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                            <button onClick={() => setEditingHotel(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
+                            <button onClick={() => handleDeleteHotel(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
                           </div>
                         </td>
                       </tr>
