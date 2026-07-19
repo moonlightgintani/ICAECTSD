@@ -394,6 +394,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<'main' | 'explore' | 'admin' | 'committee' | 'guidelines' | 'payment'>('main');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showCmtToast, setShowCmtToast] = useState(true);
+  const isSeparatePage = (id: string) => ['committee', 'guidelines', 'registration'].includes(id);
 
   // Database content states
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -490,6 +491,28 @@ export default function App() {
       setShowNexusTooltip(false);
     }, 6000); // Auto-hide tooltip after 6 seconds
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowCmtToast(false);
+    }, 8000); // Auto-hide CMT toast after 8 seconds
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const pageParam = params.get('page');
+    if (pageParam === 'committee') {
+      setCurrentPage('committee');
+      setActiveSection('committee');
+    } else if (pageParam === 'guidelines') {
+      setCurrentPage('guidelines');
+      setActiveSection('guidelines');
+    } else if (pageParam === 'registration') {
+      setCurrentPage('payment');
+      setActiveSection('registration');
+    }
   }, []);
 
   // Admin Portal authentication handlers
@@ -1496,6 +1519,11 @@ export default function App() {
     const prevPage = currentPage;
     setCurrentPage('main');
 
+    // Clean up URL query parameters when returning to main page
+    if (window.location.search) {
+      window.history.pushState({}, '', '/');
+    }
+
     // Allow state change and DOM rendering to complete if switching back from separate pages
     setTimeout(() => {
       const el = document.getElementById(id);
@@ -1707,27 +1735,39 @@ export default function App() {
             <ul style={{ display: 'flex', listStyle: 'none', alignItems: 'center', margin: 0, padding: 0, gap: '0.25rem', justifyContent: 'center', width: '100%' }}>
               {NAV_ITEMS.map((item: any) => (
                 <li key={item.id}>
-                  <button
-                    onClick={() => scrollToSection(item.id)}
-                    className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
-                    style={{ position: 'relative' }}
-                  >
-                    {item.label}
-                    {activeSection === item.id && (
-                      <motion.div
-                        layoutId="activeIndicator"
-                        style={{
-                          position: 'absolute',
-                          bottom: '-4px',
-                          left: '10%',
-                          right: '10%',
-                          height: '2px',
-                          background: '#fbbf24',
-                          borderRadius: '2px'
-                        }}
-                      />
-                    )}
-                  </button>
+                  {isSeparatePage(item.id) ? (
+                    <a
+                      href={`/?page=${item.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+                      style={{ position: 'relative', textDecoration: 'none', display: 'inline-block' }}
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => scrollToSection(item.id)}
+                      className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+                      style={{ position: 'relative' }}
+                    >
+                      {item.label}
+                      {activeSection === item.id && (
+                        <motion.div
+                          layoutId="activeIndicator"
+                          style={{
+                            position: 'absolute',
+                            bottom: '-4px',
+                            left: '10%',
+                            right: '10%',
+                            height: '2px',
+                            background: '#fbbf24',
+                            borderRadius: '2px'
+                          }}
+                        />
+                      )}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -1802,7 +1842,31 @@ export default function App() {
                   }}
                   style={{ width: '100%' }}
                 >
-                  {item.external ? (
+                  {isSeparatePage(item.id) ? (
+                    <a
+                      href={`/?page=${item.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#1e293b',
+                        textAlign: 'left',
+                        padding: '0.75rem 1rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '1rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        width: '100%',
+                        textDecoration: 'none',
+                        display: 'block',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {navLabelMap[item.id] || item.label}
+                    </a>
+                  ) : item.external ? (
                     <a
                       href={
                         item.id === 'ieee-sb'
