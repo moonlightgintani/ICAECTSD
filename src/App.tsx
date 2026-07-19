@@ -2113,7 +2113,7 @@ export default function App() {
               <div style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.75) 60%, rgba(255, 255, 255, 1) 100%)',
+                background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.35) 60%, rgba(255, 255, 255, 0.65) 100%)',
                 zIndex: 1
               }} />
 
@@ -2130,13 +2130,13 @@ export default function App() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '2.5rem',
-                    background: '#fcfbf7', // light cream
+                    background: 'rgba(252, 251, 247, 0.85)', // semi-transparent cream
                     border: '1px solid rgba(255, 255, 255, 0.8)',
                     borderRadius: '24px',
                     padding: '1.25rem 3.5rem',
                     boxShadow: '0 12px 30px rgba(0, 0, 0, 0.25)',
                     margin: '0 auto 1rem',
-                    flexWrap: 'wrap',
+                    flexWrap: 'nowrap',
                     maxWidth: '95%'
                   }}
                 >
@@ -2174,8 +2174,8 @@ export default function App() {
                   style={{
                     padding: '3rem 2.5rem',
                     borderRadius: '1.5rem',
-                    background: 'rgba(255, 255, 255, 0.85)',
-                    backdropFilter: 'blur(16px)',
+                    background: 'rgba(255, 255, 255, 0.65)',
+                    backdropFilter: 'blur(20px)',
                     border: '1px solid rgba(255, 255, 255, 0.4)',
                     boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
                     textAlign: 'center',
