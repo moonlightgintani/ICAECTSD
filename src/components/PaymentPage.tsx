@@ -371,19 +371,27 @@ export default function PaymentPage({
                     <tbody>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>IEEE Student Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0f52ba' }}>INR 9,000</td>
+                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
+                          INR {(_pricing.base_conf_student_ieee_inr || 9000).toLocaleString('en-IN')}
+                        </td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>Non-IEEE Student Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0f52ba' }}>INR 10,000</td>
+                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
+                          INR {(_pricing.base_conf_student_non_ieee_inr || 10000).toLocaleString('en-IN')}
+                        </td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>IEEE Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0f52ba' }}>INR 10,000</td>
+                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
+                          INR {(_pricing.base_conf_prof_ieee_inr || 10000).toLocaleString('en-IN')}
+                        </td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>Non-IEEE Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0f52ba' }}>INR 11,000</td>
+                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
+                          INR {(_pricing.base_conf_prof_non_ieee_inr || 11000).toLocaleString('en-IN')}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -406,19 +414,27 @@ export default function PaymentPage({
                     <tbody>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>IEEE Student Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0f52ba' }}>USD 150</td>
+                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
+                          USD {(_pricing.base_conf_student_ieee_usd || 150).toLocaleString()}
+                        </td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>Non-IEEE Student Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0f52ba' }}>USD 200</td>
+                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
+                          USD {(_pricing.base_conf_student_non_ieee_usd || 200).toLocaleString()}
+                        </td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>IEEE Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0f52ba' }}>USD 200</td>
+                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
+                          USD {(_pricing.base_conf_prof_ieee_usd || 200).toLocaleString()}
+                        </td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>Non-IEEE Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0f52ba' }}>USD 250</td>
+                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
+                          USD {(_pricing.base_conf_prof_non_ieee_usd || 250).toLocaleString()}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
