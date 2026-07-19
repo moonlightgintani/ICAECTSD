@@ -229,21 +229,13 @@ export default function CommitteePage({ committeeMembers, info, onBackToHome }: 
                           style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
                         />
                       </div>
-                      <span style={{ 
-                        background: 'rgba(88, 17, 26, 0.06)', 
-                        color: '#58111A', 
-                        padding: '0.25rem 0.75rem', 
-                        borderRadius: '2rem', 
-                        fontSize: '0.7rem', 
-                        fontWeight: 800, 
-                        textTransform: 'uppercase', 
-                        letterSpacing: '0.05em',
-                        marginBottom: '0.75rem' 
-                      }}>
-                        {member.role || 'Steering Member'}
-                      </span>
-                      <h4 style={{ fontSize: '1.15rem', color: '#58111A', fontWeight: 800, margin: '0 0 0.5rem' }}>{member.name}</h4>
-                      <p style={{ color: '#64748b', fontSize: '0.82rem', margin: 0, lineHeight: 1.5 }}>{renderFormattedDesc(member.desc)}</p>
+                      <h4 style={{ fontSize: '1.2rem', color: '#58111A', fontWeight: 800, margin: '0 0 0.75rem' }}>{member.name}</h4>
+                      <div style={{ color: '#475569', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', lineHeight: '1.4' }}>
+                        {member.role && member.role !== 'Steering Member' && (
+                          <div style={{ fontWeight: 700, color: '#091d36' }}>{member.role}</div>
+                        )}
+                        <div style={{ fontWeight: 500 }}>{renderFormattedDesc(member.desc)}</div>
+                      </div>
                     </div>
                   ))}
               </div>
@@ -461,21 +453,13 @@ export default function CommitteePage({ committeeMembers, info, onBackToHome }: 
                               style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
                             />
                           </div>
-                          <span style={{ 
-                            background: 'rgba(88, 17, 26, 0.06)', 
-                            color: '#58111A', 
-                            padding: '0.25rem 0.75rem', 
-                            borderRadius: '2rem', 
-                            fontSize: '0.7rem', 
-                            fontWeight: 800, 
-                            textTransform: 'uppercase', 
-                            letterSpacing: '0.05em',
-                            marginBottom: '0.75rem' 
-                          }}>
-                            {member.role && member.role !== 'Member' ? member.role : 'Organizing Member'}
-                          </span>
-                          <h4 style={{ fontSize: '1.15rem', color: '#58111A', fontWeight: 800, margin: '0 0 0.5rem' }}>{member.name}</h4>
-                          <p style={{ color: '#64748b', fontSize: '0.82rem', margin: 0, lineHeight: 1.5 }}>{renderFormattedDesc(member.desc)}</p>
+                          <h4 style={{ fontSize: '1.2rem', color: '#58111A', fontWeight: 800, margin: '0 0 0.75rem' }}>{member.name}</h4>
+                          <div style={{ color: '#475569', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', lineHeight: '1.4' }}>
+                            {member.role && member.role !== 'Organizing Member' && member.role !== 'Member' && (
+                              <div style={{ fontWeight: 700, color: '#091d36' }}>{member.role}</div>
+                            )}
+                            <div style={{ fontWeight: 500 }}>{renderFormattedDesc(member.desc)}</div>
+                          </div>
                         </div>
                       ))}
                   </div>
@@ -528,21 +512,13 @@ export default function CommitteePage({ committeeMembers, info, onBackToHome }: 
                           style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
                         />
                       </div>
-                      <span style={{ 
-                        background: 'rgba(88, 17, 26, 0.06)', 
-                        color: '#58111A', 
-                        padding: '0.25rem 0.75rem', 
-                        borderRadius: '2rem', 
-                        fontSize: '0.7rem', 
-                        fontWeight: 800, 
-                        textTransform: 'uppercase', 
-                        letterSpacing: '0.05em',
-                        marginBottom: '0.75rem' 
-                      }}>
-                        {adviser.role || 'Advisory Member'}
-                      </span>
-                      <h4 style={{ fontSize: '1.15rem', color: '#58111A', fontWeight: 800, margin: '0 0 0.5rem' }}>{adviser.name}</h4>
-                      <p style={{ color: '#64748b', fontSize: '0.82rem', margin: 0, lineHeight: 1.5 }}>{renderFormattedDesc(adviser.desc)}</p>
+                      <h4 style={{ fontSize: '1.2rem', color: '#58111A', fontWeight: 800, margin: '0 0 0.75rem' }}>{adviser.name}</h4>
+                      <div style={{ color: '#475569', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', lineHeight: '1.4' }}>
+                        {adviser.role && adviser.role !== 'Advisory Member' && (
+                          <div style={{ fontWeight: 700, color: '#091d36' }}>{adviser.role}</div>
+                        )}
+                        <div style={{ fontWeight: 500 }}>{renderFormattedDesc(adviser.desc)}</div>
+                      </div>
                     </div>
                   ))}
               </div>
