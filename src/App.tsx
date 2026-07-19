@@ -495,6 +495,13 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowCmtToast(false);
+    }, 8000); // Auto-hide CMT toast after 8 seconds
+    return () => clearTimeout(timer);
+  }, []);
+
   // Admin Portal authentication handlers
   const handleAdminAuth = async (e: React.FormEvent) => {
     e.preventDefault();
