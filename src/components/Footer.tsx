@@ -37,9 +37,41 @@ export default function Footer({ srecUrl, copyright, sponsor }: FooterProps) {
         <p style={{ color: 'var(--text-muted, #94a3b8)', fontSize: '0.9rem', marginBottom: '0.5rem', marginInline: 'auto', fontWeight: 500 }}>
           {copyright || defaultCopyright}
         </p>
-        <p style={{ color: 'var(--text-muted, #94a3b8)', fontSize: '0.8rem', marginInline: 'auto', opacity: 0.8, marginBottom: '2.5rem' }}>
+        <p style={{ color: 'var(--text-muted, #94a3b8)', fontSize: '0.8rem', marginInline: 'auto', opacity: 0.8, marginBottom: '1.5rem' }}>
           {sponsor || defaultSponsor}
         </p>
+        <div style={{ marginBottom: '2.5rem' }}>
+          <a 
+            href="/?page=admin" 
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ 
+              color: 'rgba(255, 255, 255, 0.45)', 
+              fontSize: '0.75rem', 
+              textDecoration: 'none', 
+              fontWeight: 600,
+              padding: '0.35rem 0.85rem',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '12px',
+              transition: 'all 0.2s ease',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#ffffff';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.45)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.background = 'transparent';
+            }}
+          >
+            Admin Portal Login &rarr;
+          </a>
+        </div>
 
         {/* 3 equidistant logos */}
         <div style={{
