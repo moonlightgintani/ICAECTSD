@@ -17,7 +17,6 @@ import {
   User, 
   BookOpen, 
   Award, 
-  Layers, 
   Terminal, 
   ChevronRight, 
   ChevronDown,
@@ -33,12 +32,19 @@ import {
   Eye,
   RefreshCw,
   Database,
-  Sparkles
+  Sparkles,
+  Globe,
+  Leaf,
+  Zap,
+  Cpu,
+  Handshake
 } from 'lucide-react';
 import { SrecLogo } from './components/SrecLogo';
 import Footer from './components/Footer';
-import acLogo from './assets/logo.jpeg';
+import acLogo from './assets/logo.png';
 import srecLogo from './assets/srec-logo.png';
+import logo1 from './assets/logo1.png';
+import logo2 from './assets/logo2.png';
 import chatbotIcon from './assets/chatbot.gif';
 import heroBg from './assets/hero.png';
 import karpagamImg from './assets/karpagam.png';
@@ -54,24 +60,23 @@ import brindhaImg from './assets/Screenshot 2026-07-10 142835.png';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 import ExplorePage from './ExplorePage'
 import AdminPage from './AdminPage';
+import CommitteePage from './components/CommitteePage';
+import GuidelinesPage from './components/GuidelinesPage';
+import PaymentPage from './components/PaymentPage';
 
 // Navigation Items
 const NAV_ITEMS = [
   { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About Us' },
-  { id: 'committee', label: 'Committee' },
+  { id: 'about', label: 'About' },
+  { id: 'call-for-papers', label: 'Tracks' },
   { id: 'speakers', label: 'Speakers' },
-  { id: 'call-for-papers', label: 'Call For Papers' },
-  { id: 'important-dates', label: 'Important Dates' },
-  { id: 'workshops', label: 'Workshops' },
-  { id: 'guidelines', label: 'Guidelines' },
-    { id: 'paper-submission', label: 'Paper Submission' },
-    { id: 'registration', label: 'Registration' },
-    { id: 'explore', label: 'Explore Coimbatore' },
-    { id: 'contact-us', label: 'Contact Us' }, 
-    { id: 'location', label: 'Directions' },
-    { id: 'ieee-sb', label: 'IEEE SB', external: true }
-  ];
+  { id: 'important-dates', label: 'Schedule' },
+  { id: 'registration', label: 'Payment Details' },
+  { id: 'call-for-papers-main', label: 'Call For Papers' },
+  { id: 'guidelines', label: 'Guidelines & Policies' },
+  { id: 'committee', label: 'Committee' },
+  { id: 'location', label: 'Venue' }
+];
 
 
 interface Department {
@@ -184,6 +189,49 @@ const parseDateDisplay = (dateStr: string) => {
 
   return { month, day, year };
 };
+
+export const renderDateWithSuperscript = (text: string | undefined | null) => {
+  if (!text) return '';
+  const parts = text.split(/(\d+)(st|nd|rd|th)\b/gi);
+  return (
+    <>
+      {parts.map((part, index) => {
+        if (index % 3 === 1) {
+          return <span key={index}>{part}<sup>{parts[index + 1]}</sup></span>;
+        } else if (index % 3 === 2) {
+          return null;
+        }
+        return part;
+      })}
+    </>
+  );
+};
+
+export const renderFormattedDesc = (descText: string | undefined | null) => {
+  if (!descText) return '';
+  const phrases = [
+    "SNR Sons Charitable Trust",
+    "Sri Ramakrishna Engineering College",
+    "Professor & Head - AI&DS",
+    "Professor & Head - Artificial Intelligence and Data Science",
+    "Organizing Secretary, Professor & Head - AI&DS",
+    "Chairman, IEEE Madras Section"
+  ];
+  const regex = new RegExp(`(${phrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
+  const parts = descText.split(regex);
+  return (
+    <>
+      {parts.map((part, index) => {
+        if (phrases.includes(part)) {
+          return <span key={index} style={{ whiteSpace: 'nowrap' }}>{part}</span>;
+        }
+        return part;
+      })}
+    </>
+  );
+};
+
+
 
 
 
@@ -345,13 +393,10 @@ function CounterUp({ target, duration = 1.2 }: { target: string; duration?: numb
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('home');
-  const [currentPage, setCurrentPage] = useState<'main' | 'explore' | 'admin'>('main');
+  const [currentPage, setCurrentPage] = useState<'main' | 'explore' | 'admin' | 'committee' | 'guidelines' | 'payment'>('main');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [committeeTab, setCommitteeTab] = useState<'steering' | 'organizing' | 'advisory'>('organizing');
-  const [activeSubcommittee, setActiveSubcommittee] = useState<string>('patrons');
-  const [subcommitteeDropdownOpen, setSubcommitteeDropdownOpen] = useState(false);
   const [desktopNavDropdownOpen, setDesktopNavDropdownOpen] = useState(false);
-  const [submissionTab, setSubmissionTab] = useState<'initial' | 'camera-ready'>('initial');
+  const [showCmtToast, setShowCmtToast] = useState(true);
   
   // Database content states
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -1427,9 +1472,34 @@ export default function App() {
       return;
     }
 
+    if (id === 'committee') {
+      setCurrentPage('committee');
+      setActiveSection('committee');
+      setMobileMenuOpen(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (id === 'guidelines' || id === 'call-for-papers-main') {
+      setCurrentPage('guidelines');
+      setActiveSection(id);
+      setMobileMenuOpen(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (id === 'registration') {
+      setCurrentPage('payment');
+      setActiveSection('registration');
+      setMobileMenuOpen(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const prevPage = currentPage;
     setCurrentPage('main');
 
-    // Allow state change and DOM rendering to complete if switching back from explore page
+    // Allow state change and DOM rendering to complete if switching back from separate pages
     setTimeout(() => {
       const el = document.getElementById(id);
       if (el) {
@@ -1442,7 +1512,7 @@ export default function App() {
         setActiveSection(id);
         setMobileMenuOpen(false);
       }
-    }, currentPage === 'explore' ? 100 : 0);
+    }, ['explore', 'committee', 'guidelines', 'payment'].includes(prevPage) ? 100 : 0);
   };
 
   const handleContactSubmit = (e: React.FormEvent) => {
@@ -1575,6 +1645,7 @@ export default function App() {
     throw new Error('Function not implemented.');
   }
 
+
   return (
     <div style={{ position: 'relative', width: '100%', minHeight: '100vh', background: 'var(--bg-deep)' }}>
       {/* Background Grids and Overlays */}
@@ -1622,215 +1693,103 @@ export default function App() {
       {/* Header / Navbar */}
       {currentPage !== 'admin' && (
         <header className="main-header">
-        <a 
-          href={info.srec_url || "https://srec.ac.in/"} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          title="Sri Ramakrishna Engineering College"
-          style={{ display: 'inline-flex', cursor: 'pointer', textDecoration: 'none', flexShrink: 0, flexGrow: 0 }}
-        >
-          <SrecLogo lightText={false} className="srec-logo" />
-        </a>
-
-        {/* Desktop Navigation Links */}
-        <nav className="desktop-nav" style={{ flex: 1, justifyContent: 'center', minWidth: 0 }}>
-          <ul style={{ display: 'flex', listStyle: 'none', alignItems: 'center', margin: 0, padding: 0, flexWrap: 'nowrap', justifyContent: 'space-between', width: '100%' }}>
-            {NAV_ITEMS.map((item: any) => {
-              if (item.id === 'explore' || item.id === 'contact-us' || item.id === 'ieee-sb') {
-                return null;
-              }
-              return (
-                <li key={item.id}>
-                  {item.external ? (
-                    <a
-                      href={
-                        item.id === 'ieee-sb'
-                          ? (info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/")
-                          : (info.snr_url || info.snr_trust_url || "https://www.snrst.org")
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="nav-link"
-                      style={{ textDecoration: 'none', display: 'inline-block' }}
-                    >
-                      {navLabelMap[item.id] || item.label}
-                    </a>
-                  ) : (
-                    <button
-                      onClick={() => scrollToSection(item.id)}
-                      className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
-                    >
-                      {navLabelMap[item.id] || item.label}
-                      {activeSection === item.id && (
-                        <motion.div 
-                          layoutId="activeIndicator"
-                          style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            height: '2.5px',
-                            background: '#3b82f6',
-                            borderRadius: '2px'
-                          }}
-                        />
-                      )}
-                    </button>
-                  )}
-                </li>
-              );
-            })}
-
-            {/* Combined Hamburger / Dropdown Nav Item */}
-            <li 
-              style={{ position: 'relative' }}
-              onMouseLeave={() => setDesktopNavDropdownOpen(false)}
-            >
-              <button
-                onClick={() => setDesktopNavDropdownOpen(!desktopNavDropdownOpen)}
-                className={`nav-link ${
-                  ['explore', 'contact-us', 'ieee-sb'].includes(activeSection) ? 'active' : ''
-                }`}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                  cursor: 'pointer'
-                }}
-              >
-                <Menu size={16} />
-                <span>More</span>
-                <ChevronDown size={12} />
-              </button>
-              
-              <AnimatePresence>
-                {desktopNavDropdownOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.15 }}
-                    style={{
-                      position: 'absolute',
-                      right: 0,
-                      top: '100%',
-                      marginTop: '0.5rem',
-                      background: 'rgba(255, 255, 255, 0.95)',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(15, 23, 42, 0.08)',
-                      borderRadius: '0.5rem',
-                      boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
-                      minWidth: '200px',
-                      zIndex: 1000,
-                      padding: '0.5rem 0'
-                    }}
-                  >
-                    {[
-                      { id: 'explore', label: 'Explore Coimbatore' },
-                      { id: 'contact-us', label: 'Contact Us' },
-                      { id: 'ieee-sb', label: 'IEEE SB', external: true }
-                    ].map((item) => (
-                      <div key={item.id}>
-                        {item.external ? (
-                          <a
-                            href={info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/"}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="dropdown-item"
-                            style={{
-                              display: 'block',
-                              padding: '0.6rem 1rem',
-                              color: '#1e293b',
-                              textDecoration: 'none',
-                              fontSize: '0.8rem',
-                              fontWeight: 500,
-                              textAlign: 'left',
-                              cursor: 'pointer'
-                            }}
-                            onClick={() => setDesktopNavDropdownOpen(false)}
-                          >
-                            {navLabelMap[item.id] || item.label}
-                          </a>
-                        ) : (
-                          <button
-                            onClick={() => {
-                              scrollToSection(item.id);
-                              setDesktopNavDropdownOpen(false);
-                            }}
-                            className="dropdown-item"
-                            style={{
-                              display: 'block',
-                              width: '100%',
-                              padding: '0.6rem 1rem',
-                              color: activeSection === item.id ? '#3b82f6' : '#1e293b',
-                              background: 'transparent',
-                              border: 'none',
-                              fontSize: '0.8rem',
-                              fontWeight: 500,
-                              textAlign: 'left',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            {navLabelMap[item.id] || item.label}
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </li>
-          </ul>
-        </nav>
-
-        {/* AC Logo and Mobile Navigation Toggle Container */}
-        <div className="header-right-container">
-          <img 
-            src={acLogo} 
-            alt="AECTSD Logo" 
-            onClick={() => {
-              setCurrentPage('admin');
-              setActiveSection('admin');
-              setShowAdminPortal(false);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className="ac-logo-img"
-          />
-
-          {/* Mobile Navigation Toggle */}
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            style={{
-              background: 'rgba(15, 23, 42, 0.05)',
-              border: '1px solid rgba(15, 23, 42, 0.1)',
-              borderRadius: '0.375rem',
-              padding: '0.5rem',
-              color: '#0f172a',
-              cursor: 'pointer',
-              overflow: 'hidden',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '38px',
-              height: '38px'
-            }}
-            className="mobile-nav-toggle"
+          <a 
+            href={info.srec_url || "https://srec.ac.in/"} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            title="Sri Ramakrishna Engineering College"
+            style={{ display: 'inline-flex', cursor: 'pointer', textDecoration: 'none', flexShrink: 0, flexGrow: 0 }}
           >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={mobileMenuOpen ? 'close' : 'menu'}
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-                style={{ display: 'inline-flex' }}
-              >
-                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-              </motion.div>
-            </AnimatePresence>
-          </button>
-        </div>
-      </header>
+            <SrecLogo lightText={false} className="srec-logo" />
+          </a>
+
+          {/* Desktop Navigation Links */}
+          <nav className="desktop-nav" style={{ flex: 1, justifyContent: 'center', minWidth: 0, padding: '0 1rem' }}>
+            <ul style={{ display: 'flex', listStyle: 'none', alignItems: 'center', margin: 0, padding: 0, gap: '0.25rem', justifyContent: 'center', width: '100%' }}>
+              {NAV_ITEMS.map((item: any) => (
+                <li key={item.id}>
+                  <button
+                    onClick={() => scrollToSection(item.id)}
+                    className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+                    style={{ position: 'relative' }}
+                  >
+                    {item.label}
+                    {activeSection === item.id && (
+                      <motion.div 
+                        layoutId="activeIndicator"
+                        style={{
+                          position: 'absolute',
+                          bottom: '-4px',
+                          left: '10%',
+                          right: '10%',
+                          height: '2px',
+                          background: '#fbbf24',
+                          borderRadius: '2px'
+                        }}
+                      />
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* AC Logo and Mobile Navigation Toggle Container */}
+          <div className="header-right-container" style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
+            {/* Contact Us Button on Desktop */}
+            <button 
+              onClick={() => scrollToSection('contact-us')}
+              className="contact-btn-nav desktop-contact-btn"
+            >
+              CONTACT US
+            </button>
+
+            <img 
+              src={acLogo} 
+              alt="Admin Portal" 
+              onClick={() => {
+                setCurrentPage('admin');
+                setActiveSection('admin');
+                setShowAdminPortal(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              style={{ width: '36px', height: '36px', borderRadius: '50%', cursor: 'pointer', display: 'block' }}
+            />
+
+            {/* Mobile Navigation Toggle */}
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                borderRadius: '0.375rem',
+                padding: '0.5rem',
+                color: '#ffffff',
+                cursor: 'pointer',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '38px',
+                height: '38px'
+              }}
+              className="mobile-nav-toggle"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={mobileMenuOpen ? 'close' : 'menu'}
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  style={{ display: 'inline-flex' }}
+                >
+                  {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                </motion.div>
+              </AnimatePresence>
+            </button>
+          </div>
+        </header>
       )}
  
       {/* Mobile Drawer Menu */}
@@ -1963,6 +1922,113 @@ export default function App() {
               }}
             />
           </motion.div>
+        ) : currentPage === 'committee' ? (
+          <motion.div
+            key="committee"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+          >
+            <CommitteePage
+              committeeMembers={committeeMembers}
+              info={info}
+              onBackToHome={() => {
+                setCurrentPage('main');
+                setActiveSection('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+          </motion.div>
+        ) : currentPage === 'guidelines' ? (
+          <motion.div
+            key="guidelines"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+          >
+            <GuidelinesPage
+              info={info}
+              onBackToHome={() => {
+                setCurrentPage('main');
+                setActiveSection('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+          </motion.div>
+        ) : currentPage === 'payment' ? (
+          <motion.div
+            key="payment"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+          >
+            <PaymentPage
+              info={info}
+              pricing={pricing}
+              isSupabaseConfigured={isSupabaseConfigured}
+              supabase={supabase}
+              fetchDbData={fetchDbData}
+              
+              regPaperId={regPaperId}
+              setRegPaperId={setRegPaperId}
+              regPaperTitle={regPaperTitle}
+              setRegPaperTitle={setRegPaperTitle}
+              regAuthorName={regAuthorName}
+              setRegAuthorName={setRegAuthorName}
+              regEmail={regEmail}
+              setRegEmail={setRegEmail}
+              regPhone={regPhone}
+              setRegPhone={setRegPhone}
+              regPhoneCode={regPhoneCode}
+              setRegPhoneCode={setRegPhoneCode}
+              regScreenshot={regScreenshot}
+              setRegScreenshot={setRegScreenshot}
+              regPaymentUrl={regPaymentUrl}
+              setRegPaymentUrl={setRegPaymentUrl}
+              regRegisterForTour={regRegisterForTour}
+              setRegRegisterForTour={setRegRegisterForTour}
+              regPreferredTourPlace={regPreferredTourPlace}
+              setRegPreferredTourPlace={setRegPreferredTourPlace}
+              regSuccess={regSuccess}
+              setRegSuccess={setRegSuccess}
+              regError={regError}
+              setRegError={setRegError}
+              regSubmitting={regSubmitting}
+              setRegSubmitting={setRegSubmitting}
+              showRegValidation={showRegValidation}
+              setShowRegValidation={setShowRegValidation}
+              paymentTab={paymentTab}
+              setPaymentTab={setPaymentTab}
+              
+              isIndian={isIndian}
+              setIsIndian={setIsIndian}
+              isStudent={isStudent}
+              setIsStudent={setIsStudent}
+              isIeeeMember={isIeeeMember}
+              setIsIeeeMember={setIsIeeeMember}
+              isLate={isLate}
+              setIsLate={setIsLate}
+              pageCount={pageCount}
+              setPageCount={setPageCount}
+              workshopAddon={workshopAddon}
+              setWorkshopAddon={setWorkshopAddon}
+              virtualMode={virtualMode}
+              setVirtualMode={setVirtualMode}
+              regOption={regOption}
+              setRegOption={setRegOption}
+              
+              handleRegistrationSubmit={handleRegistrationSubmit}
+              calculateTotalFees={calculateTotalFees}
+              onBackToHome={() => {
+                setCurrentPage('main');
+                setActiveSection('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+          </motion.div>
         ) : (
           <motion.div
             key="home"
@@ -2000,15 +2066,62 @@ export default function App() {
               }}
             />
 
-            {/* Light overlay for exact readability and style match */}
+            {/* Dark overlay for exact styling match */}
             <div style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.75) 60%, rgba(255, 255, 255, 1) 100%)',
+              background: 'linear-gradient(to bottom, rgba(44, 8, 13, 0.97) 0%, rgba(88, 17, 26, 0.92) 50%, rgba(44, 8, 13, 0.99) 100%)',
               zIndex: 1
             }} />
 
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: '960px', width: '100%' }}>
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: '960px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          
+          {/* Sponsoring/Organizing Logos Floating Banner */}
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '1.5rem',
+              background: '#fcfbf7', // light cream
+              border: '1px solid rgba(255, 255, 255, 0.8)',
+              borderRadius: '16px',
+              padding: '0.85rem 1.75rem',
+              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.35)',
+              margin: '0 auto 1rem',
+              flexWrap: 'wrap',
+              maxWidth: '90%'
+            }}
+          >
+            <img src={logo1} alt="IEEE India Council" style={{ height: '36px', width: 'auto', display: 'block' }} />
+            <div style={{ height: '24px', width: '1px', background: '#cbd5e1' }} />
+            <img src={logo2} alt="IEEE Madras Section" style={{ height: '40px', width: 'auto', display: 'block' }} />
+            <div style={{ height: '24px', width: '1px', background: '#cbd5e1' }} />
+            <img src={srecLogo} alt="Sri Ramakrishna Engineering College" style={{ height: '36px', width: 'auto', display: 'block' }} />
+          </motion.div>
+
+          {/* Banner Subtext */}
+          <motion.span 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            style={{
+              color: '#fbbf24', // yellow/gold
+              fontSize: '0.82rem',
+              fontWeight: 800,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              display: 'block',
+              marginBottom: '2.5rem',
+              textShadow: '0 2px 4px rgba(0,0,0,0.6)'
+            }}
+          >
+            AN IEEE INDIA COUNCIL CONFERENCE
+          </motion.span>
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -2017,47 +2130,47 @@ export default function App() {
             style={{
               padding: '3rem 2.5rem',
               borderRadius: '1.5rem',
-              background: 'rgba(255, 255, 255, 0.85)',
+              background: 'rgba(88, 17, 26, 0.45)', // dark burgundy tint
               backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255, 255, 255, 0.4)',
-              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              boxShadow: '0 20px 45px rgba(0, 0, 0, 0.3)',
               textAlign: 'center',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               gap: '1.5rem',
-              color: '#0f172a'
+              color: '#ffffff'
             }}
           >
             {/* Title */}
-            <h1 className="hero-title" style={{ margin: 0, fontSize: '3rem', fontWeight: 800, background: 'linear-gradient(135deg, #091d36 40%, #0f52ba 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 1.2 }}>
+            <h1 className="hero-title" style={{ margin: 0, fontSize: '3rem', fontWeight: 800, background: 'linear-gradient(135deg, #ffffff 40%, #fbbf24 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 1.2 }}>
               {info.hero_title || 'Welcome to ICAECTSD 2027'}
             </h1>
 
             {/* Subtitle */}
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#334155', maxWidth: '800px', margin: 0, lineHeight: 1.5 }}>
-              {info.hero_subtitle || 'Second IEEE International Conference On Advances in Engineering and Computing Technologies for Sustainable Development (ICAECTSD) 2027'}
-            </h2>
+            <p style={{ fontSize: '1.25rem', fontWeight: 600, color: '#ffffff', opacity: 0.95, maxWidth: '800px', margin: 0, lineHeight: 1.5, textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>
+              {info.hero_subtitle || 'Second IEEE International Conference on Advances in Engineering and Computing Technologies for Sustainable Development (ICAECTSD) 2027'}
+            </p>
 
             {/* Date & Location */}
-            <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', margin: '0.5rem 0 1rem', fontSize: '1rem', fontWeight: 700, color: '#1e293b' }}>
+            <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', margin: '0.5rem 0 1rem', fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Calendar size={20} className="text-blue-600" />
-                <span>{info.event_date_display || '17th and 18th December 2027'}</span>
+                <Calendar size={20} style={{ color: '#fbbf24' }} />
+                <span>{renderDateWithSuperscript(info.event_date_display || '17th and 18th December 2027')}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <MapPin size={20} className="text-blue-600" />
+                <MapPin size={20} style={{ color: '#fbbf24' }} />
                 <span>{info.event_location_display || 'Sri Ramakrishna Engineering College, Coimbatore, Tamilnadu, India'}</span>
               </div>
             </div>
 
             {/* Countdown Clock */}
-            <div className="countdown-container" style={{ width: '100%', maxWidth: '600px', padding: '1rem', background: 'rgba(15, 82, 186, 0.05)', borderRadius: '1rem', border: '1px solid rgba(15, 82, 186, 0.1)', color: '#0f172a' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: '#1e3a8a', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
+            <div className="countdown-container" style={{ width: '100%', maxWidth: '600px', padding: '1rem', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '1rem', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#ffffff' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: '#fbbf24', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
                 <Clock size={16} />
                 <span>{info.hero_countdown_title || 'Conference Countdown'}</span>
               </div>
-              <div className="countdown-row" style={{ color: '#0f172a' }}>
+              <div className="countdown-row" style={{ color: '#ffffff' }}>
                 {[
                   { label: info.label_days || 'Days', value: timeLeft.days },
                   { label: info.label_hours || 'Hours', value: timeLeft.hours },
@@ -2065,7 +2178,7 @@ export default function App() {
                   { label: info.label_secs || 'Seconds', value: timeLeft.seconds }
                 ].map((t, idx) => (
                   <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <span className="countdown-val" style={{ display: 'inline-flex', overflow: 'hidden', height: '2.5rem', alignItems: 'center', justifyContent: 'center', color: '#091d36', fontSize: '1.8rem', fontWeight: 800 }}>
+                    <span className="countdown-val" style={{ display: 'inline-flex', overflow: 'hidden', height: '2.5rem', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontSize: '1.8rem', fontWeight: 800 }}>
                       <AnimatePresence mode="popLayout" initial={false}>
                         <motion.span
                           key={t.value}
@@ -2079,7 +2192,7 @@ export default function App() {
                         </motion.span>
                       </AnimatePresence>
                     </span>
-                    <span className="countdown-lbl" style={{ color: '#475569', fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 600 }}>
+                    <span className="countdown-lbl" style={{ color: '#94a3b8', fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 600 }}>
                       {t.label}
                     </span>
                   </div>
@@ -2089,7 +2202,24 @@ export default function App() {
 
             {/* Actions */}
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', width: '100%', marginTop: '0.5rem' }}>
-              <button onClick={() => scrollToSection('paper-submission')} className="btn btn-primary" style={{ fontSize: '0.95rem', padding: '0.8rem 1.75rem' }}>
+              <button 
+                onClick={() => scrollToSection('paper-submission')} 
+                className="btn btn-primary" 
+                style={{ 
+                  fontSize: '0.95rem', 
+                  padding: '0.8rem 1.75rem', 
+                  background: '#fbbf24', 
+                  color: '#58111A', 
+                  fontWeight: 800, 
+                  border: 'none', 
+                  borderRadius: '30px',
+                  boxShadow: '0 4px 12px rgba(251, 191, 36, 0.25)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+              >
                 <FileText size={18} />
                 {info.hero_btn_submit || 'Submit Paper'}
               </button>
@@ -2102,12 +2232,38 @@ export default function App() {
                   document.body.appendChild(link);
                 }} 
                 className="btn btn-secondary" 
-                style={{ fontSize: '0.95rem', padding: '0.8rem 1.75rem', background: '#0b2240', border: '1px solid rgba(0,0,0,0.1)', color: '#ffffff' }}
+                style={{ 
+                  fontSize: '0.95rem', 
+                  padding: '0.8rem 1.75rem', 
+                  background: 'rgba(255, 255, 255, 0.08)', 
+                  border: '1px solid rgba(255, 255, 255, 0.2)', 
+                  color: '#ffffff',
+                  borderRadius: '30px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
               >
                 <Download size={18} />
                 Download Brochure
               </button>
-              <button onClick={() => setShowCalcModal(true)} className="btn btn-secondary" style={{ fontSize: '0.95rem', padding: '0.8rem 1.75rem' }}>
+              <button 
+                onClick={() => setShowCalcModal(true)} 
+                className="btn btn-secondary" 
+                style={{ 
+                  fontSize: '0.95rem', 
+                  padding: '0.8rem 1.75rem', 
+                  background: 'rgba(255, 255, 255, 0.08)', 
+                  border: '1px solid rgba(255, 255, 255, 0.2)', 
+                  color: '#ffffff',
+                  borderRadius: '30px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+              >
                 {info.hero_btn_register || 'Calculate Fees'}
                 <ChevronRight size={18} />
               </button>
@@ -2117,7 +2273,7 @@ export default function App() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="section">
+      <section id="about" className="section" style={{ background: '#faf9f6', borderBottom: '1px solid #e2e8f0' }}>
         <div className="container">
           <motion.div 
             initial="hidden"
@@ -2126,69 +2282,195 @@ export default function App() {
             variants={fadeInUp}
             style={{ textAlign: 'center', marginBottom: '4rem' }}
           >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.about_badge}</span>
-            <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.about_title}</h2>
-            <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
+            <h2 style={{ fontSize: '2.5rem', color: 'var(--text-primary)', marginTop: '0.5rem', fontWeight: 800 }}>
+              {info.logo_title || "IEEE AECTSD 2027"}
+            </h2>
+            <div style={{ height: '3.5px', width: '80px', background: '#f58220', margin: '1rem auto 0', borderRadius: '2px' }} />
           </motion.div>
 
-          {/* About Layout: About the Conference (Full Width) & Trust + College (Grid) */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem', marginBottom: '4rem', alignItems: 'start' }} className="grid-2-col-desktop-custom">
+            {/* Left Column: Badges & Details */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', textAlign: 'left' }}
+            >
+              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <span style={{ background: '#fef3c7', color: '#b45309', padding: '0.35rem 0.85rem', borderRadius: '2rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Theme
+                </span>
+                <span style={{ background: '#eff6ff', color: '#1e40af', padding: '0.35rem 0.85rem', borderRadius: '2rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  {info.conf_record_no ? `IEEE Conference Record: #${info.conf_record_no}` : "IEEE Conference"}
+                </span>
+              </div>
+
+              <h3 style={{ fontSize: '1.85rem', color: '#091d36', fontWeight: 800, lineHeight: 1.3, margin: '0.5rem 0 0' }}>
+                {info.hero_subtitle || "Net-Zero Cyber-Physical Intelligence: AI, 6G & Sustainable Electronics"}
+              </h3>
+
+              {info.about_conference?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
+                <p key={idx} style={{ color: 'var(--text-secondary)', margin: 0, textAlign: 'justify', lineHeight: '1.75', fontSize: '0.95rem' }}>
+                  {para}
+                </p>
+              ))}
+
+              <div style={{
+                marginTop: '1rem',
+                padding: '1.25rem',
+                background: '#ffffff',
+                border: '1px solid #cbd5e1',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '280px' }}>
+                  <Award size={24} style={{ flexShrink: 0, color: '#0f52ba' }} />
+                  <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                    The proceedings of the previous edition (<strong>AECTSD 2025</strong>) have been successfully published in <strong>IEEE Xplore</strong> and indexed in <strong>Scopus</strong>.
+                  </p>
+                </div>
+                <a 
+                  href="https://ieee-aectsd.srec.ac.in" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn btn-secondary" 
+                  style={{ 
+                    fontSize: '0.85rem', 
+                    padding: '0.5rem 1.25rem', 
+                    background: 'rgba(59, 130, 246, 0.08)', 
+                    border: '1px solid rgba(59, 130, 246, 0.2)', 
+                    color: '#0f52ba', 
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    textDecoration: 'none',
+                    fontWeight: 700
+                  }}
+                >
+                  Visit Previous Edition
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Right Column: 2x2 Grid of 4 Cards */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem', width: '100%' }}
+            >
+              {[
+                {
+                  title: "Global Knowledge Exchange",
+                  desc: "Bringing together researchers and professionals from academia, industry and government.",
+                  icon: Globe,
+                  color: '#e0f2fe',
+                  iconColor: '#0369a1'
+                },
+                {
+                  title: "Industry Collaboration",
+                  desc: "Promoting partnerships among industries, startups, innovators and IEEE communities.",
+                  icon: Handshake,
+                  color: '#fef3c7',
+                  iconColor: '#b45309'
+                },
+                {
+                  title: "Sustainable Engineering",
+                  desc: "Encouraging green technologies and engineering solutions aligned with Net-Zero goals.",
+                  icon: Leaf,
+                  color: '#dcfce7',
+                  iconColor: '#15803d'
+                },
+                {
+                  title: "Future-Ready Society",
+                  desc: "Advancing AI, 6G, CPS and sustainable electronics for smart and resilient communities.",
+                  icon: Sparkles,
+                  color: '#f3e8ff',
+                  iconColor: '#6b21a8'
+                }
+              ].map((card, cidx) => {
+                const CardIcon = card.icon;
+                return (
+                  <div 
+                    key={cidx} 
+                    className="about-grid-card"
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid #cbd5e1',
+                      borderRadius: '1rem',
+                      padding: '1.75rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '1rem',
+                      textAlign: 'left',
+                      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.03)',
+                      position: 'relative'
+                    }}
+                  >
+                    <div style={{
+                      width: '45px',
+                      height: '45px',
+                      borderRadius: '50%',
+                      background: card.color,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: card.iconColor
+                    }}>
+                      <CardIcon size={22} />
+                    </div>
+                    <h4 style={{ fontSize: '1.05rem', color: '#091d36', fontWeight: 800, margin: 0 }}>{card.title}</h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>{card.desc}</p>
+                  </div>
+                );
+              })}
+            </motion.div>
+          </div>
+
+          {/* SREC Trust & Institution Details */}
+          <div className="grid-2-col" style={{ gap: '2rem' }}>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               className="glass-card"
-              style={{ width: '100%' }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                <Layers className="text-blue-400" size={26} />
-                <h3 style={{ fontSize: '1.6rem', color: 'white', fontWeight: 700 }}>About the Conference</h3>
+                <BookOpen size={24} style={{ color: '#0f52ba' }} />
+                <h3 style={{ fontSize: '1.5rem', color: '#091d36', fontWeight: 700 }}>{info.about_card_conf_title || "About the Trust"}</h3>
               </div>
-              {info.about_conference?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
-                <p key={idx} style={{ color: 'var(--text-secondary)', marginBottom: '1rem', textIndent: '2rem', textAlign: 'justify', lineHeight: '1.8', fontSize: '0.975rem' }}>
+              {info.about_trust?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
+                <p key={idx} style={{ color: 'var(--text-secondary)', marginBottom: '1rem', textIndent: '2rem', textAlign: 'justify', lineHeight: '1.7', fontSize: '0.95rem' }}>
                   {para}
                 </p>
               ))}
             </motion.div>
- 
-            <div className="grid-2-col" style={{ gap: '2rem' }}>
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="glass-card"
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                  <BookOpen className="text-cyan-400" size={24} />
-                  <h3 style={{ fontSize: '1.5rem', color: 'white', fontWeight: 700 }}>{info.about_card_conf_title || "About the Trust"}</h3>
-                </div>
-                {info.about_trust?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
-                  <p key={idx} style={{ color: 'var(--text-secondary)', marginBottom: '1rem', textIndent: '2rem', textAlign: 'justify', lineHeight: '1.7', fontSize: '0.95rem' }}>
-                    {para}
-                  </p>
-                ))}
-              </motion.div>
- 
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="glass-card"
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                  <Award className="text-amber-400" size={24} />
-                  <h3 style={{ fontSize: '1.5rem', color: 'white', fontWeight: 700 }}>{info.about_card_inst_title || "About the Institution"}</h3>
-                </div>
-                {info.about_institution?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
-                  <p key={idx} style={{ color: 'var(--text-secondary)', marginBottom: '1rem', textIndent: '2rem', textAlign: 'justify', lineHeight: '1.7', fontSize: '0.95rem' }}>
-                    {para}
-                  </p>
-                ))}
-              </motion.div>
-            </div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="glass-card"
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                <Award size={24} style={{ color: '#f58220' }} />
+                <h3 style={{ fontSize: '1.5rem', color: '#091d36', fontWeight: 700 }}>{info.about_card_inst_title || "About the Institution"}</h3>
+              </div>
+              {info.about_institution?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
+                <p key={idx} style={{ color: 'var(--text-secondary)', marginBottom: '1rem', textIndent: '2rem', textAlign: 'justify', lineHeight: '1.7', fontSize: '0.95rem' }}>
+                  {para}
+                </p>
+              ))}
+            </motion.div>
           </div>
 
           {/* Stats Bar */}
@@ -2217,355 +2499,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Committee Section */}
-      <section id="committee" className="section">
-        <div className="container">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '4rem' }}
-          >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.committee_badge}</span>
-            <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.committee_title}</h2>
-            <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
-          </motion.div>
-
-          {/* Committee Tabs */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '3rem', flexWrap: 'wrap' }}>
-            {([
-              { id: 'organizing', label: info.committee_tab_org || 'Organizing Committee' },
-              { id: 'advisory', label: info.committee_tab_adv || 'Advisory Committee' },
-              { id: 'steering', label: info.committee_tab_steering || 'Steering Committee' }
-            ] as { id: 'steering' | 'organizing' | 'advisory', label: string }[]).map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setCommitteeTab(tab.id)}
-                className={`committee-tab-btn ${committeeTab === tab.id ? 'active' : 'inactive'}`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Committee Content Cards */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={committeeTab}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.3 }}
-            >
-              {committeeTab === 'steering' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                  {info.steering_committee_desc && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="glass-card"
-                      style={{ padding: '2rem', textAlign: 'center', maxWidth: '900px', margin: '0 auto 0.5rem', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
-                    >
-                      <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>
-                        Steering Committee
-                      </h3>
-                      <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7', fontSize: '0.95rem', margin: 0 }}>
-                        {info.steering_committee_desc}
-                      </p>
-                    </motion.div>
-                  )}
-
-                  <div className="centered-flex-grid">
-                    {committeeMembers
-                      .filter((member) => member.category === 'steering')
-                      .map((member, mIdx) => (
-                        <div key={mIdx} className="member-profile-card">
-                          <span className="member-role-badge">
-                            {member.role || 'Steering Committee Member'}
-                          </span>
-                          <h4 className="member-name">{member.name}</h4>
-                          <p className="member-desc">{member.desc}</p>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              )}
-
-              {committeeTab === 'organizing' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                  {info.organizing_committee_desc && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="glass-card"
-                      style={{ padding: '2rem', textAlign: 'center', maxWidth: '900px', margin: '0 auto 0.5rem', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
-                    >
-                      <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>
-                        Organizing Committee
-                      </h3>
-                      <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7', fontSize: '0.95rem', margin: 0 }}>
-                        {info.organizing_committee_desc}
-                      </p>
-                    </motion.div>
-                  )}
-                  
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%' }}>
-                    {/* Subcommittee Buttons: Desktop Layout */}
-                    <div className="desktop-subcommittee-nav" style={{ flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem', width: '100%', alignItems: 'center' }}>
-                      {/* Row 1 */}
-                      <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', width: '100%' }}>
-                        {[
-                          { id: 'patrons', label: 'Patrons' },
-                          { id: 'general-chairs', label: 'General Chairs' },
-                          { id: 'executive', label: 'Executive Committee' },
-                          { id: 'finance', label: 'Finance' },
-                          { id: 'publication', label: 'Publication' },
-                          { id: 'arrangements', label: 'Arrangements' },
-                          { id: 'registration', label: 'Registration' }
-                        ].map((group) => (
-                          <button
-                            key={group.id}
-                            type="button"
-                            onClick={() => setActiveSubcommittee(group.id)}
-                            className={`committee-tab-btn ${activeSubcommittee === group.id ? 'active' : 'inactive'}`}
-                            style={{ fontSize: '0.85rem', padding: '0.5rem 1rem', textTransform: 'capitalize', minWidth: '120px' }}
-                          >
-                            {group.label}
-                          </button>
-                        ))}
-                      </div>
-                      
-                      {/* Row 2 */}
-                      <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', width: '100%' }}>
-                        {[
-                          { id: 'tutorials', label: 'Tutorials & Workshops' },
-                          { id: 'review', label: 'Technical Review' },
-                          { id: 'outreach', label: 'Outreach & Promotion' },
-                          { id: 'website', label: 'Website & Media' },
-                          { id: 'hospitality', label: 'Hospitality' },
-                          { id: 'members', label: 'General Members' }
-                        ].map((group) => (
-                          <button
-                            key={group.id}
-                            type="button"
-                            onClick={() => setActiveSubcommittee(group.id)}
-                            className={`committee-tab-btn ${activeSubcommittee === group.id ? 'active' : 'inactive'}`}
-                            style={{ fontSize: '0.85rem', padding: '0.5rem 1rem', textTransform: 'capitalize', minWidth: '120px' }}
-                          >
-                            {group.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Subcommittee Dropdown: Mobile Layout */}
-                    <div className="mobile-subcommittee-nav" style={{ width: '100%', maxWidth: '320px', margin: '0 auto 2rem', position: 'relative' }}>
-                      <button
-                        type="button"
-                        onClick={() => setSubcommitteeDropdownOpen(!subcommitteeDropdownOpen)}
-                        style={{
-                          width: '100%',
-                          padding: '0.75rem 1.25rem',
-                          background: '#1e293b',
-                          border: '1px solid #334155',
-                          borderRadius: '0.5rem',
-                          color: '#ffffff',
-                          fontWeight: 600,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          cursor: 'pointer',
-                          textAlign: 'left'
-                        }}
-                      >
-                        <span>
-                          {
-                            [
-                              { id: 'patrons', label: 'Patrons' },
-                              { id: 'general-chairs', label: 'General Chairs' },
-                              { id: 'executive', label: 'Executive Committee' },
-                              { id: 'finance', label: 'Finance' },
-                              { id: 'publication', label: 'Publication' },
-                              { id: 'arrangements', label: 'Arrangements' },
-                              { id: 'registration', label: 'Registration' },
-                              { id: 'tutorials', label: 'Tutorials & Workshops' },
-                              { id: 'review', label: 'Technical Review' },
-                              { id: 'outreach', label: 'Outreach & Promotion' },
-                              { id: 'website', label: 'Website & Media' },
-                              { id: 'hospitality', label: 'Hospitality' },
-                              { id: 'members', label: 'General Members' }
-                            ].find(g => g.id === activeSubcommittee)?.label || 'Patrons'
-                          }
-                        </span>
-                        <ChevronDown size={18} style={{ marginLeft: 'auto' }} />
-                      </button>
-
-                      <AnimatePresence>
-                        {subcommitteeDropdownOpen && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                            style={{
-                              position: 'absolute',
-                              top: '105%',
-                              left: 0,
-                              right: 0,
-                              background: 'rgba(15, 23, 42, 0.95)',
-                              backdropFilter: 'blur(12px)',
-                              border: '1px solid rgba(255, 255, 255, 0.1)',
-                              borderRadius: '0.5rem',
-                              zIndex: 10,
-                              maxHeight: '300px',
-                              overflowY: 'auto',
-                              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)'
-                            }}
-                          >
-                            {[
-                              { id: 'patrons', label: 'Patrons' },
-                              { id: 'general-chairs', label: 'General Chairs' },
-                              { id: 'executive', label: 'Executive Committee' },
-                              { id: 'finance', label: 'Finance' },
-                              { id: 'publication', label: 'Publication' },
-                              { id: 'arrangements', label: 'Arrangements' },
-                              { id: 'registration', label: 'Registration' },
-                              { id: 'tutorials', label: 'Tutorials & Workshops' },
-                              { id: 'review', label: 'Technical Review' },
-                              { id: 'outreach', label: 'Outreach & Promotion' },
-                              { id: 'website', label: 'Website & Media' },
-                              { id: 'hospitality', label: 'Hospitality' },
-                              { id: 'members', label: 'General Members' }
-                            ].map((group) => (
-                              <button
-                                key={group.id}
-                                type="button"
-                                onClick={() => {
-                                  setActiveSubcommittee(group.id);
-                                  setSubcommitteeDropdownOpen(false);
-                                }}
-                                style={{
-                                  width: '100%',
-                                  padding: '0.75rem 1.25rem',
-                                  background: activeSubcommittee === group.id ? 'rgba(59, 130, 246, 0.2)' : 'transparent',
-                                  border: 'none',
-                                  color: '#ffffff',
-                                  textAlign: 'left',
-                                  fontSize: '0.9rem',
-                                  fontWeight: activeSubcommittee === group.id ? 700 : 500,
-                                  cursor: 'pointer',
-                                  display: 'block',
-                                  borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
-                                }}
-                              >
-                                {group.label}
-                              </button>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-
-                    {/* Active Panel Members Grid */}
-                    <div className="centered-flex-grid">
-                    {committeeMembers
-                      .filter((member) => {
-                        if (member.category !== 'organizing') return false;
-                        switch (activeSubcommittee) {
-                          case 'patrons':
-                            return member.role === 'Chief Patron' || member.role === 'Patron';
-                          case 'general-chairs':
-                            return member.role === 'General Chair';
-                          case 'executive':
-                            return member.role === 'Conference Chair' || member.role === 'Conference Chair & Organizing Secretary' || member.role === 'Session Chair';
-                          case 'finance':
-                            return member.role === 'Program and Finance Chair' || member.role === 'Finance Committee Member' || member.role === 'Program and Finance Committee Member';
-                          case 'publication':
-                            return member.role === 'Publication Chair' || member.role === 'Publication Committee Member';
-                          case 'arrangements':
-                            return member.role === 'Local Arrangements Chair' || member.role === 'Local Arrangements Committee Member';
-                          case 'registration':
-                            return member.role === 'Registration Chair' || member.role === 'Registration Committee Member';
-                          case 'tutorials':
-                            return member.role === 'Conference Pre-Tutorial Sessions Chair' || member.role === 'Pre-Tutorial Sessions Committee Member';
-                          case 'review':
-                            return member.role === 'Technical Review Committee Convener' || member.role === 'Technical Review Committee Member';
-                          case 'outreach':
-                            return member.role === 'Outreach and Promotion Committee Convener' || member.role === 'Outreach and Promotion Committee Member';
-                          case 'website':
-                            return member.role === 'Website and Social Media Promotion Committee Chair' || member.role === 'Website and Social Media Promotion Committee Member';
-                          case 'hospitality':
-                            return member.role === 'Hospitality Committee Convener' || member.role === 'Hospitality Committee Member';
-                          case 'members':
-                            return member.role === 'Member' || !member.role;
-                          default:
-                            return false;
-                        }
-                      })
-                      .map((member, mIdx) => {
-                          return (
-                            <div key={mIdx} className="member-profile-card">
-                              {['patrons', 'general-chairs', 'executive'].includes(activeSubcommittee) && (
-                                <div className="member-avatar-wrapper">
-                                  <img 
-                                    src={getMemberImage(member.name, member.image_url)}
-                                    onError={(e) => {
-                                      (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0f52ba,06b6d4,f58220`;
-                                    }}
-                                    alt={member.name}
-                                    className="member-avatar-img"
-                                  />
-                                </div>
-                              )}
-                              <span className="member-role-badge">
-                                {member.role && member.role !== 'Member' ? member.role : 'Organizing Member'}
-                              </span>
-                              <h4 className="member-name">{member.name}</h4>
-                              <p className="member-desc">{member.desc}</p>
-                            </div>
-                          );
-                      })}
-                  </div>
-                </div>
-              </div>
-            )}
-
-              {committeeTab === 'advisory' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                  {info.advisory_committee_desc && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="glass-card"
-                      style={{ padding: '2rem', textAlign: 'center', maxWidth: '800px', margin: '0 auto 0.5rem', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
-                    >
-                      <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>
-                        Advisory Committee
-                      </h3>
-                      <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7', fontSize: '0.95rem', margin: 0 }}>
-                        {info.advisory_committee_desc}
-                      </p>
-                    </motion.div>
-                  )}
-                  
-                  <div className="centered-flex-grid">
-                    {committeeMembers.filter(m => m.category === 'advisory').map((adviser, index) => (
-                      <div key={index} className="member-profile-card">
-                        <span className="member-role-badge">{adviser.role || 'Advisory Member'}</span>
-                        <h4 className="member-name">{adviser.name}</h4>
-                        <p className="member-desc">{adviser.desc}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </section>
+      {/* Committee page is now standalone at src/components/CommitteePage.tsx */}
 
       {/* Speakers Section */}
       <section id="speakers" className="section">
@@ -2647,54 +2581,75 @@ export default function App() {
       </section>
 
       {/* Call For Papers Section */}
-      <section id="call-for-papers" className="section">
+      <section id="call-for-papers" className="section" style={{ background: '#faf9f6', borderBottom: '1px solid #e2e8f0' }}>
         <div className="container">
           <motion.div 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '4rem' }}
+            style={{ textAlign: 'center', marginBottom: '3rem' }}
           >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.cfp_badge}</span>
-            <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.cfp_title}</h2>
-            <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
-            <p style={{ color: 'var(--text-secondary)', marginTop: '1.5rem', maxWidth: '800px', marginInline: 'auto' }}>
-              {info.cfp_desc}
+            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.cfp_badge || 'CALL FOR PAPERS'}</span>
+            <h2 style={{ fontSize: '2.5rem', color: '#091d36', marginTop: '0.5rem', fontWeight: 800 }}>
+              Technical Tracks
+            </h2>
+            <div style={{ height: '3.5px', width: '80px', background: '#eab308', margin: '1rem auto 0', borderRadius: '2px' }} />
+            <p style={{ color: 'var(--text-secondary)', marginTop: '1.5rem', maxWidth: '800px', marginInline: 'auto', lineHeight: 1.7, fontSize: '0.95rem' }}>
+              {info.cfp_desc || 'Prospective authors are invited to submit papers showcasing original research in the following technical tracks.'}
             </p>
           </motion.div>
 
           {/* Departments grid */}
-          <div className="grid-3-col">
-            {departments.map((dept, index) => (
-              <div 
-                key={index} 
-                className="glass-card" 
-                onClick={() => setSelectedDept(dept)}
-                style={{ 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  gap: '1rem', 
-                  cursor: 'pointer',
-                  justifyContent: 'space-between',
-                  height: '100%',
-                  minHeight: '180px'
-                }}
-              >
-                <div>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--gold)', fontWeight: 800, textTransform: 'uppercase' }}>
-                    {info.cfp_badge} {index + 1}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '3rem' }}>
+            {departments.map((dept, index) => {
+              const getTrackIcon = (idx: number) => {
+                switch (idx) {
+                  case 0: return <Cpu size={26} style={{ color: '#0f52ba' }} />;
+                  case 1: return <Terminal size={26} style={{ color: '#0891b2' }} />;
+                  case 2: return <Shield size={26} style={{ color: '#16a34a' }} />;
+                  case 3: return <Zap size={26} style={{ color: '#ca8a04' }} />;
+                  case 4: return <Database size={26} style={{ color: '#9333ea' }} />;
+                  default: return <Leaf size={26} style={{ color: '#059669' }} />;
+                }
+              };
+
+              return (
+                <div 
+                  key={index} 
+                  className="track-redesign-card" 
+                  onClick={() => setSelectedDept(dept)}
+                >
+                  {/* Background fainted number */}
+                  <span style={{ 
+                    position: 'absolute', 
+                    right: '1.25rem', 
+                    bottom: '0.25rem', 
+                    fontSize: '4.5rem', 
+                    fontWeight: 900, 
+                    color: 'rgba(15, 82, 186, 0.03)', 
+                    pointerEvents: 'none',
+                    userSelect: 'none',
+                    fontFamily: 'var(--font-heading)'
+                  }}>
+                    {(index + 1).toString().padStart(2, '0')}
                   </span>
-                  <h3 style={{ fontSize: '1.2rem', marginTop: '0.5rem', lineHeight: '1.4', fontWeight: 700 }}>
+
+                  <div className="track-icon-wrapper">
+                    {getTrackIcon(index)}
+                  </div>
+
+                  <h3 style={{ fontSize: '1.15rem', color: '#091d36', fontWeight: 800, margin: '0 0 1.25rem 0', lineHeight: 1.45 }}>
                     {dept.name}
                   </h3>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: '#0f52ba', fontWeight: 700, marginTop: 'auto' }}>
+                    <span>View Scope Details</span>
+                    <ChevronRight size={16} />
+                  </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: '#0f52ba', fontWeight: 700, marginTop: 'auto' }}>
-                  <span>View Scope Details</span>
-                  <ChevronRight size={16} />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Template Downloads */}
@@ -2723,14 +2678,71 @@ export default function App() {
             variants={fadeInUp}
             style={{ textAlign: 'center', marginBottom: '4rem' }}
           >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.dates_badge}</span>
-            <h2 style={{ fontSize: '2.5rem', color: '#091d36', marginTop: '0.5rem' }}>{info.dates_title}</h2>
-            <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
+            <span style={{ color: '#58111A', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.12em' }}>{info.dates_badge || "TIMELINE"}</span>
+            <h2 style={{ fontSize: '2.5rem', color: '#58111A', marginTop: '0.5rem', fontWeight: 800 }}>{info.dates_title || "Important Dates"}</h2>
+            <div style={{ height: '3.5px', width: '80px', background: '#fbbf24', margin: '1rem auto 0', borderRadius: '2px' }} />
           </motion.div>
 
-          {/* Blocks Layout with Green Checkmarks and Active Highlights */}
+          {/* Blocks Layout with Colorful Outlines and Highlights */}
           <div className="grid-3-col" style={{ marginTop: '2rem', gap: '2rem' }}>
             {(() => {
+              const CARD_PALETTES = [
+                {
+                  border: '#cbd5e1',
+                  borderActive: '#3b82f6',
+                  badgeBg: '#3b82f6',
+                  badgeText: '#ffffff',
+                  titleColor: '#1e3a8a',
+                  iconColor: '#3b82f6',
+                  glowColor: 'rgba(59, 130, 246, 0.08)'
+                },
+                {
+                  border: '#cbd5e1',
+                  borderActive: '#10b981',
+                  badgeBg: '#10b981',
+                  badgeText: '#ffffff',
+                  titleColor: '#065f46',
+                  iconColor: '#10b981',
+                  glowColor: 'rgba(16, 185, 129, 0.08)'
+                },
+                {
+                  border: '#cbd5e1',
+                  borderActive: '#f97316',
+                  badgeBg: '#f97316',
+                  badgeText: '#ffffff',
+                  titleColor: '#7c2d12',
+                  iconColor: '#f97316',
+                  glowColor: 'rgba(249, 115, 22, 0.08)'
+                },
+                {
+                  border: '#cbd5e1',
+                  borderActive: '#d946ef',
+                  badgeBg: '#d946ef',
+                  badgeText: '#ffffff',
+                  titleColor: '#701a75',
+                  iconColor: '#d946ef',
+                  glowColor: 'rgba(217, 70, 239, 0.08)'
+                },
+                {
+                  border: '#cbd5e1',
+                  borderActive: '#f43f5e',
+                  badgeBg: '#f43f5e',
+                  badgeText: '#ffffff',
+                  titleColor: '#4c0519',
+                  iconColor: '#f43f5e',
+                  glowColor: 'rgba(244, 63, 94, 0.08)'
+                },
+                {
+                  border: '#cbd5e1',
+                  borderActive: '#14b8a6',
+                  badgeBg: '#14b8a6',
+                  badgeText: '#ffffff',
+                  titleColor: '#0f766e',
+                  iconColor: '#14b8a6',
+                  glowColor: 'rgba(20, 184, 166, 0.08)'
+                }
+              ];
+
               const isPassedArray = importantDates.map(evt => {
                 try {
                   const cleanDateStr = evt.event_date.replace(/-[0-9]+/g, '').trim(); 
@@ -2745,6 +2757,7 @@ export default function App() {
               return importantDates.map((evt, idx) => {
                 const { month, day, year } = parseDateDisplay(evt.event_date);
                 const isPassed = isPassedArray[idx];
+                const palette = CARD_PALETTES[idx % CARD_PALETTES.length];
 
                 return (
                   <motion.div
@@ -2753,27 +2766,30 @@ export default function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: idx * 0.05 }}
+                    whileHover={{ 
+                      y: -5,
+                      borderColor: palette.borderActive,
+                      boxShadow: `0 12px 30px ${palette.glowColor}`
+                    }}
                     style={{
-                      background: isPassed ? 'rgba(240, 253, 244, 0.95)' : '#ffffff',
-                      border: isPassed ? '2px solid #10b981' : '1px solid #e2e8f0',
+                      background: '#ffffff',
+                      border: `1px solid ${palette.border}`,
                       borderRadius: '1.25rem',
                       padding: '2rem',
-                      boxShadow: isPassed 
-                        ? '0 10px 15px -3px rgba(16, 185, 129, 0.1), 0 4px 6px -4px rgba(16, 185, 129, 0.1)' 
-                        : '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
                       display: 'flex',
                       flexDirection: 'column',
                       position: 'relative',
-                      transition: 'all 0.3s ease',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      cursor: 'default'
                     }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
                       <span style={{
                         fontSize: '0.75rem',
                         fontWeight: 800,
-                        color: '#ffffff',
-                        background: isPassed ? '#10b981' : '#64748b',
-                        padding: '0.35rem 0.85rem',
+                        color: palette.badgeText,
+                        background: palette.badgeBg,
+                        padding: '0.4rem 0.95rem',
                         borderRadius: '2rem',
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em'
@@ -2782,16 +2798,16 @@ export default function App() {
                       </span>
                       
                       {isPassed ? (
-                        <CheckCircle size={24} style={{ color: '#10b981', flexShrink: 0 }} />
+                        <CheckCircle size={22} style={{ color: '#10b981', flexShrink: 0 }} />
                       ) : (
-                        <Clock size={24} style={{ color: '#94a3b8', flexShrink: 0 }} />
+                        <Clock size={22} style={{ color: palette.iconColor, flexShrink: 0 }} />
                       )}
                     </div>
 
                     <h4 style={{
                       fontSize: '1.2rem',
                       fontWeight: 800,
-                      color: isPassed ? '#065f46' : '#0f172a',
+                      color: palette.titleColor,
                       marginBottom: '0.75rem',
                       lineHeight: 1.3
                     }}>
@@ -2800,7 +2816,7 @@ export default function App() {
 
                     <p style={{
                       fontSize: '0.9rem',
-                      color: isPassed ? '#15803d' : '#64748b',
+                      color: '#475569',
                       lineHeight: 1.5,
                       margin: 0
                     }}>
@@ -2858,163 +2874,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Guidelines Section */}
-      <section id="guidelines" className="section" style={{ paddingBottom: '2rem' }}>
-        <div className="container">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '4rem' }}
-          >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.guidelines_badge}</span>
-            <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.guidelines_title}</h2>
-            <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
-          </motion.div>
-
-          {/* 2. Instructions and CMT Procedures */}
-          <div className="grid-2-col" style={{ gap: '2rem' }}>
-            {/* Left Card: General Instructions */}
-            <div className="glass-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <h3 style={{ fontSize: '1.35rem', color: 'white', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem', fontWeight: 700 }}>
-                Instructions for Authors
-              </h3>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.95rem', color: 'var(--text-secondary)', padding: 0, margin: 0 }}>
-                {[
-                  "The maximum length of the paper for review is 6 pages, including figures, tables, and references. The maximum file size allowed is 10 MB in PDF format without encryption and/or passwords.",
-                  "Papers of poor quality and/or high similarity index will be rejected during the initial screening process without review.",
-                  "Use only the IEEE standard two-column conference paper Microsoft Word template.",
-                  "The paper will be peer-reviewed by domain experts of the respective tracks.",
-                  "Authors should submit the papers through Microsoft Conference Management Toolkit (CMT).",
-                  "Kindly do not submit the paper multiple times, as it may lead to the cancellation of your paper."
-                ].map((inst, idx) => (
-                  <li key={idx} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', lineHeight: '1.6' }}>
-                    <span style={{ color: '#3b82f6', fontWeight: 'bold', fontSize: '1.1rem', marginTop: '-2px' }}>•</span>
-                    <span>{inst}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Right Card: CMT Procedure Toggler */}
-            <div className="glass-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <div style={{ display: 'flex', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                <h3 style={{ fontSize: '1.35rem', color: 'white', fontWeight: 700, margin: 0 }}>
-                  CMT Submission Portal
-                </h3>
-                <div style={{ display: 'inline-flex', background: 'rgba(255,255,255,0.06)', borderRadius: '1.5rem', padding: '0.25rem' }}>
-                  <button 
-                    onClick={() => setSubmissionTab('initial')}
-                    className={`committee-tab-btn ${submissionTab === 'initial' ? 'active' : 'inactive'}`}
-                    style={{ padding: '0.4rem 1.2rem', fontSize: '0.8rem', borderRadius: '1.5rem' }}
-                  >
-                    Initial Submission
-                  </button>
-                  <button 
-                    onClick={() => setSubmissionTab('camera-ready')}
-                    className={`committee-tab-btn ${submissionTab === 'camera-ready' ? 'active' : 'inactive'}`}
-                    style={{ padding: '0.4rem 1.2rem', fontSize: '0.8rem', borderRadius: '1.5rem' }}
-                  >
-                    Camera-Ready
-                  </button>
-                </div>
-              </div>
-
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={submissionTab}
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {submissionTab === 'initial' ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                      <span style={{ fontSize: '0.85rem', color: '#d97706', fontWeight: 700 }}>
-                        Procedure for Uploading Papers:
-                      </span>
-                      <ol style={{ paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                        <li>
-                          Go to paper submission website: <a href="https://cmt3.research.microsoft.com/aectsd2025" target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'underline' }}>https://cmt3.research.microsoft.com/aectsd2025</a>.
-                        </li>
-                        <li>If you are new to the system, please choose "Register" at the bottom of the dialog box. Create a new account with a user ID and Password.</li>
-                        <li>Log in to CMT with your user ID and Password.</li>
-                        <li>Select "All Conferences" and choose the conference.</li>
-                        <li>Click the Conference Name link.</li>
-                        <li>On the Author Console page, click <strong>+ Create new submission</strong>.</li>
-                        <li>Fill out the required fields, including the title, abstract, authors, subject areas, and email IDs of all the co-authors.</li>
-                        <li>Upload your paper and other files (if needed).</li>
-                        <li>Click “Submit” to submit your paper.</li>
-                      </ol>
-                    </div>
-                  ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                      <span style={{ fontSize: '0.85rem', color: '#d97706', fontWeight: 700 }}>
-                        Submitting Camera-Ready Version:
-                      </span>
-                      <ol style={{ paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                        <li>Go to the Author Console in CMT.</li>
-                        <li>Click the <strong>Create Camera Ready Submission</strong> link.</li>
-                        <li>Edit the title, abstract, and author information.</li>
-                        <li>Upload the camera-ready file.</li>
-                        <li>Answer any additional questions.</li>
-                        <li>Click “Submit” to submit your paper.</li>
-                      </ol>
-                    </div>
-                  )}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Paper Submission Section */}
-      <section id="paper-submission" className="section" style={{ paddingTop: '2rem' }}>
-        <div className="container">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            style={{ textAlign: 'center', marginBottom: '4rem' }}
-          >
-            <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>{info.submission_badge}</span>
-            <h2 style={{ fontSize: '2.5rem', color: 'white', marginTop: '0.5rem' }}>{info.submission_title}</h2>
-            <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
-          </motion.div>
-
-          <div className="glass-card" style={{ maxWidth: '750px', margin: '0 auto', padding: '2.5rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
-            <div style={{ display: 'inline-flex', background: 'rgba(59, 130, 246, 0.1)', padding: '0.85rem', borderRadius: '50%', color: '#3b82f6' }}>
-              <Layers size={32} />
-            </div>
-            
-            <h3 style={{ fontSize: '1.6rem', color: 'white', margin: 0, fontWeight: 700 }}>
-              {info.submission_card_title || 'Submit Your Application through CMT'}
-            </h3>
-            <p style={{ color: 'var(--text-secondary)', margin: 0, maxWidth: '600px', fontSize: '0.95rem', lineHeight: '1.5' }}>
-              {info.submission_card_desc || 'Submit your research papers directly via the Microsoft CMT portal. Make sure to adhere to all formatting guidelines before uploading your work.'}
-            </p>
- 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', color: '#94a3b8' }}>
-              <Terminal size={14} />
-              <span>{info.label_conf_id || 'Conference CMT Portal ID:'} <strong>{info.cmt_id || 'AECTSD2027'}</strong></span>
-            </div>
- 
-            <a 
-              href={info.cmt_link || 'https://cmt3.research.microsoft.com/aectsd2025'} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="btn btn-primary"
-              style={{ fontSize: '1rem', padding: '0.8rem 2.2rem', marginTop: '0.5rem' }}
-            >
-              {info.submission_btn_cmt || 'Go to CMT Submission Portal'}
-              <ExternalLink size={16} />
-            </a>
-          </div>
-        </div>
-      </section>
+      {/* Guidelines & CMT Submission are now standalone at src/components/GuidelinesPage.tsx */}
 
       {/* Registration Section */}
       <section id="registration" className="section">
@@ -3969,6 +3829,9 @@ export default function App() {
                             <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '2px solid #cbd5e1', paddingTop: '0.5rem', fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent)' }}>
                               <span>Total Due:</span>
                               <span>{bill.currencySymbol}{bill.total} ({bill.currency})</span>
+                            </div>
+                            <div style={{ marginTop: '0.75rem', fontSize: '0.72rem', color: '#b45309', lineHeight: '1.4', fontStyle: 'italic', borderTop: '1px dashed #cbd5e1', paddingTop: '0.5rem', textAlign: 'left' }}>
+                              * Note: Registration rates and fees are tentative and subject to final confirmation (under discussion with Dr. K. Balamurugan).
                             </div>
                           </div>
                         );
@@ -6347,6 +6210,95 @@ export default function App() {
             Send
           </button>
         </form>
+      </motion.div>
+    )}
+  </AnimatePresence>
+
+  <AnimatePresence>
+    {showCmtToast && (
+      <motion.div
+        initial={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 100 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+        style={{
+          position: 'fixed',
+          bottom: '95px',
+          right: '20px',
+          width: '320px',
+          background: '#58111A',
+          borderBottom: '4px solid #d4af37',
+          borderRadius: '12px',
+          padding: '1.25rem',
+          boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3)',
+          zIndex: 9998,
+          display: 'flex',
+          gap: '1rem',
+          alignItems: 'start'
+        }}
+      >
+        <div style={{
+          width: '40px',
+          height: '40px',
+          borderRadius: '10px',
+          background: '#d4af37',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+          boxShadow: '0 2px 8px rgba(212, 175, 55, 0.3)'
+        }}>
+          <FileText size={20} style={{ color: '#58111A' }} />
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', textAlign: 'left', flexGrow: 1, paddingRight: '0.75rem' }}>
+          <span style={{ color: '#f59e0b', fontSize: '0.78rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            CMT PORTAL LIVE
+          </span>
+          <p style={{ color: '#f8fafc', fontSize: '0.8rem', margin: 0, lineHeight: 1.4 }}>
+            Submissions are now open. Upload your manuscript for peer review.
+          </p>
+          <div style={{ marginTop: '0.5rem' }}>
+            <a
+              href={info.cmt_link || 'https://cmt3.research.microsoft.com/aectsd2025'}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: '#ffffff',
+                color: '#58111A',
+                padding: '0.4rem 0.85rem',
+                borderRadius: '20px',
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.25rem',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}
+            >
+              SUBMIT PAPER &rarr;
+            </a>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setShowCmtToast(false)}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'rgba(255, 255, 255, 0.6)',
+            cursor: 'pointer',
+            padding: 0,
+            position: 'absolute',
+            top: '10px',
+            right: '10px'
+          }}
+          title="Close"
+        >
+          <X size={16} />
+        </button>
       </motion.div>
     )}
   </AnimatePresence></>
