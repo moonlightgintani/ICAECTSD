@@ -166,16 +166,16 @@ export default function PaymentPage({
             Back to Home
           </button>
           <span style={{ color: 'var(--text-muted)' }}>/</span>
-          <span style={{ color: 'var(--text-secondary)' }}>Registration & Payment</span>
+          <span style={{ color: 'var(--text-secondary)' }}>Registration</span>
         </div>
 
         {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>
-            {info.reg_badge || 'REGISTRATION FEES'}
+            {info.reg_badge || 'REGISTRATION'}
           </span>
           <h2 style={{ fontSize: '2.5rem', color: 'var(--text-primary)', marginTop: '0.5rem', fontWeight: 800 }}>
-            {info.reg_title || 'Payment & Registration'}
+            {info.reg_title || 'Registration'}
           </h2>
           <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
         </div>
