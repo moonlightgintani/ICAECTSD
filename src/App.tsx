@@ -394,7 +394,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<'main' | 'explore' | 'admin' | 'committee' | 'guidelines' | 'payment'>('main');
   const [initialRegTab, setInitialRegTab] = useState<'submission' | 'fees' | 'form'>('submission');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isSeparatePage = (id: string) => ['committee', 'guidelines', 'call-for-papers-main', 'registration', 'explore'].includes(id);
+  const isSeparatePage = (id: string) => ['committee', 'guidelines', 'call-for-papers-main', 'registration', 'explore', 'admin'].includes(id);
 
   // Database content states
   const [departments, setDepartments] = useState<Department[]>([]);
