@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  ArrowLeft,
   BookOpen,
   Award,
   MapPin,
@@ -42,7 +43,7 @@ export interface HotelToStay {
   sort_order?: number;
 }
 
-export default function ExplorePage({ adminUser }: { adminUser: string | null }) {
+export default function ExplorePage({ adminUser, onBackToHome }: { adminUser: string | null; onBackToHome?: () => void }) {
   const [touristPlaces, setTouristPlaces] = useState<TouristPlace[]>([]);
   const [weekendStays, setWeekendStays] = useState<WeekendStay[]>([]);
   const [hotels, setHotels] = useState<HotelToStay[]>([]);
@@ -693,6 +694,37 @@ export default function ExplorePage({ adminUser }: { adminUser: string | null })
           }
         }
       `}} />
+
+      {/* Breadcrumb Navigation */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '0.9rem', width: '100%', justifyContent: 'flex-start' }}>
+        <button 
+          onClick={() => {
+            if (onBackToHome) {
+              onBackToHome();
+            } else if (window.opener || window.history.length > 1) {
+              window.close();
+            } else {
+              window.location.href = '/';
+            }
+          }} 
+          style={{ 
+            background: 'none', 
+            border: 'none', 
+            color: '#3b82f6', 
+            cursor: 'pointer', 
+            fontWeight: 600, 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '0.35rem',
+            padding: 0
+          }}
+        >
+          <ArrowLeft size={16} />
+          Back to Home
+        </button>
+        <span style={{ color: 'var(--text-muted)' }}>/</span>
+        <span style={{ color: 'var(--text-secondary)' }}>Explore Coimbatore</span>
+      </div>
       {/* Admin Tab Switching Toolbar */}
       {adminUser && (
         <div style={{

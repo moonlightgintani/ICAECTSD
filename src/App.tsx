@@ -59,7 +59,6 @@ import { supabase, isSupabaseConfigured } from './supabaseClient';
 import ExplorePage from './ExplorePage'
 import AdminPage from './AdminPage';
 import CommitteePage from './components/CommitteePage';
-import GuidelinesPage from './components/GuidelinesPage';
 import PaymentPage from './components/PaymentPage';
 
 // Navigation Items
@@ -71,8 +70,8 @@ const NAV_ITEMS = [
   { id: 'important-dates', label: 'Schedule' },
   { id: 'registration', label: 'Registration' },
   { id: 'call-for-papers-main', label: 'Call For Papers' },
-  { id: 'guidelines', label: 'Guidelines & Policies' },
   { id: 'committee', label: 'Committee' },
+  { id: 'explore', label: 'Explore' },
   { id: 'location', label: 'Venue' }
 ];
 
@@ -392,9 +391,10 @@ function CounterUp({ target, duration = 1.2 }: { target: string; duration?: numb
 export default function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [currentPage, setCurrentPage] = useState<'main' | 'explore' | 'admin' | 'committee' | 'guidelines' | 'payment'>('main');
+  const [initialRegTab, setInitialRegTab] = useState<'submission' | 'fees' | 'form'>('submission');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showCmtToast, setShowCmtToast] = useState(true);
-  const isSeparatePage = (id: string) => ['committee', 'guidelines', 'registration'].includes(id);
+  const isSeparatePage = (id: string) => ['committee', 'guidelines', 'call-for-papers-main', 'registration', 'explore'].includes(id);
 
   // Database content states
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -508,10 +508,15 @@ export default function App() {
       setActiveSection('committee');
     } else if (pageParam === 'guidelines') {
       setCurrentPage('guidelines');
+      setInitialRegTab('submission');
       setActiveSection('guidelines');
     } else if (pageParam === 'registration') {
       setCurrentPage('payment');
+      setInitialRegTab('fees');
       setActiveSection('registration');
+    } else if (pageParam === 'explore') {
+      setCurrentPage('explore');
+      setActiveSection('explore');
     }
   }, []);
 
@@ -1933,7 +1938,14 @@ export default function App() {
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.35, ease: 'easeInOut' }}
           >
-            <ExplorePage adminUser={adminUser} />
+            <ExplorePage 
+              adminUser={adminUser} 
+              onBackToHome={() => {
+                setCurrentPage('main');
+                setActiveSection('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
           </motion.div>
         ) : currentPage === 'admin' ? (
           <motion.div
@@ -1991,24 +2003,7 @@ export default function App() {
               }}
             />
           </motion.div>
-        ) : currentPage === 'guidelines' ? (
-          <motion.div
-            key="guidelines"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.35, ease: 'easeInOut' }}
-          >
-            <GuidelinesPage
-              info={info}
-              onBackToHome={() => {
-                setCurrentPage('main');
-                setActiveSection('home');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-            />
-          </motion.div>
-        ) : currentPage === 'payment' ? (
+        ) : (currentPage === 'guidelines' || currentPage === 'payment') ? (
           <motion.div
             key="payment"
             initial={{ opacity: 0, y: 15 }}
@@ -2022,6 +2017,7 @@ export default function App() {
               isSupabaseConfigured={isSupabaseConfigured}
               supabase={supabase}
               fetchDbData={fetchDbData}
+              initialTab={currentPage === 'guidelines' ? 'submission' : initialRegTab}
 
               regPaperId={regPaperId}
               setRegPaperId={setRegPaperId}
@@ -2449,8 +2445,12 @@ export default function App() {
                     ].map((card, cidx) => {
                       const CardIcon = card.icon;
                       return (
-                        <div
+                        <motion.div
                           key={cidx}
+                          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ type: "spring", stiffness: 100, damping: 15, delay: cidx * 0.15 }}
                           className="about-grid-card"
                           style={{
                             background: '#ffffff',
@@ -2479,7 +2479,7 @@ export default function App() {
                           </div>
                           <h4 style={{ fontSize: '1.05rem', color: '#091d36', fontWeight: 800, margin: 0 }}>{card.title}</h4>
                           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>{card.desc}</p>
-                        </div>
+                        </motion.div>
                       );
                     })}
                   </motion.div>
@@ -2813,10 +2813,10 @@ export default function App() {
                       return (
                         <motion.div
                           key={idx}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
+                          initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                          whileInView={{ opacity: 1, y: 0, scale: 1 }}
                           viewport={{ once: true }}
-                          transition={{ duration: 0.4, delay: idx * 0.05 }}
+                          transition={{ type: "spring", stiffness: 100, damping: 15, delay: idx * 0.1 }}
                           whileHover={{
                             y: -5,
                             borderColor: palette.borderActive,
