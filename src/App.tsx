@@ -338,7 +338,7 @@ export const renderSpeakerTalkOrButton = (talkStr: string | undefined | null, de
   );
 };
 
-export const ORGANIZING_DEPARTMENTS_INFO: Record<string, { title: string; subtitle?: string; desc: string[]; highlights?: string[] }> = {
+const ORGANIZING_DEPARTMENTS_INFO: Record<string, { title: string; subtitle?: string; desc: string[]; highlights?: string[] }> = {
   'artificial intelligence': {
     title: 'Department of Artificial Intelligence and Data Science',
     subtitle: '(AI & DS)',
@@ -453,7 +453,7 @@ export const ORGANIZING_DEPARTMENTS_INFO: Record<string, { title: string; subtit
   }
 };
 
-export const getDeptInfoFromText = (text: string) => {
+const getDeptInfoFromText = (text: string) => {
   const lower = text.toLowerCase();
   if (lower.includes('m.tech') || lower.includes('5 year')) return ORGANIZING_DEPARTMENTS_INFO['m.tech'];
   if (lower.includes('artificial intelligence') || lower.includes('aids') || lower.includes('data science')) return ORGANIZING_DEPARTMENTS_INFO['artificial intelligence'];
