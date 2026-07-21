@@ -338,7 +338,7 @@ export const renderSpeakerTalkOrButton = (talkStr: string | undefined | null, de
   );
 };
 
-const ORGANIZING_DEPARTMENTS_INFO: Record<string, { title: string; subtitle?: string; desc: string[]; highlights?: string[] }> = {
+const ORGANIZING_DEPARTMENTS_INFO: Record<string, { title: string; subtitle?: string; desc: string[]; highlights?: string[]; hodName?: string; hodTitle?: string; hodMessage?: string }> = {
   'artificial intelligence': {
     title: 'Department of Artificial Intelligence and Data Science',
     subtitle: '(AI & DS)',
@@ -357,15 +357,23 @@ const ORGANIZING_DEPARTMENTS_INFO: Record<string, { title: string; subtitle?: st
     title: 'Department of Biomedical Engineering',
     subtitle: '(BME)',
     desc: [
-      'The Department of Biomedical Engineering bridges engineering innovation with clinical healthcare to develop advanced diagnostic tools, medical imaging software, wearable health sensors, and rehabilitation technologies.',
-      'With dedicated research labs in Bio-Signal Processing, Telemedicine, Micro/Nano Bio-engineering, and Biomechanics, students gain hands-on training to address critical challenges in modern healthcare.',
-      'The department works closely with leading hospitals, medical research institutes, and healthcare organizations for clinical trials and medical device development.'
+      'Biomedical Engineering is a unique and exciting field where engineering meets medicine, creating solutions that improve and save lives. At our department, we provide a dynamic learning environment that integrates engineering principles, life sciences, biotechnology, and medical technology. Through a carefully designed curriculum, state-of-the-art laboratories, experiential learning, and interdisciplinary collaboration, students develop the knowledge, technical expertise, and problem-solving abilities required to excel in this rapidly evolving profession.',
+      'The department takes immense pride in its excellent record of placements, higher studies, and entrepreneurial achievements. Our graduates have secured rewarding careers in healthcare technology companies, research institutions, hospitals, and multinational organizations across the globe. We also provide dedicated guidance for competitive examinations such as GATE, GRE, TOEFL, IELTS, UPSC, and other career-oriented pathways.'
     ],
     highlights: [
-      'Clinical Training & Multi-Specialty Hospital Partnerships',
-      'Advanced Bio-Signal & Medical Imaging Systems',
-      'Research in Wearable Health Sensors & Point-of-Care Diagnostics'
-    ]
+      'Dedicated guidance for competitive examinations (GATE, GRE, TOEFL, IELTS, UPSC)',
+      'Interdisciplinary curriculum integrating engineering principles, life sciences, biotechnology & medical technology',
+      'High-impact placements & higher studies track record in global healthcare & research institutions'
+    ],
+    vision: 'To emerge as a center of excellence in biomedical domains, fostering quality education through holistic and interdisciplinary approaches for sustainable healthcare innovations.',
+    mission: [
+      'To impart knowledge and skills to address challenges in healthcare sectors.',
+      'To nurture innovative scientific research and translate technologies into sustainable medical solutions.',
+      'To empower graduates with professional attributes and a deep commitment to ethical principles.'
+    ],
+    hodName: 'Dr. N. Sathish Kumar',
+    hodTitle: 'B.E., M.E., Ph.D | Head of the Department',
+    hodMessage: 'Welcome to the Department of Biomedical Engineering. It gives me immense pleasure to welcome you to a discipline that stands at the forefront of transforming healthcare through innovation, technology, and human compassion. As the Head of the Department, I am proud to lead a vibrant academic community committed to nurturing the next generation of biomedical engineers who will shape the future of healthcare worldwide.'
   },
   'computer science engineering': {
     title: 'Department of Computer Science Engineering',
@@ -385,15 +393,19 @@ const ORGANIZING_DEPARTMENTS_INFO: Record<string, { title: string; subtitle?: st
     title: 'Department of Electrical and Electronics Engineering',
     subtitle: '(EEE)',
     desc: [
-      'The Department of Electrical and Electronics Engineering is dedicated to shaping future leaders in power systems, smart grids, renewable energy, electric vehicle technologies, and industrial automation.',
-      'Equipped with modern laboratories for Power Electronics, Drives & Control, High Voltage Engineering, Electric Vehicles, and Smart Sensors, the department combines rigorous theory with practical engineering.',
-      'Faculty and students collaborate on industrial consultancy projects, renewable energy integration, and smart grid automation for leading energy enterprises.'
+      'Established in 1994, the Department of Electrical and Electronics Engineering offers a comprehensive four-year B.E. programme in Electrical and Electronics Engineering, along with a Ph.D. programme to promote advanced research in core and emerging areas of electrical engineering. The department is backed by a distinguished team of faculty, comprising 13 Doctorates and 8 faculty members pursuing Ph.D. in various specializations, with rich experience in industry, research, and teaching.',
+      'The department has a proven track record of academic excellence and quality assurance, with its B.E. programme accredited by the National Board of Accreditation (NBA), New Delhi in 2003 and reaccredited in 2007, 2012, 2016, 2019, 2022, and 2025. It is equipped with state-of-the-art, industry-collaborated laboratories that provide learners with hands-on exposure to world-class technologies and a 360-degree view of industrial processes.',
+      'The department takes pride in housing a Centre of Excellence in e-Mobility, fostering innovation and research in electric vehicle technologies. It also engages in energy auditing and consultancy services, supported by energy auditors among the faculty. Strong industry linkages through active MoUs with Salzer Electronics, Mahindra and Mahindra, Divise Electronics, and Cares Renewables facilitate collaborative research, internships, and technical training. With a consistently strong placement record, the department ensures that its graduates are well-equipped to meet the demands of the industry and contribute to sustainable and smart energy solutions.'
     ],
     highlights: [
-      'Electric Vehicle & Smart Grid Research Facilities',
-      'Power Electronics, Automation & Renewable Energy Labs',
-      'Industry-Sponsored Consultancy & Energy Audits'
-    ]
+      'Centre of Excellence in e-Mobility (Electric Vehicle Technologies R&D)',
+      'Continuous NBA Accreditation (2003, 2007, 2012, 2016, 2019, 2022, 2025)',
+      'Active MoUs with Salzer Electronics, Mahindra & Mahindra, Divise Electronics, and Cares Renewables',
+      'In-house Energy Auditing & Industrial Consultancy Services'
+    ],
+    hodName: 'Dr. S. Allirani',
+    hodTitle: 'B.E., M.E., Ph.D. | Professor & Head of the Department',
+    hodMessage: 'Dr. S. Allirani is currently working as Professor & Head in the Department of Electrical and Electronics Engineering at Sri Ramakrishna Engineering College. She received her B.E. in Electrical & Electronics Engineering from Coimbatore Institute of Technology (CIT), Coimbatore, in 1994, M.E. in Electrical Machines from PSG College of Technology, Coimbatore, in 2004, and Ph.D. in the domain of Electrical Engineering from Anna University, Chennai, in 2014. She is a recognized supervisor under Anna University, Chennai.'
   },
   'electronics and communication': {
     title: 'Department of Electronics and Communication Engineering',
@@ -664,7 +676,7 @@ export default function App() {
   const [pricing, setPricing] = useState<Record<string, number>>({});
   const [selectedDept, setSelectedDept] = useState<Department | null>(null);
   const [showCalcModal, setShowCalcModal] = useState<boolean>(false);
-  const [activeDeptModal, setActiveDeptModal] = useState<{ title: string; subtitle?: string; desc: string[]; highlights?: string[] } | null>(null);
+  const [activeDeptModal, setActiveDeptModal] = useState<{ title: string; subtitle?: string; desc: string[]; highlights?: string[]; vision?: string; mission?: string[]; hodName?: string; hodTitle?: string; hodMessage?: string } | null>(null);
 
   // Admin Portal states
   const [adminUser, setAdminUser] = useState<string | null>(() => localStorage.getItem('srec_logged_in_admin'));
@@ -1659,6 +1671,21 @@ export default function App() {
         });
         setInfo(prev => ({ ...prev, ...infoMap }));
         localStorage.setItem('srec_offline_info', JSON.stringify(infoMap));
+      }
+
+      // Fetch organizing_departments table if present
+      const { data: orgDeptRows, error: errOrgDept } = await supabase.from('organizing_departments').select('*').order('sort_order');
+      if (!errOrgDept && orgDeptRows && orgDeptRows.length > 0) {
+        const orgDeptMap: Record<string, any> = {};
+        orgDeptRows.forEach((row: any) => {
+          orgDeptMap[row.dept_key] = {
+            title: row.title,
+            subtitle: row.subtitle,
+            desc: Array.isArray(row.description) ? row.description : [row.description],
+            highlights: Array.isArray(row.highlights) ? row.highlights : []
+          };
+        });
+        setInfo(prev => ({ ...prev, organizing_departments_info: JSON.stringify(orgDeptMap) }));
       }
 
       // Fetch registrations log
@@ -3736,6 +3763,51 @@ export default function App() {
                         </li>
                       ))}
                     </ul>
+                  </div>
+                )}
+
+                {activeDeptModal.vision && (
+                  <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '0.75rem', padding: '1.25rem', marginTop: '0.5rem' }}>
+                    <h5 style={{ fontSize: '0.95rem', color: '#1d4ed8', fontWeight: 800, margin: '0 0 0.4rem 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      Vision
+                    </h5>
+                    <p style={{ margin: 0, color: '#1e3a8a', lineHeight: 1.6, fontWeight: 500 }}>
+                      {activeDeptModal.vision}
+                    </p>
+                  </div>
+                )}
+
+                {activeDeptModal.mission && activeDeptModal.mission.length > 0 && (
+                  <div style={{ background: '#fefce8', border: '1px solid #fef08a', borderRadius: '0.75rem', padding: '1.25rem', marginTop: '0.5rem' }}>
+                    <h5 style={{ fontSize: '0.95rem', color: '#854d0e', fontWeight: 800, margin: '0 0 0.4rem 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      Mission
+                    </h5>
+                    <ul style={{ paddingLeft: '1.25rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.4rem', color: '#713f12' }}>
+                      {activeDeptModal.mission.map((mItem, mIdx) => (
+                        <li key={mIdx}>{mItem}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {activeDeptModal.hodMessage && (
+                  <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '0.75rem', padding: '1.25rem', marginTop: '0.5rem' }}>
+                    <h5 style={{ fontSize: '0.95rem', color: '#166534', fontWeight: 800, margin: '0 0 0.4rem 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      Head of the Department
+                    </h5>
+                    <p style={{ margin: '0 0 0.75rem 0', color: '#14532d', fontStyle: 'italic', lineHeight: 1.65 }}>
+                      "{activeDeptModal.hodMessage}"
+                    </p>
+                    {activeDeptModal.hodName && (
+                      <div style={{ fontWeight: 800, color: '#091d36', fontSize: '0.95rem' }}>
+                        {activeDeptModal.hodName}
+                        {activeDeptModal.hodTitle && (
+                          <span style={{ fontWeight: 600, color: '#475569', fontSize: '0.85rem', display: 'block', marginTop: '0.15rem' }}>
+                            {activeDeptModal.hodTitle}
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
