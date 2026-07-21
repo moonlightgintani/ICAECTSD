@@ -1821,7 +1821,7 @@ export default function App() {
               <div className="header-right-container">
                 {/* IEEE SREC SB Portal Link */}
                 <a
-                  href={info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/"}
+                  href={info.ieee_sb_url || "https://www.ieeesrec.in/"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="ieee-sb-btn-nav desktop-btn"
@@ -1927,8 +1927,8 @@ export default function App() {
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.35, ease: 'easeInOut' }}
           >
-            <ExplorePage 
-              adminUser={adminUser} 
+            <ExplorePage
+              adminUser={adminUser}
               onBackToHome={() => {
                 setCurrentPage('main');
                 setActiveSection('home');
@@ -1982,16 +1982,16 @@ export default function App() {
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.35, ease: 'easeInOut' }}
           >
-             <CommitteePage
-               committeeMembers={committeeMembers}
-               info={info}
-               getMemberImage={getMemberImage}
-               onBackToHome={() => {
-                 setCurrentPage('main');
-                 setActiveSection('home');
-                 window.scrollTo({ top: 0, behavior: 'smooth' });
-               }}
-             />
+            <CommitteePage
+              committeeMembers={committeeMembers}
+              info={info}
+              getMemberImage={getMemberImage}
+              onBackToHome={() => {
+                setCurrentPage('main');
+                setActiveSection('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
           </motion.div>
         ) : (currentPage === 'guidelines' || currentPage === 'payment') ? (
           <motion.div
@@ -2606,7 +2606,7 @@ export default function App() {
                 </motion.div>
 
                 {/* Departments grid */}
-                <motion.div 
+                <motion.div
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
@@ -2637,9 +2637,9 @@ export default function App() {
                         key={index}
                         variants={{
                           hidden: { opacity: 0, y: 30, scale: 0.96 },
-                          visible: { 
-                            opacity: 1, 
-                            y: 0, 
+                          visible: {
+                            opacity: 1,
+                            y: 0,
                             scale: 1,
                             transition: { type: 'spring', stiffness: 90, damping: 14 }
                           }
