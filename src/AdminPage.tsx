@@ -768,7 +768,7 @@ export default function AdminPage({
         role: editingCommittee.role || '',
         desc: editingCommittee.desc || '',
         category: editingCommittee.category,
-        sort_order: Number(editingCommittee.sort_order || 1)
+        image_url: editingCommittee.image_url || null
       };
 
       if (isSupabaseConfigured && supabase) {
