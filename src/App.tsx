@@ -15,7 +15,6 @@ import {
   Mail,
   Phone,
   User,
-  BookOpen,
   Award,
   Terminal,
   ChevronRight,
