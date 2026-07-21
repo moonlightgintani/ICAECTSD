@@ -251,12 +251,96 @@ export const renderFormattedDesc = (descText: string | undefined | null) => {
   );
 };
 
+const LinkedinIcon = ({ size = 16, style }: { size?: number; style?: React.CSSProperties }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={style}>
+    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+  </svg>
+);
 
+export const renderSpeakerTalkOrButton = (talkStr: string | undefined | null, defaultLabel?: string) => {
+  if (!talkStr) return null;
 
+  // Clean outer quotes, single quotes, escaped quotes, and whitespace
+  const cleaned = talkStr
+    .replace(/^\\"/g, '')
+    .replace(/\\"/g, '"')
+    .replace(/^["'\s]+|["'\s]+$/g, '')
+    .trim();
 
+  if (!cleaned) return null;
 
+  // Check if string contains or is a URL
+  const urlPattern = /(https?:\/\/[^\s"]+|www\.[^\s"]+|[a-zA-Z0-9-]+\.com\/[^\s"]*|[a-zA-Z0-9-]+\.in\/[^\s"]*)/i;
+  const match = cleaned.match(urlPattern);
+
+  if (match || /^https?:\/\//i.test(cleaned) || /^www\./i.test(cleaned) || cleaned.includes('linkedin.com')) {
+    let rawUrl = match ? match[0] : cleaned;
+    let url = rawUrl.replace(/^["'\s]+|["'\s]+$/g, '').trim();
+    if (!/^https?:\/\//i.test(url)) {
+      url = `https://${url}`;
+    }
+    const isLinkedIn = url.toLowerCase().includes('linkedin.com');
+
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.5rem',
+          width: '100%',
+          padding: '0.65rem 1rem',
+          borderRadius: '0.5rem',
+          fontWeight: 700,
+          fontSize: '0.85rem',
+          textDecoration: 'none',
+          color: '#ffffff',
+          backgroundColor: isLinkedIn ? '#0a66c2' : '#2563eb',
+          boxShadow: isLinkedIn ? '0 4px 12px rgba(10, 102, 194, 0.35)' : '0 4px 12px rgba(37, 99, 235, 0.35)',
+          transition: 'all 0.2s ease-in-out',
+          cursor: 'pointer',
+          marginTop: 'auto'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = isLinkedIn ? '#004182' : '#1d4ed8';
+          e.currentTarget.style.transform = 'translateY(-2px)';
+          e.currentTarget.style.boxShadow = isLinkedIn ? '0 6px 16px rgba(10, 102, 194, 0.45)' : '0 6px 16px rgba(37, 99, 235, 0.45)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = isLinkedIn ? '#0a66c2' : '#2563eb';
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.boxShadow = isLinkedIn ? '0 4px 12px rgba(10, 102, 194, 0.35)' : '0 4px 12px rgba(37, 99, 235, 0.35)';
+        }}
+      >
+        {isLinkedIn ? <LinkedinIcon size={16} /> : <ExternalLink size={16} />}
+        <span>{isLinkedIn ? 'View LinkedIn Profile' : 'View Profile'}</span>
+      </a>
+    );
+  }
+
+  // Otherwise render as Talk Title / Keynote Topic box
+  return (
+    <div style={{
+      background: 'rgba(0, 0, 0, 0.02)',
+      border: '1px solid rgba(0, 0, 0, 0.06)',
+      padding: '1rem',
+      borderRadius: '0.5rem',
+      width: '100%',
+      marginTop: 'auto'
+    }}>
+      <span style={{ display: 'block', fontSize: '0.75rem', color: '#d97706', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+        {defaultLabel || 'KEYNOTE TALK'}
+      </span>
+      <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 600 }}>"{cleaned}"</span>
+    </div>
+  );
+};
 
 const ADMIN_MASTER_KEY = "MRBB2026";
+
 
 async function sha256(message: string): Promise<string> {
   // Check if Web Crypto API is available (only available in Secure Contexts, i.e., HTTPS or localhost)
@@ -2568,17 +2652,7 @@ export default function App() {
                       <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '0.25rem' }}>{speaker.name}</h3>
                       <span style={{ fontSize: '0.85rem', color: speaker.color, fontWeight: 700, textTransform: 'uppercase' }}>{speaker.title}</span>
                       <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '0.5rem 0 1.25rem' }}>{speaker.role}</p>
-                      <div style={{
-                        background: 'rgba(0, 0, 0, 0.02)',
-                        border: '1px solid rgba(0, 0, 0, 0.06)',
-                        padding: '1rem',
-                        borderRadius: '0.5rem',
-                        width: '100%',
-                        marginTop: 'auto'
-                      }}>
-                        <span style={{ display: 'block', fontSize: '0.75rem', color: '#d97706', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>{info.speakers_keynote_label}</span>
-                        <span style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 600 }}>"{speaker.talk}"</span>
-                      </div>
+                      {renderSpeakerTalkOrButton(speaker.talk, info.speakers_keynote_label)}
                     </motion.div>
                   ))}
                 </div>
@@ -5138,8 +5212,8 @@ export default function App() {
                               <h5 style={{ fontSize: '1.15rem', color: '#091d36', margin: '0 0 0.25rem', fontWeight: 800 }}>{sp.name}</h5>
                               <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#f58220', textTransform: 'uppercase' }}>{sp.role}</span>
                               <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.5rem 0' }}>{sp.title}</p>
-                              <div style={{ fontSize: '0.8rem', background: '#ffffff', padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid #e2e8f0', marginTop: '0.5rem' }}>
-                                <strong>Talk:</strong> "{sp.talk}"
+                              <div style={{ marginTop: '0.5rem' }}>
+                                {renderSpeakerTalkOrButton(sp.talk, 'Talk Topic')}
                               </div>
 
                               <div className="admin-action-row">

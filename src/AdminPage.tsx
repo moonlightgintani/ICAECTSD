@@ -21,7 +21,8 @@ import {
   Eye,
   X,
   Menu,
-  MapPin
+  MapPin,
+  ExternalLink
 } from 'lucide-react';
 
 const ADMIN_MASTER_KEY = "MRBB2026";
@@ -3389,7 +3390,15 @@ export default function AdminPage({
                                </div>
                              </div>
                            </td>
-                           <td style={{ padding: '1rem', fontWeight: 600, color: '#0f52ba', maxWidth: '280px' }}>{item.talk || 'N/A'}</td>
+                           <td style={{ padding: '1rem', fontWeight: 600, color: '#0f52ba', maxWidth: '280px' }}>
+                             {item.talk && (item.talk.includes('http') || item.talk.includes('www.') || item.talk.includes('linkedin.com')) ? (
+                               <a href={item.talk.replace(/^["'\s]+|["'\s]+$/g, '').trim()} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', color: '#0a66c2', fontWeight: 600, textDecoration: 'underline' }}>
+                                 Profile Link <ExternalLink size={12} />
+                               </a>
+                             ) : (
+                               item.talk || 'N/A'
+                             )}
+                           </td>
                            <td style={{ padding: '1rem', color: '#475569' }}>{item.role}</td>
                            <td style={{ padding: '1rem', textAlign: 'center' }}>
                              <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
