@@ -209,7 +209,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <h3 style={{ fontSize: '1.45rem', color: '#0b4f30', fontWeight: 800, margin: 0 }}>
             {committeeTab === 'organizing' 
-              ? `The ${SUBCOMMITTEES.find(s => s.id === activeSubcommittee)?.label} Committee`
+              ? 'Organizing Committee'
               : committeeTab === 'steering'
               ? 'The Core Steering & Advisory Committees'
               : 'Distinguished Advisory Members'}
@@ -286,144 +286,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
             {committeeTab === 'organizing' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%' }}>
-                  {/* Subcommittee Buttons: Desktop Layout */}
-                  <div className="desktop-subcommittee-nav" style={{ flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem', width: '100%', alignItems: 'center' }}>
-                    {/* Row 1 */}
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', width: '100%' }}>
-                      {SUBCOMMITTEES.slice(0, 7).map((group) => (
-                        <button
-                          key={group.id}
-                          type="button"
-                          onClick={() => {
-                            setActiveSubcommittee(group.id);
-                            document.getElementById(`sub-${group.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                          }}
-                          className="subcommittee-btn"
-                          style={{
-                            background: activeSubcommittee === group.id ? '#0b4f30' : '#ffffff',
-                            color: activeSubcommittee === group.id ? '#ffffff' : '#64748b',
-                            border: '1px solid #e2e8f0',
-                            borderRadius: '20px',
-                            fontSize: '0.8rem',
-                            fontWeight: 700,
-                            padding: '0.45rem 1rem',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease',
-                            minWidth: '120px'
-                          }}
-                        >
-                          {group.label}
-                        </button>
-                      ))}
-                    </div>
-                    
-                    {/* Row 2 */}
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', width: '100%' }}>
-                      {SUBCOMMITTEES.slice(7).map((group) => (
-                        <button
-                          key={group.id}
-                          type="button"
-                          onClick={() => {
-                            setActiveSubcommittee(group.id);
-                            document.getElementById(`sub-${group.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                          }}
-                          className="subcommittee-btn"
-                          style={{
-                            background: activeSubcommittee === group.id ? '#0b4f30' : '#ffffff',
-                            color: activeSubcommittee === group.id ? '#ffffff' : '#64748b',
-                            border: '1px solid #e2e8f0',
-                            borderRadius: '20px',
-                            fontSize: '0.8rem',
-                            fontWeight: 700,
-                            padding: '0.45rem 1rem',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease',
-                            minWidth: '120px'
-                          }}
-                        >
-                          {group.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Subcommittee Dropdown: Mobile Layout */}
-                  <div className="mobile-subcommittee-nav" style={{ width: '100%', maxWidth: '320px', margin: '0 auto 2rem', position: 'relative' }}>
-                    <button
-                      type="button"
-                      onClick={() => setSubcommitteeDropdownOpen(!subcommitteeDropdownOpen)}
-                      style={{
-                        width: '100%',
-                        padding: '0.75rem 1.25rem',
-                        background: '#ffffff',
-                        border: '1px solid #cbd5e1',
-                        borderRadius: '0.5rem',
-                        color: '#0b4f30',
-                        fontWeight: 700,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer',
-                        textAlign: 'left'
-                      }}
-                    >
-                      <span>
-                        {SUBCOMMITTEES.find(g => g.id === activeSubcommittee)?.label || 'Patrons'}
-                      </span>
-                      <ChevronDown size={18} style={{ marginLeft: 'auto' }} />
-                    </button>
-
-                    <AnimatePresence>
-                      {subcommitteeDropdownOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2 }}
-                          style={{
-                            position: 'absolute',
-                            top: '105%',
-                            left: 0,
-                            right: 0,
-                            background: '#ffffff',
-                            border: '1px solid #cbd5e1',
-                            borderRadius: '0.5rem',
-                            zIndex: 10,
-                            maxHeight: '300px',
-                            overflowY: 'auto',
-                            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)'
-                          }}
-                        >
-                          {SUBCOMMITTEES.map((group) => (
-                            <button
-                              key={group.id}
-                              type="button"
-                              onClick={() => {
-                                setActiveSubcommittee(group.id);
-                                setSubcommitteeDropdownOpen(false);
-                                document.getElementById(`sub-${group.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                              }}
-                              style={{
-                                width: '100%',
-                                padding: '0.75rem 1.25rem',
-                                background: activeSubcommittee === group.id ? 'rgba(11, 79, 48, 0.08)' : 'transparent',
-                                border: 'none',
-                                color: '#0b4f30',
-                                textAlign: 'left',
-                                fontSize: '0.9rem',
-                                fontWeight: activeSubcommittee === group.id ? 700 : 500,
-                                cursor: 'pointer',
-                                display: 'block',
-                                borderBottom: '1px solid #cbd5e1'
-                              }}
-                            >
-                              {group.label}
-                            </button>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                  {/* All Subcommittees Rendered Vertically Stacked */}
 
                   {/* All Subcommittees Rendered Vertically Stacked (Scrollable) */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem', width: '100%' }}>
