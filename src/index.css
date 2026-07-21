@@ -2898,6 +2898,28 @@ td {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
+/* Track Card Special Golden Hover Effects */
+.track-card-item:hover {
+  border-color: #f58220 !important;
+  box-shadow: 0 20px 40px -8px rgba(245, 130, 32, 0.22), 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  background: #ffffff !important;
+}
+
+.track-card-item:hover .track-title-text {
+  color: #d97706 !important;
+}
+
+.track-card-item:hover .track-icon-badge {
+  background: #fffbe6 !important;
+  border-color: #fde047 !important;
+  transform: scale(1.1) rotate(4deg);
+}
+
+.track-card-item:hover .track-card-divider {
+  width: 55px !important;
+  background: #f58220 !important;
+}
+
 .indicon-countdown-title {
   display: flex;
   align-items: center;
@@ -3133,9 +3155,90 @@ td {
   }
 }
 
+/* Mobile View Comprehensive Responsive Overrides & Complete Mobile UI Polish */
+@media (max-width: 850px) {
+  .nav-capsule-container {
+    padding: 0.5rem 0.85rem !important;
+    background: transparent !important;
+  }
+
+  .nav-capsule {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    height: auto !important;
+    padding: 0 !important;
+    justify-content: space-between !important;
+  }
+
+  .mobile-toggle-left {
+    background: rgba(9, 29, 54, 0.92) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .mobile-nav-drawer {
+    position: fixed !important;
+    top: calc(4.5rem + var(--banner-height, 0px)) !important;
+    left: 0.75rem !important;
+    right: 0.75rem !important;
+    background: rgba(9, 29, 54, 0.98) !important;
+    backdrop-filter: blur(28px) !important;
+    -webkit-backdrop-filter: blur(28px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 24px !important;
+    padding: 1.25rem 1.25rem !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.6rem !important;
+    max-height: calc(85vh - var(--banner-height, 0px)) !important;
+    overflow-y: auto !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65) !important;
+    pointer-events: auto !important;
+  }
+
+  .mobile-nav-drawer .mobile-link-item {
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    padding: 0.85rem 1.1rem !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .mobile-nav-drawer .mobile-link-item:active,
+  .mobile-nav-drawer .mobile-link-item.active {
+    background: #f58220 !important;
+    color: #ffffff !important;
+  }
+}
+
 @media (max-width: 768px) {
-  body {
+  html, body {
     overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+  .section {
+    padding: 3.5rem 0 !important;
+  }
+
+  .container, .section-container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    width: 100% !important;
   }
 
   .grid-4-col,
@@ -3148,40 +3251,52 @@ td {
   .committee-profile-card,
   .speaker-profile-card {
     width: 100% !important;
-    max-width: 340px !important;
+    max-width: 100% !important;
     margin: 0 auto !important;
   }
 
-  .section-container {
-    padding: 3rem 1rem !important;
+  /* Table responsive wrappers on mobile */
+  .table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-radius: 0.75rem !important;
+  }
+
+  /* Popups and Modals touch mobile support */
+  div[style*="position: fixed"][style*="zIndex: 99999"],
+  div[style*="position: fixed"][style*="z-index: 99999"],
+  div[style*="position: fixed"][style*="zIndex: 9999"] {
+    padding: 1rem 0.75rem !important;
+  }
+
+  div[style*="position: fixed"] > div[style*="max-width: 720px"],
+  div[style*="position: fixed"] > div[style*="maxWidth: 720px"],
+  div[style*="position: fixed"] > div[style*="maxWidth: 600px"] {
+    max-width: 94vw !important;
+    width: 94vw !important;
+    padding: 1.5rem 1.25rem !important;
+    border-radius: 1.25rem !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 }
 
 @media (max-width: 640px) {
   .indicon-logo-banner {
-    padding: 0.5rem 0.85rem !important;
+    padding: 0.45rem 0.85rem !important;
     gap: 0.6rem !important;
     border-radius: 9999px !important;
     width: fit-content !important;
-    max-width: 95% !important;
+    max-width: 96% !important;
     background: #ffffff !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
-    box-sizing: border-box !important;
     margin: 0 auto 0.75rem !important;
   }
 
   .indicon-banner-logo {
-    height: 38px !important;
-    max-height: 38px !important;
-    width: auto !important;
-    object-fit: contain !important;
-  }
-
-  .indicon-logo-divider {
-    height: 26px !important;
-    width: 1px !important;
-    background: #cbd5e1 !important;
-    flex-shrink: 0 !important;
+    height: 34px !important;
+    max-height: 34px !important;
   }
 
   .indicon-hero-title {
@@ -3192,28 +3307,25 @@ td {
 
   .indicon-hero-subtitle {
     font-size: 0.75rem !important;
-    letter-spacing: 0.02em !important;
-    padding: 0 0.5rem;
-    line-height: 1.4 !important;
+    line-height: 1.45 !important;
+    padding: 0 0.5rem !important;
   }
 
   .indicon-date-pill {
     font-size: 0.72rem !important;
-    padding: 0.45rem 0.75rem !important;
+    padding: 0.45rem 0.85rem !important;
     border-radius: 20px !important;
-    gap: 0.3rem !important;
-    text-align: center;
-    line-height: 1.35;
-    max-width: 95% !important;
+    text-align: center !important;
+    max-width: 96% !important;
   }
 
   .indicon-countdown-bar {
     flex-direction: column !important;
-    gap: 0.4rem !important;
-    padding: 0.6rem 0.85rem !important;
-    border-radius: 16px !important;
+    gap: 0.5rem !important;
+    padding: 0.75rem 0.85rem !important;
+    border-radius: 18px !important;
     width: 100% !important;
-    max-width: 340px !important;
+    max-width: 100% !important;
   }
 
   .indicon-countdown-units {
@@ -3223,35 +3335,35 @@ td {
   }
 
   .indicon-countdown-val {
-    font-size: 1.15rem !important;
+    font-size: 1.2rem !important;
   }
 
   .indicon-countdown-lbl {
-    font-size: 0.6rem !important;
+    font-size: 0.62rem !important;
   }
 
   .indicon-action-row {
     flex-direction: column !important;
     width: 100% !important;
-    max-width: 340px !important;
+    max-width: 100% !important;
     gap: 0.65rem !important;
   }
 
   .indicon-btn-yellow,
   .indicon-btn-outline {
     width: 100% !important;
-    padding: 0.75rem 1.25rem !important;
+    padding: 0.85rem 1.25rem !important;
     font-size: 0.9rem !important;
     border-radius: 14px !important;
   }
 
   .indicon-toast-card {
     position: fixed !important;
-    bottom: 0.85rem !important;
+    bottom: 0.75rem !important;
     left: 0.75rem !important;
     right: 0.75rem !important;
     max-width: calc(100% - 1.5rem) !important;
     padding: 0.85rem 1rem !important;
-    border-radius: 16px !important;
+    border-radius: 18px !important;
   }
 }

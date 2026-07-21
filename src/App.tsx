@@ -16,7 +16,6 @@ import {
   Phone,
   User,
   Award,
-  Terminal,
   ChevronRight,
   CheckCircle,
   Menu,
@@ -32,10 +31,16 @@ import {
   Database,
   Sparkles,
   Globe,
-  Leaf,
   Zap,
-  Cpu,
-  Handshake
+  Leaf,
+  Handshake,
+  Bot,
+  Radio,
+  Building2,
+  Plug,
+  Sliders,
+  Atom,
+  Satellite
 } from 'lucide-react';
 import Footer from './components/Footer';
 import acLogo from './assets/logo.png';
@@ -338,7 +343,7 @@ export const renderSpeakerTalkOrButton = (talkStr: string | undefined | null, de
   );
 };
 
-const ORGANIZING_DEPARTMENTS_INFO: Record<string, { title: string; subtitle?: string; desc: string[]; highlights?: string[]; hodName?: string; hodTitle?: string; hodMessage?: string }> = {
+const ORGANIZING_DEPARTMENTS_INFO: Record<string, { title: string; subtitle?: string; desc: string[]; highlights?: string[]; vision?: string; mission?: string[]; hodName?: string; hodTitle?: string; hodMessage?: string }> = {
   'artificial intelligence': {
     title: 'Department of Artificial Intelligence and Data Science',
     subtitle: '(AI & DS)',
@@ -2917,13 +2922,15 @@ export default function App() {
                 >
                   {departments.map((dept, index) => {
                     const getTrackIcon = (idx: number) => {
-                      switch (idx) {
-                        case 0: return <Cpu size={26} style={{ color: '#0f52ba' }} />;
-                        case 1: return <Terminal size={26} style={{ color: '#0891b2' }} />;
-                        case 2: return <Shield size={26} style={{ color: '#16a34a' }} />;
-                        case 3: return <Zap size={26} style={{ color: '#ca8a04' }} />;
-                        case 4: return <Database size={26} style={{ color: '#9333ea' }} />;
-                        default: return <Leaf size={26} style={{ color: '#059669' }} />;
+                      switch (idx % 8) {
+                        case 0: return <Bot size={32} style={{ color: '#ec4899' }} />; // AI & Machine Learning
+                        case 1: return <Radio size={32} style={{ color: '#3b82f6' }} />; // 6G & Wireless
+                        case 2: return <Building2 size={32} style={{ color: '#06b6d4' }} />; // Cyber-Physical & Digital Twins
+                        case 3: return <Zap size={32} style={{ color: '#f59e0b' }} />; // VLSI & Embedded Systems
+                        case 4: return <Plug size={32} style={{ color: '#8b5cf6' }} />; // Power Electronics & Smart Grids
+                        case 5: return <Sliders size={32} style={{ color: '#64748b' }} />; // Robotics & Automation
+                        case 6: return <Atom size={32} style={{ color: '#6366f1' }} />; // Photonics & Quantum
+                        case 7: default: return <Satellite size={32} style={{ color: '#4f46e5' }} />; // Sensors & Remote Sensing
                       }
                     };
 
@@ -2940,35 +2947,101 @@ export default function App() {
                           }
                         }}
                         whileHover={{ y: -6, scale: 1.015 }}
-                        className="track-redesign-card"
+                        className="track-card-item"
                         onClick={() => setSelectedDept(dept)}
+                        style={{
+                          backgroundColor: '#ffffff',
+                          borderRadius: '1.25rem',
+                          padding: '2.25rem 1.5rem',
+                          position: 'relative',
+                          overflow: 'hidden',
+                          cursor: 'pointer',
+                          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
+                          border: '1.5px solid #f1f5f9',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          textAlign: 'center',
+                          minHeight: '260px',
+                          justifyContent: 'center',
+                          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                        }}
                       >
-                        {/* Background fainted number */}
-                        <span style={{
-                          position: 'absolute',
-                          right: '1.25rem',
-                          bottom: '0.25rem',
-                          fontSize: '4.5rem',
-                          fontWeight: 900,
-                          color: 'rgba(15, 82, 186, 0.03)',
-                          pointerEvents: 'none',
-                          userSelect: 'none',
-                          fontFamily: 'var(--font-heading)'
-                        }}>
+                        {/* Faint Background Watermark Number in Center */}
+                        <span
+                          style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            fontSize: '6.5rem',
+                            fontWeight: 900,
+                            color: 'rgba(15, 23, 42, 0.035)',
+                            pointerEvents: 'none',
+                            userSelect: 'none',
+                            fontFamily: 'var(--font-heading)',
+                            zIndex: 0,
+                            lineHeight: 1
+                          }}
+                        >
                           {(index + 1).toString().padStart(2, '0')}
                         </span>
 
-                        <div className="track-icon-wrapper">
+                        {/* Top Icon Badge */}
+                        <div
+                          className="track-icon-badge"
+                          style={{
+                            position: 'relative',
+                            zIndex: 1,
+                            width: '64px',
+                            height: '64px',
+                            borderRadius: '1rem',
+                            background: '#f8fafc',
+                            border: '1px solid #f1f5f9',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginBottom: '1.25rem',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
+                            transition: 'all 0.3s ease'
+                          }}
+                        >
                           {getTrackIcon(index)}
                         </div>
 
-                        <h3 style={{ fontSize: '1.15rem', color: '#091d36', fontWeight: 800, margin: '0 0 1.25rem 0', lineHeight: 1.45 }}>
+                        {/* Track Title */}
+                        <h3
+                          className="track-title-text"
+                          style={{
+                            position: 'relative',
+                            zIndex: 1,
+                            fontSize: '1.05rem',
+                            color: '#701a2b',
+                            fontWeight: 800,
+                            margin: 0,
+                            lineHeight: 1.45,
+                            transition: 'all 0.3s ease'
+                          }}
+                        >
                           {dept.name}
                         </h3>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: '#0f52ba', fontWeight: 700, marginTop: 'auto' }}>
-                          <span>View Scope Details</span>
-                          <ChevronRight size={16} />
+                        {/* Divider & Action Prompt */}
+                        <div
+                          style={{
+                            position: 'relative',
+                            zIndex: 1,
+                            marginTop: '1.25rem',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '0.4rem'
+                          }}
+                        >
+                          <div className="track-card-divider" style={{ width: '36px', height: '2.5px', background: '#f58220', borderRadius: '2px', transition: 'all 0.3s ease' }} />
+                          <span style={{ fontSize: '0.78rem', color: '#0f52ba', fontWeight: 700, opacity: 0.85, marginTop: '0.2rem' }}>
+                            Click to View Scope Details ↗
+                          </span>
                         </div>
                       </motion.div>
                     );
