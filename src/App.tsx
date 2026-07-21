@@ -453,16 +453,30 @@ const ORGANIZING_DEPARTMENTS_INFO: Record<string, { title: string; subtitle?: st
   }
 };
 
-const getDeptInfoFromText = (text: string) => {
+const getDeptInfoFromText = (text: string, dbInfo?: Record<string, string>) => {
+  let deptMap = ORGANIZING_DEPARTMENTS_INFO;
+  if (dbInfo && dbInfo.organizing_departments_info) {
+    try {
+      const parsed = typeof dbInfo.organizing_departments_info === 'string'
+        ? JSON.parse(dbInfo.organizing_departments_info)
+        : dbInfo.organizing_departments_info;
+      if (parsed && typeof parsed === 'object') {
+        deptMap = { ...ORGANIZING_DEPARTMENTS_INFO, ...parsed };
+      }
+    } catch (e) {
+      console.error('Failed to parse organizing_departments_info from DB:', e);
+    }
+  }
+
   const lower = text.toLowerCase();
-  if (lower.includes('m.tech') || lower.includes('5 year')) return ORGANIZING_DEPARTMENTS_INFO['m.tech'];
-  if (lower.includes('artificial intelligence') || lower.includes('aids') || lower.includes('data science')) return ORGANIZING_DEPARTMENTS_INFO['artificial intelligence'];
-  if (lower.includes('biomedical')) return ORGANIZING_DEPARTMENTS_INFO['biomedical'];
-  if (lower.includes('computer science engineering') || lower.includes('computer science and engineering')) return ORGANIZING_DEPARTMENTS_INFO['computer science engineering'];
-  if (lower.includes('electrical and electronics') || lower.includes('eee')) return ORGANIZING_DEPARTMENTS_INFO['electrical and electronics'];
-  if (lower.includes('electronics and communication') || lower.includes('ece')) return ORGANIZING_DEPARTMENTS_INFO['electronics and communication'];
-  if (lower.includes('electronics and instrumentation') || lower.includes('eie')) return ORGANIZING_DEPARTMENTS_INFO['electronics and instrumentation'];
-  if (lower.includes('information technology')) return ORGANIZING_DEPARTMENTS_INFO['information technology'];
+  if (lower.includes('m.tech') || lower.includes('5 year')) return deptMap['m.tech'] || ORGANIZING_DEPARTMENTS_INFO['m.tech'];
+  if (lower.includes('artificial intelligence') || lower.includes('aids') || lower.includes('data science')) return deptMap['artificial intelligence'] || ORGANIZING_DEPARTMENTS_INFO['artificial intelligence'];
+  if (lower.includes('biomedical')) return deptMap['biomedical'] || ORGANIZING_DEPARTMENTS_INFO['biomedical'];
+  if (lower.includes('computer science engineering') || lower.includes('computer science and engineering')) return deptMap['computer science engineering'] || ORGANIZING_DEPARTMENTS_INFO['computer science engineering'];
+  if (lower.includes('electrical and electronics') || lower.includes('eee')) return deptMap['electrical and electronics'] || ORGANIZING_DEPARTMENTS_INFO['electrical and electronics'];
+  if (lower.includes('electronics and communication') || lower.includes('ece')) return deptMap['electronics and communication'] || ORGANIZING_DEPARTMENTS_INFO['electronics and communication'];
+  if (lower.includes('electronics and instrumentation') || lower.includes('eie')) return deptMap['electronics and instrumentation'] || ORGANIZING_DEPARTMENTS_INFO['electronics and instrumentation'];
+  if (lower.includes('information technology')) return deptMap['information technology'] || ORGANIZING_DEPARTMENTS_INFO['information technology'];
   
   return {
     title: text,
@@ -2547,7 +2561,7 @@ export default function App() {
                             <ul style={{ paddingLeft: '1.25rem', margin: '0.5rem 0', color: 'var(--text-secondary)', lineHeight: '1.75', fontSize: '0.95rem', listStyleType: 'disc' }}>
                               {bulletLines.map((bLine, bIdx) => {
                                 const text = bLine.replace(/^[•\-*\s]+/, '');
-                                const deptInfo = getDeptInfoFromText(text);
+                                const deptInfo = getDeptInfoFromText(text, info);
                                 return (
                                   <li key={bIdx} style={{ marginBottom: '0.4rem' }}>
                                     <button
