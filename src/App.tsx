@@ -501,7 +501,52 @@ const getDeptInfoFromText = (text: string, dbInfo?: Record<string, string>) => {
     desc: [
       `${text} is one of the premier academic departments of Sri Ramakrishna Engineering College, actively contributing to academic excellence, research innovations, and industry-oriented technical education.`
     ]
-  };
+};
+
+const getDateStatus = (eventDateStr: string): 'past' | 'present' | 'future' => {
+  if (!eventDateStr) return 'future';
+
+  const normalized = eventDateStr.replace(/–|—/g, '-');
+  let startDate: Date | null = null;
+  let endDate: Date | null = null;
+
+  const rangeMatch = normalized.match(/([A-Za-z]+)\s+(\d+)\s*-\s*(\d+),\s*(\d{4})/);
+  if (rangeMatch) {
+    const month = rangeMatch[1];
+    const startDay = rangeMatch[2];
+    const endDay = rangeMatch[3];
+    const year = rangeMatch[4];
+    startDate = new Date(`${month} ${startDay}, ${year}`);
+    endDate = new Date(`${month} ${endDay}, ${year}`);
+  } else {
+    const parsed = new Date(normalized);
+    if (!isNaN(parsed.getTime())) {
+      startDate = parsed;
+      endDate = parsed;
+    }
+  }
+
+  if (!startDate || isNaN(startDate.getTime())) {
+    return 'future';
+  }
+
+  const now = new Date();
+  if (endDate) {
+    endDate.setHours(23, 59, 59, 999);
+  } else {
+    endDate = new Date(startDate.getTime());
+    endDate.setHours(23, 59, 59, 999);
+  }
+
+  startDate.setHours(0, 0, 0, 0);
+
+  if (now > endDate) {
+    return 'past';
+  } else if (now >= startDate && now <= endDate) {
+    return 'present';
+  } else {
+    return 'future';
+  }
 };
 
 const ADMIN_MASTER_KEY = "MRBB2026";
@@ -3079,80 +3124,42 @@ export default function App() {
                   <div style={{ height: '3.5px', width: '80px', background: '#fbbf24', margin: '1rem auto 0', borderRadius: '2px' }} />
                 </motion.div>
 
-                {/* Blocks Layout with Colorful Outlines and Highlights (4 Cards per Row) */}
+                {/* Blocks Layout with Status-Based Color Badges (Red = Past, Green = Present, Blue = Future) */}
                 <div className="grid-4-col" style={{ marginTop: '2rem', gap: '1.25rem' }}>
                   {(() => {
-                    const CARD_PALETTES = [
-                      {
-                        border: '#cbd5e1',
-                        borderActive: '#3b82f6',
-                        badgeBg: '#3b82f6',
+                    const STATUS_PALETTES = {
+                      past: {
+                        badgeBg: '#ef4444',        // Red for past dates
                         badgeText: '#ffffff',
-                        titleColor: '#1e3a8a',
-                        iconColor: '#3b82f6',
-                        glowColor: 'rgba(59, 130, 246, 0.08)'
+                        iconColor: '#ef4444',
+                        border: '#fecaca',
+                        borderActive: '#dc2626',
+                        titleColor: '#091d36',
+                        glowColor: 'rgba(239, 68, 68, 0.15)'
                       },
-                      {
-                        border: '#cbd5e1',
-                        borderActive: '#10b981',
-                        badgeBg: '#10b981',
+                      present: {
+                        badgeBg: '#10b981',        // Green for present / today dates
                         badgeText: '#ffffff',
-                        titleColor: '#065f46',
                         iconColor: '#10b981',
-                        glowColor: 'rgba(16, 185, 129, 0.08)'
+                        border: '#a7f3d0',
+                        borderActive: '#059669',
+                        titleColor: '#091d36',
+                        glowColor: 'rgba(16, 185, 129, 0.18)'
                       },
-                      {
-                        border: '#cbd5e1',
-                        borderActive: '#f97316',
-                        badgeBg: '#f97316',
+                      future: {
+                        badgeBg: '#3b82f6',        // Blue for future dates
                         badgeText: '#ffffff',
-                        titleColor: '#7c2d12',
-                        iconColor: '#f97316',
-                        glowColor: 'rgba(249, 115, 22, 0.08)'
-                      },
-                      {
-                        border: '#cbd5e1',
-                        borderActive: '#d946ef',
-                        badgeBg: '#d946ef',
-                        badgeText: '#ffffff',
-                        titleColor: '#701a75',
-                        iconColor: '#d946ef',
-                        glowColor: 'rgba(217, 70, 239, 0.08)'
-                      },
-                      {
-                        border: '#cbd5e1',
-                        borderActive: '#f43f5e',
-                        badgeBg: '#f43f5e',
-                        badgeText: '#ffffff',
-                        titleColor: '#4c0519',
-                        iconColor: '#f43f5e',
-                        glowColor: 'rgba(244, 63, 94, 0.08)'
-                      },
-                      {
-                        border: '#cbd5e1',
-                        borderActive: '#14b8a6',
-                        badgeBg: '#14b8a6',
-                        badgeText: '#ffffff',
-                        titleColor: '#0f766e',
-                        iconColor: '#14b8a6',
-                        glowColor: 'rgba(20, 184, 166, 0.08)'
+                        iconColor: '#3b82f6',
+                        border: '#bfdbfe',
+                        borderActive: '#1d4ed8',
+                        titleColor: '#091d36',
+                        glowColor: 'rgba(59, 130, 246, 0.15)'
                       }
-                    ];
-
-                    const isPassedArray = importantDates.map(evt => {
-                      try {
-                        const cleanDateStr = evt.event_date.replace(/-[0-9]+/g, '').trim();
-                        const dateVal = new Date(cleanDateStr);
-                        if (isNaN(dateVal.getTime())) return false;
-                        return dateVal <= new Date();
-                      } catch (e) {
-                        return false;
-                      }
-                    });
+                    };
 
                     return importantDates.map((evt, idx) => {
-                      const isPassed = isPassedArray[idx];
-                      const palette = CARD_PALETTES[idx % CARD_PALETTES.length];
+                      const status = getDateStatus(evt.event_date);
+                      const palette = STATUS_PALETTES[status];
 
                       return (
                         <motion.div
@@ -3168,7 +3175,7 @@ export default function App() {
                           }}
                           style={{
                             background: '#ffffff',
-                            border: `1px solid ${palette.border}`,
+                            border: `1.5px solid ${palette.border}`,
                             borderRadius: '1.25rem',
                             padding: '2rem',
                             display: 'flex',
@@ -3187,13 +3194,14 @@ export default function App() {
                               padding: '0.4rem 0.95rem',
                               borderRadius: '2rem',
                               textTransform: 'uppercase',
-                              letterSpacing: '0.05em'
+                              letterSpacing: '0.05em',
+                              boxShadow: `0 4px 12px ${palette.glowColor}`
                             }}>
                               {renderDateWithSuperscript(evt.event_date)}
                             </span>
 
-                            {isPassed ? (
-                              <CheckCircle size={22} style={{ color: '#10b981', flexShrink: 0 }} />
+                            {status === 'past' ? (
+                              <CheckCircle size={22} style={{ color: palette.iconColor, flexShrink: 0 }} />
                             ) : (
                               <Clock size={22} style={{ color: palette.iconColor, flexShrink: 0 }} />
                             )}
@@ -6558,3 +6566,5 @@ export default function App() {
     </div>
   );
 }
+
+export default App;
