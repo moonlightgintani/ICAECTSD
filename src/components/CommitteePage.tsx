@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 interface CommitteeMember {
   id?: any;
@@ -66,7 +66,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
   const resolveMemberImage = getMemberImageProp || getMemberImage;
   const [committeeTab, setCommitteeTab] = useState<'steering' | 'organizing' | 'advisory'>('organizing');
   const [activeSubcommittee, setActiveSubcommittee] = useState<string>('patrons');
-  const [subcommitteeDropdownOpen, setSubcommitteeDropdownOpen] = useState(false);
+  const [] = useState(false);
 
   const SUBCOMMITTEES = [
     { id: 'patrons', label: 'Patrons' },
