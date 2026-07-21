@@ -339,6 +339,141 @@ export const renderSpeakerTalkOrButton = (talkStr: string | undefined | null, de
   );
 };
 
+export const ORGANIZING_DEPARTMENTS_INFO: Record<string, { title: string; subtitle?: string; desc: string[]; highlights?: string[] }> = {
+  'artificial intelligence': {
+    title: 'Department of Artificial Intelligence and Data Science',
+    subtitle: '(AI & DS)',
+    desc: [
+      'The Department of Artificial Intelligence and Data Science (AI & DS) at Sri Ramakrishna Engineering College focuses on developing next-generation leaders in AI, Machine Learning, Deep Learning, Big Data Analytics, and Intelligent Systems.',
+      'Equipped with state-of-the-art AI laboratories, GPU computing clusters, and industry-oriented R&D facilities, the department provides hands-on experience in cutting-edge domains including Computer Vision, Natural Language Processing, MLOps, and Autonomous Systems.',
+      'Driven by experienced faculty members and strong industry collaborations, the department actively engages in multidisciplinary research, consulting projects, and tech innovation hackathons.'
+    ],
+    highlights: [
+      'Advanced AI/ML & High-Performance GPU Computing Labs',
+      'Industry Collaborations and Co-Innovation Centers',
+      'Active Research in Generative AI, Computer Vision, & Responsible AI'
+    ]
+  },
+  'biomedical': {
+    title: 'Department of Biomedical Engineering',
+    subtitle: '(BME)',
+    desc: [
+      'The Department of Biomedical Engineering bridges engineering innovation with clinical healthcare to develop advanced diagnostic tools, medical imaging software, wearable health sensors, and rehabilitation technologies.',
+      'With dedicated research labs in Bio-Signal Processing, Telemedicine, Micro/Nano Bio-engineering, and Biomechanics, students gain hands-on training to address critical challenges in modern healthcare.',
+      'The department works closely with leading hospitals, medical research institutes, and healthcare organizations for clinical trials and medical device development.'
+    ],
+    highlights: [
+      'Clinical Training & Multi-Specialty Hospital Partnerships',
+      'Advanced Bio-Signal & Medical Imaging Systems',
+      'Research in Wearable Health Sensors & Point-of-Care Diagnostics'
+    ]
+  },
+  'computer science engineering': {
+    title: 'Department of Computer Science Engineering',
+    subtitle: '(CSE)',
+    desc: [
+      'The Department of Computer Science and Engineering is a flagship department at SREC, fostering academic excellence in software engineering, algorithms, cloud computing, cyber security, and distributed systems.',
+      'Featuring modern computer centers with high-speed networks, cloud infrastructure, and open-source software stacks, the department empowers students to build scalable enterprise applications and innovative software products.',
+      'With active student chapters of IEEE Computer Society, ACM, and CSI, the department nurtures technical leadership through codeathons, research publications, and open-source contributions.'
+    ],
+    highlights: [
+      'High-Performance Computing Infrastructure & Cloud Testbeds',
+      'Strong Placement Track Record & Top Tier Tech Internships',
+      'Active Student Chapters (IEEE CS, ACM, CSI)'
+    ]
+  },
+  'electrical and electronics': {
+    title: 'Department of Electrical and Electronics Engineering',
+    subtitle: '(EEE)',
+    desc: [
+      'The Department of Electrical and Electronics Engineering is dedicated to shaping future leaders in power systems, smart grids, renewable energy, electric vehicle technologies, and industrial automation.',
+      'Equipped with modern laboratories for Power Electronics, Drives & Control, High Voltage Engineering, Electric Vehicles, and Smart Sensors, the department combines rigorous theory with practical engineering.',
+      'Faculty and students collaborate on industrial consultancy projects, renewable energy integration, and smart grid automation for leading energy enterprises.'
+    ],
+    highlights: [
+      'Electric Vehicle & Smart Grid Research Facilities',
+      'Power Electronics, Automation & Renewable Energy Labs',
+      'Industry-Sponsored Consultancy & Energy Audits'
+    ]
+  },
+  'electronics and communication': {
+    title: 'Department of Electronics and Communication Engineering',
+    subtitle: '(ECE)',
+    desc: [
+      'The Department of Electronics and Communication Engineering excels in training students in 5G/6G wireless communication, VLSI design, embedded systems, signal processing, and RF/microwave engineering.',
+      'Featuring state-of-the-art labs for Cadence VLSI tools, Embedded Systems, Signal & Image Processing, and Microwave & Optical Communications, the department provides an ideal environment for hardware-software co-design.',
+      'The department maintains active industry ties with semiconductor giants, telecom providers, and defense R&D organizations.'
+    ],
+    highlights: [
+      'Cadence VLSI & Embedded Systems Design Suite',
+      'Wireless Communication (5G/6G) & Antenna Design Facilities',
+      'Product R&D in Embedded AI and Edge Devices'
+    ]
+  },
+  'electronics and instrumentation': {
+    title: 'Department of Electronics and Instrumentation Engineering',
+    subtitle: '(EIE)',
+    desc: [
+      'The Department of Electronics and Instrumentation Engineering specializes in process automation, industrial IoT, SCADA/DCS systems, smart sensors, robotics, and cyber-physical systems.',
+      'The department is equipped with process control rigs, virtual instrumentation setups, PLCs, industrial controllers, and sensor calibration labs to provide real-world automation experience.',
+      'Collaborating closely with manufacturing and continuous-process industries, the department drives innovation in Industry 4.0/5.0 transformation.'
+    ],
+    highlights: [
+      'Process Control, SCADA & DCS Automation Centers',
+      'Industrial Robotics & Cyber-Physical Systems Labs',
+      'Smart Sensors & Measurement Technology Facilities'
+    ]
+  },
+  'information technology': {
+    title: 'Department of Information Technology',
+    subtitle: '(IT)',
+    desc: [
+      'The Department of Information Technology focuses on full-stack software development, cyber security, data analytics, web/mobile engineering, and enterprise cloud solutions.',
+      'Through state-of-the-art computing labs, DevOps toolchains, and cyber security testbeds, students develop practical expertise in solving complex software engineering challenges.',
+      'The department maintains close links with IT services, product firms, and tech startups for mentorship, hackathons, and placement opportunities.'
+    ],
+    highlights: [
+      'Full-Stack Software Development & Cloud Computing Labs',
+      'Cyber Security & Threat Intelligence Testing Center',
+      'Industry Hackathons & Product Engineering Mentorship'
+    ]
+  },
+  'm.tech': {
+    title: 'M.TECH - COMPUTER SCIENCE AND ENGINEERING',
+    subtitle: '(5 Year Integrated Programme)',
+    desc: [
+      'The Department of M.Tech in Computer Science and Engineering (5 Years Integrated Programme), established in year 2021, aims to be a center of excellence for advanced education, research, and industry-driven innovation. It focuses on developing skilled professionals and researchers capable of addressing the challenges of a technology-driven world. The program features a unique curriculum with two six-month internships at reputed organizations and institution of eminence such as LTTS, Airbus, HTIC, CDAC, NITs, IITs, and IISc, providing students with valuable real-world exposure and practical experience.',
+      'The department is equipped with state-of-the-art laboratories featuring high-performance computing systems, AI and ML frameworks, AR and VR kits, Data Analytics platforms, and advanced networking and security setups that support hands-on learning and innovation emphasizing emerging fields such as Data Science, Cyber Security, Artificial Intelligence, and Augmented and Virtual Reality, enabling students to explore modern technologies and applications.',
+      'Guided by a team of highly qualified and research-driven faculty members, students are encouraged to engage in innovative projects, publish research papers, and develop impactful technology solutions.'
+    ],
+    highlights: [
+      'Currently working on an ANRF-funded project to automate MSMEs in Coimbatore region',
+      'Student & Faculty team working under MSME Idea Hackathon 5.0 project "Predictive Food safety monitoring using smart sensors"',
+      'Recognized as an Experience Centre by C-DAC Chennai for capacity building & advanced computing research'
+    ]
+  }
+};
+
+export const getDeptInfoFromText = (text: string) => {
+  const lower = text.toLowerCase();
+  if (lower.includes('m.tech') || lower.includes('5 year')) return ORGANIZING_DEPARTMENTS_INFO['m.tech'];
+  if (lower.includes('artificial intelligence') || lower.includes('aids') || lower.includes('data science')) return ORGANIZING_DEPARTMENTS_INFO['artificial intelligence'];
+  if (lower.includes('biomedical')) return ORGANIZING_DEPARTMENTS_INFO['biomedical'];
+  if (lower.includes('computer science engineering') || lower.includes('computer science and engineering')) return ORGANIZING_DEPARTMENTS_INFO['computer science engineering'];
+  if (lower.includes('electrical and electronics') || lower.includes('eee')) return ORGANIZING_DEPARTMENTS_INFO['electrical and electronics'];
+  if (lower.includes('electronics and communication') || lower.includes('ece')) return ORGANIZING_DEPARTMENTS_INFO['electronics and communication'];
+  if (lower.includes('electronics and instrumentation') || lower.includes('eie')) return ORGANIZING_DEPARTMENTS_INFO['electronics and instrumentation'];
+  if (lower.includes('information technology')) return ORGANIZING_DEPARTMENTS_INFO['information technology'];
+  
+  return {
+    title: text,
+    subtitle: 'Organizing Department',
+    desc: [
+      `${text} is one of the premier academic departments of Sri Ramakrishna Engineering College, actively contributing to academic excellence, research innovations, and industry-oriented technical education.`
+    ]
+  };
+};
+
 const ADMIN_MASTER_KEY = "MRBB2026";
 
 
@@ -516,6 +651,7 @@ export default function App() {
   const [pricing, setPricing] = useState<Record<string, number>>({});
   const [selectedDept, setSelectedDept] = useState<Department | null>(null);
   const [showCalcModal, setShowCalcModal] = useState<boolean>(false);
+  const [activeDeptModal, setActiveDeptModal] = useState<{ title: string; subtitle?: string; desc: string[]; highlights?: string[] } | null>(null);
 
   // Admin Portal states
   const [adminUser, setAdminUser] = useState<string | null>(() => localStorage.getItem('srec_logged_in_admin'));
@@ -2395,11 +2531,71 @@ export default function App() {
                       {info.hero_subtitle || "Net-Zero Cyber-Physical Intelligence: AI, 6G & Sustainable Electronics"}
                     </h3>
 
-                    {info.about_conference?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
-                      <p key={idx} style={{ color: 'var(--text-secondary)', margin: 0, textAlign: 'justify', lineHeight: '1.75', fontSize: '0.95rem' }}>
-                        {para}
-                      </p>
-                    ))}
+                    {info.about_conference?.split('\n\n').filter(Boolean).map((block: string, idx: number) => {
+                      const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+                      const hasBullets = lines.some(line => line.startsWith('•') || line.startsWith('-'));
+
+                      if (hasBullets) {
+                        const headerLines = lines.filter(l => !l.startsWith('•') && !l.startsWith('-'));
+                        const bulletLines = lines.filter(l => l.startsWith('•') || l.startsWith('-'));
+                        return (
+                          <div key={idx} style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}>
+                            {headerLines.map((h, hidx) => (
+                              <p key={hidx} style={{ color: 'var(--text-secondary)', fontWeight: 700, margin: '0 0 0.5rem 0', fontSize: '0.95rem' }}>
+                                {h}
+                              </p>
+                            ))}
+                            <ul style={{ paddingLeft: '1.25rem', margin: '0.5rem 0', color: 'var(--text-secondary)', lineHeight: '1.75', fontSize: '0.95rem', listStyleType: 'disc' }}>
+                              {bulletLines.map((bLine, bIdx) => {
+                                const text = bLine.replace(/^[•\-*\s]+/, '');
+                                const deptInfo = getDeptInfoFromText(text);
+                                return (
+                                  <li key={bIdx} style={{ marginBottom: '0.4rem' }}>
+                                    <button
+                                      type="button"
+                                      onClick={() => setActiveDeptModal(deptInfo)}
+                                      style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        padding: 0,
+                                        font: 'inherit',
+                                        color: '#0f52ba',
+                                        fontWeight: 700,
+                                        textDecoration: 'underline',
+                                        cursor: 'pointer',
+                                        textAlign: 'left'
+                                      }}
+                                    >
+                                      {text} ↗
+                                    </button>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        );
+                      }
+
+                      const isMtechTitle = block.startsWith('M.TECH -');
+                      const isTitle = isMtechTitle || block.startsWith('About the Department:') || block.startsWith('Organizing Departments:');
+                      if (isTitle) {
+                        return (
+                          <h4
+                            key={idx}
+                            id={isMtechTitle ? "about-mtech-dept" : undefined}
+                            style={{ fontSize: '1.15rem', color: '#091d36', fontWeight: 800, margin: '1.5rem 0 0.25rem 0', scrollMarginTop: '100px' }}
+                          >
+                            {block}
+                          </h4>
+                        );
+                      }
+
+                      return (
+                        <p key={idx} style={{ color: 'var(--text-secondary)', margin: 0, textAlign: 'justify', lineHeight: '1.75', fontSize: '0.95rem' }}>
+                          {block}
+                        </p>
+                      );
+                    })}
 
                     <div style={{
                       marginTop: '1rem',
@@ -2523,29 +2719,11 @@ export default function App() {
                   </motion.div>
                 </div>
 
-                {/* SREC Trust & Institution Details */}
-                <div className="grid-2-col" style={{ gap: '2rem' }}>
+                {/* Institution Details */}
+                <div style={{ width: '100%' }}>
                   <motion.div
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="glass-card"
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                      <BookOpen size={24} style={{ color: '#0f52ba' }} />
-                      <h3 style={{ fontSize: '1.5rem', color: '#091d36', fontWeight: 700 }}>{info.about_card_conf_title || "About the Trust"}</h3>
-                    </div>
-                    {info.about_trust?.split('\n\n').filter(Boolean).map((para: string, idx: number) => (
-                      <p key={idx} style={{ color: 'var(--text-secondary)', marginBottom: '1rem', textIndent: '2rem', textAlign: 'justify', lineHeight: '1.7', fontSize: '0.95rem' }}>
-                        {para}
-                      </p>
-                    ))}
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, x: 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
                     className="glass-card"
@@ -2610,7 +2788,7 @@ export default function App() {
                   )}
                 </motion.div>
 
-                <div className="grid-3-col" style={{ gap: '2rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '2rem' }}>
                   {speakers.map((speaker, index) => (
                     <motion.div
                       key={index}
@@ -2624,7 +2802,10 @@ export default function App() {
                         flexDirection: 'column',
                         alignItems: 'center',
                         textAlign: 'center',
-                        borderTop: `4px solid ${speaker.color}`
+                        borderTop: `4px solid ${speaker.color}`,
+                        maxWidth: '380px',
+                        width: '100%',
+                        flex: '1 1 320px'
                       }}
                     >
                       <div style={{
@@ -3423,6 +3604,135 @@ export default function App() {
                   onClick={() => setSelectedDept(null)}
                   className="btn btn-primary"
                   style={{ fontSize: '0.9rem' }}
+                >
+                  Close Window
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Department Details Popup Modal */}
+      <AnimatePresence>
+        {activeDeptModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(9, 29, 54, 0.75)',
+              backdropFilter: 'blur(6px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 99999,
+              padding: '1.5rem'
+            }}
+            onClick={() => setActiveDeptModal(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 30 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 30 }}
+              style={{
+                backgroundColor: '#ffffff',
+                borderRadius: '1.25rem',
+                padding: '2.25rem',
+                maxWidth: '720px',
+                width: '100%',
+                maxHeight: '85vh',
+                overflowY: 'auto',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                position: 'relative',
+                border: '1px solid #e2e8f0'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setActiveDeptModal(null)}
+                style={{
+                  position: 'absolute',
+                  top: '1.25rem',
+                  right: '1.25rem',
+                  background: '#f1f5f9',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '36px',
+                  height: '36px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: '#475569',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#e2e8f0';
+                  e.currentTarget.style.color = '#0f172a';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#f1f5f9';
+                  e.currentTarget.style.color = '#475569';
+                }}
+              >
+                <X size={20} />
+              </button>
+
+              {/* Modal Header */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <span style={{ background: '#eff6ff', color: '#1d4ed8', padding: '0.35rem 0.85rem', borderRadius: '2rem', fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Organizing Department
+                </span>
+              </div>
+
+              <h2 style={{ fontSize: '1.55rem', color: '#091d36', fontWeight: 800, margin: '0.25rem 0 0.25rem 0', lineHeight: 1.3 }}>
+                {activeDeptModal.title}
+              </h2>
+              {activeDeptModal.subtitle && (
+                <h4 style={{ fontSize: '1.05rem', color: '#0f52ba', fontWeight: 700, margin: '0 0 1.25rem 0' }}>
+                  {activeDeptModal.subtitle}
+                </h4>
+              )}
+
+              <div style={{ height: '3.5px', width: '60px', background: '#f58220', marginBottom: '1.5rem', borderRadius: '2px' }} />
+
+              {/* Modal Body */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', color: '#334155', lineHeight: 1.7, fontSize: '0.95rem' }}>
+                <h5 style={{ fontSize: '1.1rem', color: '#091d36', fontWeight: 800, margin: '0.5rem 0 0' }}>
+                  About the Department:
+                </h5>
+                {activeDeptModal.desc.map((paragraph, pIdx) => (
+                  <p key={pIdx} style={{ textAlign: 'justify', margin: 0 }}>
+                    {paragraph}
+                  </p>
+                ))}
+
+                {activeDeptModal.highlights && activeDeptModal.highlights.length > 0 && (
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '0.75rem', padding: '1.25rem', marginTop: '0.5rem' }}>
+                    <h5 style={{ fontSize: '1rem', color: '#091d36', fontWeight: 800, margin: '0 0 0.5rem 0' }}>
+                      Key Highlights & Infrastructure:
+                    </h5>
+                    <ul style={{ paddingLeft: '1.25rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      {activeDeptModal.highlights.map((item, hIdx) => (
+                        <li key={hIdx}>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div style={{ marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'flex-end' }}>
+                <button
+                  onClick={() => setActiveDeptModal(null)}
+                  className="btn btn-primary"
+                  style={{ padding: '0.6rem 1.5rem', borderRadius: '0.5rem', fontWeight: 700, fontSize: '0.9rem' }}
                 >
                   Close Window
                 </button>
