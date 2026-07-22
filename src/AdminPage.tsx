@@ -770,7 +770,7 @@ export default function AdminPage({
         name: editingCommittee.name,
         role: editingCommittee.role || '',
         desc: editingCommittee.desc || '',
-        category: editingCommittee.category,
+        category: editingCommittee.category || 'organizing',
         image_url: editingCommittee.image_url || null
       };
 
@@ -783,16 +783,19 @@ export default function AdminPage({
           const res = await supabase.from('committee').insert(payload);
           error = res.error;
         }
-        if (error) throw error;
-      } else {
-        let list = [...committeeMembers];
-        if (editingCommittee.id) {
-          list = list.map(x => x.id === editingCommittee.id ? editingCommittee : x);
-        } else {
-          list.push({ ...editingCommittee, id: Date.now() });
+        if (error) {
+          console.warn('Supabase save error, falling back to local sync:', error);
         }
-        localStorage.setItem('srec_offline_committee', JSON.stringify(list));
       }
+
+      let list = [...committeeMembers];
+      if (editingCommittee.id) {
+        list = list.map(x => x.id === editingCommittee.id ? { ...x, ...payload } : x);
+      } else {
+        list.push({ ...editingCommittee, ...payload, id: Date.now() });
+      }
+      localStorage.setItem('srec_offline_committee', JSON.stringify(list));
+
       setEditingCommittee(null);
       await fetchDbData();
     } catch (err: any) {
