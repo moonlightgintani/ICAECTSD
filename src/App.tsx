@@ -46,6 +46,8 @@ import Footer from './components/Footer';
 import acLogo from './assets/logo.png';
 import srecLogo from './assets/srec-logo.png';
 import logo2 from './assets/logo2.png';
+import Tru1 from './assets/tru2 (1).png';
+import Tru2 from './assets/tru2 (2).png';
 import chatbotIcon from './assets/chatbot.gif';
 import heroBg from './assets/hero.png';
 import karpagamImg from './assets/karpagam.png';
@@ -1961,13 +1963,15 @@ function App() {
   const getMemberImage = (name: string, imageUrl?: string): string => {
     if (imageUrl && imageUrl !== 'no_file' && imageUrl !== '') return imageUrl;
     if (name.includes('Sundar Ramakrishnan') || name.includes('R. Sundar')) return logo5;
-    if (name.includes('Thiru.S.Narendran')) return trust1Img;
+    if (name.includes('Thiru')) return trust1Img;
     if (name.includes('Balamurugan')) return balamurgunImg;
     if (name.includes('Soundarrajan')) return principalImg;
     if (name.includes('P. Sakthivel')) return sakthivelImg;
     if (name.includes('S. Radha')) return radhaImg;
     if (name.includes('S. Brindha')) return brindhaImg;
     if (name.toLowerCase().includes('kingsy')) return kingsyImg;
+    if (name.includes('Ramakrishna')) return Tru1;
+    if (name.includes('Lakshminarayanaswamy')) return Tru2;
     //if (name.includes('Praveen Kumar')) return praveenkumarImg;
     if (name.includes('Karpagam')) return karpagamImg;
     if (name.includes('Jansi')) return jansiImg;
