@@ -2552,7 +2552,21 @@ function App() {
                   <img src={logo2} alt="SNR Trust Logo" className="AECTSD-banner-logo" />
                 </motion.div>
 
-
+                {/* AECTSD Logo above title */}
+                <motion.img
+                  src={acLogo}
+                  alt="AECTSD Logo"
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  style={{
+                    height: '90px',
+                    width: 'auto',
+                    objectFit: 'contain',
+                    filter: 'drop-shadow(0 4px 16px rgba(245,158,11,0.45))',
+                    margin: '1rem auto'
+                  }}
+                />
 
                 {/* 3. Massive Golden Serif Title */}
                 <motion.h1
@@ -2562,11 +2576,11 @@ function App() {
                   className="AECTSD-hero-title"
                 >
                   {info.hero_title ? (
-                    info.hero_title.includes(' ') ? (
+                    info.hero_title.split(' ').length >= 3 ? (
                       <>
-                        {info.hero_title.split(' ')[0]}
+                        {info.hero_title.split(' ').slice(0, 2).join(' ')}
                         <br />
-                        {info.hero_title.split(' ').slice(1).join(' ')}
+                        {info.hero_title.split(' ').slice(2).join(' ')}
                       </>
                     ) : info.hero_title
                   ) : (
