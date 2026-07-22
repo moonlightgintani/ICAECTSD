@@ -1628,12 +1628,11 @@ export default function AdminPage({
                       id="mem_cat"
                       value={editingCommittee.category}
                       onChange={(e) => setEditingCommittee({ ...editingCommittee, category: e.target.value })}
-                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                      style={{ width: '100%', padding: '0.55rem', border: '1px solid #cbd5e1', borderRadius: '0.375rem', marginTop: '0.25rem', background: '#ffffff', fontWeight: 600 }}
                     >
-                      <option value="steering">Steering / Advisory / Leadership</option>
+                      <option value="steering">Steering Committee</option>
                       <option value="organizing">Organizing Committee</option>
-                      <option value="advisory">National / International Advisory</option>
-                      <option value="technical">Technical Program Committee</option>
+                      <option value="advisory">Advisory Committee</option>
                     </select>
                   </div>
                   <div>
@@ -4716,92 +4715,6 @@ export default function AdminPage({
                 </button>
               </div>
 
-              {editingWorkshop && (
-                <form onSubmit={handleSaveWorkshop} style={{ background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '0.5rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
-                  <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingWorkshop.id ? 'Edit Workshop' : 'Add New Workshop'}</h4>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label htmlFor="wk_title" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Workshop Title</label>
-                    <input
-                      id="wk_title"
-                      type="text"
-                      required
-                      value={editingWorkshop.title}
-                      onChange={(e) => setEditingWorkshop({ ...editingWorkshop, title: e.target.value })}
-                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                    />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      <label htmlFor="wk_spk" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Lead Instructor Name</label>
-                      <input
-                        id="wk_spk"
-                        type="text"
-                        required
-                        value={editingWorkshop.speaker}
-                        onChange={(e) => setEditingWorkshop({ ...editingWorkshop, speaker: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="wk_des" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Instructor Designation</label>
-                      <input
-                        id="wk_des"
-                        type="text"
-                        value={editingWorkshop.speaker_designation || ''}
-                        onChange={(e) => setEditingWorkshop({ ...editingWorkshop, speaker_designation: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      <label htmlFor="wk_inst" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Instructor University / Organization</label>
-                      <input
-                        id="wk_inst"
-                        type="text"
-                        value={editingWorkshop.speaker_institution || ''}
-                        onChange={(e) => setEditingWorkshop({ ...editingWorkshop, speaker_institution: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="wk_date" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Date</label>
-                      <input
-                        id="wk_date"
-                        type="text"
-                        value={editingWorkshop.date || ''}
-                        onChange={(e) => setEditingWorkshop({ ...editingWorkshop, date: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="wk_time" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Time</label>
-                      <input
-                        id="wk_time"
-                        type="text"
-                        value={editingWorkshop.time || ''}
-                        onChange={(e) => setEditingWorkshop({ ...editingWorkshop, time: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                  </div>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label htmlFor="wk_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Short Abstract / Outline</label>
-                    <textarea
-                      id="wk_desc"
-                      value={editingWorkshop.desc || ''}
-                      onChange={(e) => setEditingWorkshop({ ...editingWorkshop, desc: e.target.value })}
-                      rows={3}
-                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', fontFamily: 'inherit' }}
-                    />
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button type="submit" className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>Save Workshop</button>
-                    <button type="button" onClick={() => setEditingWorkshop(null)} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>Cancel</button>
-                  </div>
-                </form>
-              )}
-
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left' }}>
                   <thead>
@@ -4869,74 +4782,6 @@ export default function AdminPage({
                   <Plus size={14} /> Add Coordinator
                 </button>
               </div>
-
-              {editingCoordinator && (
-                <form onSubmit={handleSaveCoordinator} style={{ background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '0.5rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
-                  <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingCoordinator.id ? 'Edit Coordinator Details' : 'Add New Coordinator'}</h4>
-                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      <label htmlFor="co_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Coordinator Name</label>
-                      <input
-                        id="co_name"
-                        type="text"
-                        required
-                        value={editingCoordinator.name}
-                        onChange={(e) => setEditingCoordinator({ ...editingCoordinator, name: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="co_role" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Role / Association (e.g. Co-convenor)</label>
-                      <input
-                        id="co_role"
-                        type="text"
-                        value={editingCoordinator.role || ''}
-                        onChange={(e) => setEditingCoordinator({ ...editingCoordinator, role: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="co_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
-                      <input
-                        id="co_sort"
-                        type="number"
-                        required
-                        value={editingCoordinator.sort_order || 1}
-                        onChange={(e) => setEditingCoordinator({ ...editingCoordinator, sort_order: Number(e.target.value) })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      <label htmlFor="co_phone" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Mobile Number</label>
-                      <input
-                        id="co_phone"
-                        type="text"
-                        required
-                        value={editingCoordinator.phone}
-                        onChange={(e) => setEditingCoordinator({ ...editingCoordinator, phone: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="co_email" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Email Address</label>
-                      <input
-                        id="co_email"
-                        type="email"
-                        required
-                        value={editingCoordinator.email}
-                        onChange={(e) => setEditingCoordinator({ ...editingCoordinator, email: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button type="submit" className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>Save Contact</button>
-                    <button type="button" onClick={() => setEditingCoordinator(null)} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>Cancel</button>
-                  </div>
-                </form>
-              )}
 
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left' }}>
