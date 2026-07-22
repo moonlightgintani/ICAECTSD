@@ -501,6 +501,7 @@ const getDeptInfoFromText = (text: string, dbInfo?: Record<string, string>) => {
     desc: [
       `${text} is one of the premier academic departments of Sri Ramakrishna Engineering College, actively contributing to academic excellence, research innovations, and industry-oriented technical education.`
     ]
+  };
 };
 
 const getDateStatus = (eventDateStr: string): 'past' | 'present' | 'future' => {
@@ -705,7 +706,7 @@ function CounterUp({ target, duration = 1.2 }: { target: string; duration?: numb
   );
 }
 
-export default function App() {
+function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [currentPage, setCurrentPage] = useState<'main' | 'explore' | 'admin' | 'committee' | 'guidelines' | 'payment'>('main');
   const [initialRegTab, setInitialRegTab] = useState<'submission' | 'fees' | 'form'>('submission');
