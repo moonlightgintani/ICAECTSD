@@ -25,6 +25,7 @@ export const renderFormattedDesc = (descText: string | undefined | null) => {
     .replace(/\\'/g, "'")
     .replace(/\\"/g, '"')
     .replace(/\\n/g, ' ')
+    .replace(/\\/g, '')
     .replace(/\bnice\b/gi, '');
 
   const phrases = [
@@ -40,11 +41,11 @@ export const renderFormattedDesc = (descText: string | undefined | null) => {
   const regex = new RegExp(`(${phrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
   const parts = cleanedText.split(regex);
   return (
-    <span style={{ display: 'block', width: '100%', wordBreak: 'break-word', textAlign: 'center', lineHeight: 1.45 }}>
+    <span style={{ display: 'block', width: '100%', wordBreak: 'normal', textAlign: 'center', lineHeight: 1.45 }}>
       {parts.map((part, index) => {
         if (phrases.includes(part)) {
           return (
-            <span key={index} style={{ fontWeight: 600, color: '#0f172a', display: 'inline' }}>
+            <span key={index} style={{ fontWeight: 600, color: '#0f172a', display: 'inline-block', whiteSpace: 'nowrap' }}>
               {part}
             </span>
           );
