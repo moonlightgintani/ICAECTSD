@@ -2834,10 +2834,10 @@ export default function AdminPage({
                           id="mem_cat"
                           value={editingCommittee.category}
                           onChange={(e) => setEditingCommittee({ ...editingCommittee, category: e.target.value })}
-                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                          style={{ width: '100%', padding: '0.55rem', border: '1px solid #cbd5e1', borderRadius: '0.375rem', marginTop: '0.25rem', background: '#ffffff', fontWeight: 600 }}
                         >
+                          <option value="steering">Steering Committee</option>
                           <option value="organizing">Organizing Committee</option>
-                          <option value="steering">Steering & Leadership</option>
                           <option value="advisory">Advisory Committee</option>
                         </select>
                       </div>
@@ -4595,107 +4595,6 @@ export default function AdminPage({
                   <Plus size={14} /> Add Member
                 </button>
               </div>
-
-              {editingCommittee && (
-                <form onSubmit={handleSaveCommittee} style={{ background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '0.5rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
-                  <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingCommittee.id ? 'Edit Committee Member' : 'Add Committee Member'}</h4>
-                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      <label htmlFor="mem_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Member Name</label>
-                      <input
-                        id="mem_name"
-                        type="text"
-                        required
-                        value={editingCommittee.name}
-                        onChange={(e) => setEditingCommittee({ ...editingCommittee, name: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="mem_cat" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Category Group</label>
-                      <select
-                        id="mem_cat"
-                        value={editingCommittee.category}
-                        onChange={(e) => setEditingCommittee({ ...editingCommittee, category: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      >
-                        <option value="steering">Steering / Advisory / Leadership</option>
-                        <option value="organizing">Organizing Committee</option>
-                        <option value="advisory">National / International Advisory</option>
-                        <option value="technical">Technical Program Committee</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label htmlFor="mem_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
-                      <input
-                        id="mem_sort"
-                        type="number"
-                        required
-                        value={editingCommittee.sort_order || 1}
-                        onChange={(e) => setEditingCommittee({ ...editingCommittee, sort_order: Number(e.target.value) })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      {editingCommittee.category === 'organizing' ? (
-                        <>
-                          <label htmlFor="mem_sub" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Subgroup Title (For Organizing Committee)</label>
-                          <select
-                            id="mem_sub"
-                            value={editingCommittee.role || ''}
-                            onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
-                            style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', background: '#ffffff' }}
-                          >
-                            <option value="">Select Subgroup...</option>
-                            <option value="Executive Committee">Executive Committee</option>
-                            <option value="Patrons">Patrons</option>
-                            <option value="General Chairs">General Chairs</option>
-                            <option value="Finance">Finance</option>
-                            <option value="Publication">Publication</option>
-                            <option value="Arrangements">Arrangements</option>
-                            <option value="Registration">Registration</option>
-                            <option value="Tutorials & Workshops">Tutorials & Workshops</option>
-                            <option value="Technical Review">Technical Review</option>
-                            <option value="Outreach & Promotion">Outreach & Promotion</option>
-                            <option value="Website & Media">Website & Media</option>
-                            <option value="Hospitality">Hospitality</option>
-                            <option value="General Members">General Members</option>
-                          </select>
-                        </>
-                      ) : (
-                        <>
-                          <label htmlFor="mem_role" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Role / Designation</label>
-                          <input
-                            id="mem_role"
-                            type="text"
-                            placeholder="e.g. Advisory Chair, Reviewer, etc."
-                            value={editingCommittee.role || ''}
-                            onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
-                            style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                          />
-                        </>
-                      )}
-                    </div>
-                    <div>
-                      <label htmlFor="mem_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Affiliation / Description</label>
-                      <input
-                        id="mem_desc"
-                        type="text"
-                        placeholder="e.g. Professor, IIT Bombay"
-                        value={editingCommittee.desc || ''}
-                        onChange={(e) => setEditingCommittee({ ...editingCommittee, desc: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                      />
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button type="submit" className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>Save Member</button>
-                    <button type="button" onClick={() => setEditingCommittee(null)} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>Cancel</button>
-                  </div>
-                </form>
-              )}
 
                {/* Desktop view */}
                <div className="admin-desktop-view" style={{ overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: '0.5rem' }}>
