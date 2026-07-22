@@ -2552,21 +2552,6 @@ function App() {
                   <img src={logo2} alt="SNR Trust Logo" className="AECTSD-banner-logo" />
                 </motion.div>
 
-                {/* AECTSD Logo above title */}
-                <motion.img
-                  src={acLogo}
-                  alt="AECTSD Logo"
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
-                  style={{
-                    height: '90px',
-                    width: 'auto',
-                    objectFit: 'contain',
-                    filter: 'drop-shadow(0 4px 16px rgba(245,158,11,0.45))',
-                    margin: '1rem auto'
-                  }}
-                />
 
                 {/* 3. Massive Golden Serif Title */}
                 <motion.h1
@@ -3584,51 +3569,140 @@ function App() {
                     )}
                   </div>
 
-                  {/* Coordinators */}
+                  {/* Coordinators Tree Hierarchy Layout */}
                   <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                    {/* Coordinators */}
-                    <div className="glass-card" style={{ height: '100%' }}>
-                      <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '1.5rem' }}>{info.contact_coord_title || 'Conference Coordinators'}</h3>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
-                        {coordinators.map((coord, cidx) => {
-                          const initials = coord.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
-                          const bgColors = ['#0f52ba', '#0d9488', '#7c3aed', '#b45309', '#0369a1', '#be185d'];
-                          const bg = bgColors[cidx % bgColors.length];
-                          return (
-                            <div key={cidx} style={{ borderRadius: '0.75rem', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', display: 'flex', flexDirection: 'column' }}>
-                              {/* Box Image Area — no overlay badge */}
-                              <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0 }}>
-                                {getMemberImage(coord.name, coord.image_url) && !getMemberImage(coord.name, coord.image_url).includes('dicebear') ? (
-                                  <img
-                                    src={getMemberImage(coord.name, coord.image_url)}
-                                    alt={coord.name}
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
-                                  />
-                                ) : (
-                                  <div style={{ width: '100%', height: '100%', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <span style={{ fontSize: '3rem', fontWeight: 800, color: 'white', letterSpacing: '0.05em' }}>{initials}</span>
+                    <div className="glass-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <h3 style={{ fontSize: '1.35rem', color: 'white', marginBottom: '1.5rem', textAlign: 'center', width: '100%' }}>
+                        {info.contact_coord_title || 'Conference Coordinators'}
+                      </h3>
+
+                      {(() => {
+                        const defaultCoords = [
+                          { name: 'Dr. V. Karpagam', role: 'Organizing Secretary, ICAECTSD 2027 Professor & Head, Dept. of AI&DS', phone: '+91 9842073310', email: 'karpagam@srec.ac.in' },
+                          { name: 'Dr. S. Balamurugan', role: 'Joint-Organizing Secretary, ICAECTSD 2027 Associate Professor, Dept. of AI&DS', phone: '+91 9842267890', email: 'balamurugan@srec.ac.in' },
+                          { name: 'Mrs. S. Jansi Rani', role: 'Joint-Organizing Secretary, ICAECTSD 2027 Assistant Professor (Sl.Gr), Dept. of IT', phone: '+91 9486800382', email: 'jansi@srec.ac.in' }
+                        ];
+
+                        // Ensure all 3 coordinators exist (Karpagam, Balamurugan, Jansi)
+                        const fullList = [...coordinators];
+                        defaultCoords.forEach(def => {
+                          const keyName = def.name.split(' ').pop()!.toLowerCase();
+                          if (!fullList.some(c => c.name.toLowerCase().includes(keyName))) {
+                            fullList.push(def);
+                          }
+                        });
+
+                        // Top Node: Karpagam
+                        const leadCoord = fullList.find(c => c.name.toLowerCase().includes('karpagam')) || fullList[0];
+                        // Sub Nodes: Balamurugan (Left) & Jansi (Right)
+                        const subCoords = fullList.filter(c => c !== leadCoord).sort((a, b) => {
+                          if (a.name.toLowerCase().includes('balamurugan')) return -1;
+                          if (b.name.toLowerCase().includes('balamurugan')) return 1;
+                          return 0;
+                        });
+
+                        return (
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', position: 'relative', padding: '0.5rem 0' }}>
+                            {/* 1. TOP NODE: Dr. V. Karpagam */}
+                            {leadCoord && (
+                              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', zIndex: 2 }}>
+                                <div style={{
+                                  width: '215px',
+                                  borderRadius: '0.9rem',
+                                  overflow: 'hidden',
+                                  border: '2px solid #f59e0b',
+                                  background: '#090e17',
+                                  boxShadow: '0 12px 35px rgba(0,0,0,0.6), 0 0 25px rgba(245, 158, 11, 0.3)',
+                                  textAlign: 'center'
+                                }}>
+                                  <div style={{ width: '100%', height: '140px', overflow: 'hidden', background: '#090e17' }}>
+                                    <img
+                                      src={getMemberImage(leadCoord.name, leadCoord.image_url)}
+                                      alt={leadCoord.name}
+                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+                                    />
                                   </div>
-                                )}
-                              </div>
-                              {/* Info */}
-                              <div style={{ padding: '0.9rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-                                <h4 style={{ fontSize: '1rem', color: 'white', margin: 0, fontWeight: 700 }}>{coord.name}</h4>
-                                <span style={{ fontSize: '0.65rem', color: '#f59e0b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.4 }}>{coord.role}</span>
-                                {coord.email && (
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', marginTop: '0.2rem' }}>
-                                    <Mail size={11} style={{ color: '#60a5fa', flexShrink: 0 }} />
-                                    <a href={`mailto:${coord.email}`} style={{ color: '#60a5fa', textDecoration: 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{coord.email}</a>
+                                  <div style={{ padding: '0.8rem 0.6rem', background: 'linear-gradient(180deg, #0d1520 0%, #151d2a 100%)' }}>
+                                    <div style={{ fontSize: '0.98rem', color: '#ffffff', margin: '0 0 0.25rem 0', fontWeight: 900, textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                                      {leadCoord.name}
+                                    </div>
+                                    <span style={{ fontSize: '0.62rem', color: '#fbbf24', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em', display: 'block', lineHeight: 1.3 }}>
+                                      {leadCoord.role || 'Organizing Secretary'}
+                                    </span>
+                                    {leadCoord.phone && (
+                                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', fontSize: '0.76rem', color: '#ffffff', fontWeight: 700, marginTop: '0.4rem' }}>
+                                        <Phone size={11} style={{ color: '#fbbf24' }} />
+                                        <span>{leadCoord.phone}</span>
+                                      </div>
+                                    )}
                                   </div>
-                                )}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                                  <Phone size={11} style={{ flexShrink: 0 }} />
-                                  <span>{coord.phone}</span>
                                 </div>
+
+                                {/* Vertical Line down from top node */}
+                                {subCoords.length > 0 && (
+                                  <div style={{ width: '3px', height: '26px', background: 'linear-gradient(180deg, #f59e0b, #3b82f6)' }} />
+                                )}
                               </div>
+                            )}
+
+                            {/* 2. CONNECTING BRANCH LINES */}
+                            {subCoords.length > 0 && (
+                              <div style={{ width: '64%', minWidth: '190px', maxWidth: '290px', position: 'relative', height: '20px' }}>
+                                {/* Horizontal Bar connecting sub nodes */}
+                                <div style={{ position: 'absolute', top: 0, left: '22%', right: '22%', height: '3px', background: '#3b82f6', borderRadius: '2px', boxShadow: '0 0 8px rgba(59,130,246,0.5)' }} />
+                                {/* Left Vertical Drop Line */}
+                                <div style={{ position: 'absolute', top: 0, left: '22%', width: '3px', height: '100%', background: '#3b82f6' }} />
+                                {/* Right Vertical Drop Line */}
+                                <div style={{ position: 'absolute', top: 0, right: '22%', width: '3px', height: '100%', background: '#3b82f6' }} />
+                              </div>
+                            )}
+
+                            {/* 3. SUB NODES ROW: Balamurugan (Left) & Jansi (Right) Side-by-Side */}
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', width: '100%' }}>
+                              {subCoords.map((coord, idx) => (
+                                <div key={idx} style={{
+                                  flex: '1 1 0',
+                                  maxWidth: '175px',
+                                  minWidth: '135px',
+                                  borderRadius: '0.85rem',
+                                  overflow: 'hidden',
+                                  border: '1.5px solid rgba(56, 189, 248, 0.5)',
+                                  background: '#090e17',
+                                  boxShadow: '0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(56, 189, 248, 0.15)',
+                                  textAlign: 'center'
+                                }}>
+                                  <div style={{ width: '100%', height: '135px', overflow: 'hidden', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <img
+                                      src={getMemberImage(coord.name, coord.image_url)}
+                                      alt={coord.name}
+                                      style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                        objectPosition: 'top center'
+                                      }}
+                                    />
+                                  </div>
+                                  <div style={{ padding: '0.7rem 0.55rem', background: 'linear-gradient(180deg, #0d1520 0%, #151d2a 100%)' }}>
+                                    <div style={{ fontSize: '0.88rem', color: '#ffffff', margin: '0 0 0.2rem 0', fontWeight: 900, textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                                      {coord.name}
+                                    </div>
+                                    <span style={{ fontSize: '0.58rem', color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.02em', display: 'block', lineHeight: 1.3 }}>
+                                      {coord.role || 'Joint-Organizing Secretary'}
+                                    </span>
+                                    {coord.phone && (
+                                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', fontSize: '0.72rem', color: '#ffffff', fontWeight: 700, marginTop: '0.35rem' }}>
+                                        <Phone size={10} style={{ color: '#38bdf8' }} />
+                                        <span>{coord.phone}</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
                             </div>
-                          );
-                        })}
-                      </div>
+                          </div>
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>
