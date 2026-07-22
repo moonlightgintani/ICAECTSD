@@ -3119,10 +3119,9 @@ export default function AdminPage({
                           onChange={(e) => setEditingCommittee({ ...editingCommittee, category: e.target.value })}
                           style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
                         >
-                          <option value="steering">Steering / Advisory / Leadership</option>
                           <option value="organizing">Organizing Committee</option>
-                          <option value="advisory">National / International Advisory</option>
-                          <option value="technical">Technical Program Committee</option>
+                          <option value="steering">Steering & Leadership</option>
+                          <option value="advisory">Advisory Committee</option>
                         </select>
                       </div>
                       <div>
@@ -3139,44 +3138,39 @@ export default function AdminPage({
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                       <div>
-                        {editingCommittee.category === 'organizing' ? (
-                          <>
-                            <label htmlFor="mem_sub" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Subgroup Title (For Organizing Committee)</label>
-                            <select
-                              id="mem_sub"
-                              value={editingCommittee.role || ''}
-                              onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
-                              style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', background: '#ffffff' }}
-                            >
-                              <option value="">Select Subgroup...</option>
-                              <option value="Executive Committee">Executive Committee</option>
-                              <option value="Patrons">Patrons</option>
-                              <option value="General Chairs">General Chairs</option>
-                              <option value="Finance">Finance</option>
-                              <option value="Publication">Publication</option>
-                              <option value="Arrangements">Arrangements</option>
-                              <option value="Registration">Registration</option>
-                              <option value="Tutorials & Workshops">Tutorials & Workshops</option>
-                              <option value="Technical Review">Technical Review</option>
-                              <option value="Outreach & Promotion">Outreach & Promotion</option>
-                              <option value="Website & Media">Website & Media</option>
-                              <option value="Hospitality">Hospitality</option>
-                              <option value="General Members">General Members</option>
-                            </select>
-                          </>
-                        ) : (
-                          <>
-                            <label htmlFor="mem_role" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Role / Designation</label>
-                            <input
-                              id="mem_role"
-                              type="text"
-                              placeholder="e.g. Advisory Chair, Reviewer, etc."
-                              value={editingCommittee.role || ''}
-                              onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
-                              style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
-                            />
-                          </>
-                        )}
+                        <label htmlFor="mem_sub" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Subgroup Title / Role</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginTop: '0.25rem' }}>
+                          <select
+                            id="mem_sub"
+                            value={editingCommittee.role || ''}
+                            onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
+                            style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', background: '#ffffff' }}
+                          >
+                            <option value="">Select or Type Subgroup...</option>
+                            <option value="Patrons">Patrons</option>
+                            <option value="General Chairs">General Chairs</option>
+                            <option value="Executive Committee">Executive Committee</option>
+                            <option value="Publication Committee">Publication Committee</option>
+                            <option value="Arrangements Committee">Arrangements Committee</option>
+                            <option value="Registration Committee">Registration Committee</option>
+                            <option value="Tutorials & Workshops">Tutorials & Workshops</option>
+                            <option value="Technical Review Committee">Technical Review Committee</option>
+                            <option value="Outreach & Promotion Committee">Outreach & Promotion Committee</option>
+                            <option value="Website & Media Committee">Website & Media Committee</option>
+                            <option value="Hospitality Committee">Hospitality Committee</option>
+                            <option value="General Members">General Members</option>
+                            <option value="Steering Committee">Steering Committee</option>
+                            <option value="National Advisory">National Advisory</option>
+                            <option value="International Advisory">International Advisory</option>
+                          </select>
+                          <input
+                            type="text"
+                            placeholder="Or type custom subgroup..."
+                            value={editingCommittee.role || ''}
+                            onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
+                            style={{ width: '100%', padding: '0.4rem 0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', fontSize: '0.82rem' }}
+                          />
+                        </div>
                       </div>
                       <div>
                         <label htmlFor="mem_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Affiliation / Description</label>

@@ -227,6 +227,7 @@ export const renderFormattedDesc = (descText: string | undefined | null) => {
     .replace(/\\'/g, "'")
     .replace(/\\"/g, '"')
     .replace(/\\n/g, ' ')
+    .replace(/\\/g, '')
     .replace(/\bnice\b/gi, '');
 
   const phrases = [
