@@ -2250,6 +2250,7 @@ function App() {
 
               {/* Desktop Navigation Action Buttons */}
               <div className="header-right-container" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+
                 {/* IEEE SREC SB Portal Link */}
                 <a
                   href={info.ieee_sb_url || "https://www.ieeesrec.in/"}
@@ -2325,6 +2326,7 @@ function App() {
               {/* Action Buttons inside Mobile Drawer */}
               <div className="mobile-action-row" style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                 <a
+
                   href={info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/"}
                   target="_blank"
                   rel="noopener noreferrer"
