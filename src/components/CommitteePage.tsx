@@ -348,58 +348,117 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                             {sub.label.endsWith('Committee') ? sub.label : `The ${sub.label}`}
                           </h4>
 
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', justifyContent: 'center' }}>
-                            {members.map((member, mIdx) => (
-                              <div 
-                                key={mIdx} 
-                                className="committee-profile-card"
-                                style={{
-                                  background: '#ffffff',
-                                  border: '1px solid #cbd5e1',
-                                  borderRadius: '1.5rem',
-                                  padding: '2rem 1.5rem',
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  alignItems: 'center',
-                                  textAlign: 'center',
-                                  width: '100%',
-                                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.03)',
-                                  transition: 'all 0.3s ease'
-                                }}
-                              >
-                                <div style={{
-                                  width: '140px',
-                                  height: '140px',
-                                  borderRadius: '50%',
-                                  border: '2px solid #eab308',
-                                  padding: '4px',
-                                  marginBottom: '1.25rem',
-                                  overflow: 'hidden',
-                                  background: '#ffffff',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  flexShrink: 0
-                                }}>
-                                  <img 
-                                    src={resolveMemberImage(member.name, member.image_url)}
-                                    onError={(e) => {
-                                      (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0b4f30,eab308&textColor=ffffff`;
-                                    }}
-                                    alt={member.name}
-                                    style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
-                                  />
+                          {sub.id === 'general-chairs' ? (
+                            /* General Chairs: Horizontal Card Layout (Left Pic, Right Details) */
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%', maxWidth: '850px', margin: '0 auto' }}>
+                              {members.map((member, mIdx) => (
+                                <div 
+                                  key={mIdx} 
+                                  className="committee-profile-card"
+                                  style={{
+                                    background: '#ffffff',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '1.5rem',
+                                    padding: '2rem 2.5rem',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    gap: '2rem',
+                                    textAlign: 'left',
+                                    width: '100%',
+                                    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.04)',
+                                    transition: 'all 0.3s ease'
+                                  }}
+                                >
+                                  <div style={{
+                                    width: '140px',
+                                    height: '140px',
+                                    borderRadius: '50%',
+                                    border: '3px solid #eab308',
+                                    padding: '4px',
+                                    overflow: 'hidden',
+                                    background: '#ffffff',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0
+                                  }}>
+                                    <img 
+                                      src={resolveMemberImage(member.name, member.image_url)}
+                                      onError={(e) => {
+                                        (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0b4f30,eab308&textColor=ffffff`;
+                                      }}
+                                      alt={member.name}
+                                      style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                                    />
+                                  </div>
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                                    <h4 style={{ fontSize: '1.4rem', color: '#0b4f30', fontWeight: 800, margin: 0 }}>{member.name}</h4>
+                                    {member.role && (
+                                      <div style={{ fontWeight: 700, color: '#091d36', fontSize: '1rem' }}>{member.role}</div>
+                                    )}
+                                    <div style={{ color: '#475569', fontSize: '0.92rem', fontWeight: 500, lineHeight: '1.5' }}>
+                                      {renderFormattedDesc(member.desc)}
+                                    </div>
+                                  </div>
                                 </div>
-                                <h4 style={{ fontSize: '1.2rem', color: '#0b4f30', fontWeight: 800, margin: '0 0 0.75rem' }}>{member.name}</h4>
-                                <div style={{ color: '#475569', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', lineHeight: '1.4' }}>
-                                  {member.role && member.role !== 'Organizing Member' && member.role !== 'Member' && (
-                                    <div style={{ fontWeight: 700, color: '#091d36' }}>{member.role}</div>
-                                  )}
-                                  <div style={{ fontWeight: 500 }}>{renderFormattedDesc(member.desc)}</div>
+                              ))}
+                            </div>
+                          ) : (
+                            /* Other Subcommittees: 4-Column Vertical Cards */
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', justifyContent: 'center' }}>
+                              {members.map((member, mIdx) => (
+                                <div 
+                                  key={mIdx} 
+                                  className="committee-profile-card"
+                                  style={{
+                                    background: '#ffffff',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '1.5rem',
+                                    padding: '2rem 1.5rem',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    textAlign: 'center',
+                                    width: '100%',
+                                    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.03)',
+                                    transition: 'all 0.3s ease'
+                                  }}
+                                >
+                                  <div style={{
+                                    width: '140px',
+                                    height: '140px',
+                                    borderRadius: '50%',
+                                    border: '2px solid #eab308',
+                                    padding: '4px',
+                                    marginBottom: '1.25rem',
+                                    overflow: 'hidden',
+                                    background: '#ffffff',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0
+                                  }}>
+                                    <img 
+                                      src={resolveMemberImage(member.name, member.image_url)}
+                                      onError={(e) => {
+                                        (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0b4f30,eab308&textColor=ffffff`;
+                                      }}
+                                      alt={member.name}
+                                      style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                                    />
+                                  </div>
+                                  <h4 style={{ fontSize: '1.2rem', color: '#0b4f30', fontWeight: 800, margin: '0 0 0.75rem' }}>{member.name}</h4>
+                                  <div style={{ color: '#475569', fontSize: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', lineHeight: '1.4' }}>
+                                    {member.role && member.role !== 'Organizing Member' && member.role !== 'Member' && (
+                                      <div style={{ fontWeight: 700, color: '#091d36' }}>{member.role}</div>
+                                    )}
+                                    <div style={{ fontWeight: 500 }}>{renderFormattedDesc(member.desc)}</div>
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
-                          </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       );
                     })}
