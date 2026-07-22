@@ -50,10 +50,10 @@ import chatbotIcon from './assets/chatbot.gif';
 import heroBg from './assets/hero.png';
 import karpagamImg from './assets/karpagam.png';
 import jansiImg from './assets/jansi.png';
-import balamurgunImg from './assets/balamurugan.jpg';
-import narendranImg from './assets/Narendran.png';
+import balamurgunImg from './assets/bala.jpeg';
+import trust1Img from './assets/trust1.png';
 import logo5 from './assets/logo5.jpg';
-import principalImg from './assets/principal.jpeg';
+import principalImg from './assets/principal.png';
 import kingsyImg from './assets/Kingsy.png';
 import sakthivelImg from './assets/Sakthivel.png';
 import radhaImg from './assets/Screenshot 2026-07-10 142828.png';
@@ -1961,7 +1961,7 @@ function App() {
   const getMemberImage = (name: string, imageUrl?: string): string => {
     if (imageUrl && imageUrl !== 'no_file' && imageUrl !== '') return imageUrl;
     if (name.includes('Sundar Ramakrishnan') || name.includes('R. Sundar')) return logo5;
-    if (name.includes('S. Narendran')) return narendranImg;
+    if (name.includes('Thiru.S.Narendran')) return trust1Img;
     if (name.includes('Balamurugan')) return balamurgunImg;
     if (name.includes('Soundarrajan')) return principalImg;
     if (name.includes('P. Sakthivel')) return sakthivelImg;

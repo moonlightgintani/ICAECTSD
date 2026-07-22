@@ -356,7 +356,7 @@ export default function PaymentPage({
             {/* Tables Side-by-Side */}
             <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
               {/* Indian Delegates Table */}
-              <div className="glass-card" style={{ flex: '1 1 450px', padding: '2rem', minWidth: '0' }}>
+              <div className="glass-card" style={{ flex: '1 1 480px', padding: '2rem', minWidth: '0' }}>
                 <h3 style={{ fontSize: '1.35rem', color: '#091d36', marginBottom: '1.25rem', fontWeight: 800 }}>
                   Indian Delegates (Fees in INR, GST Inclusive)
                 </h3>
@@ -364,34 +364,36 @@ export default function PaymentPage({
                   <table className="registration-table">
                     <thead>
                       <tr>
-                        <th style={{ textAlign: 'left', width: '60%' }}>Category</th>
-                        <th style={{ textAlign: 'right' }}>Fee (incl. GST)</th>
+                        <th style={{ textAlign: 'left', width: '40%' }}>Category</th>
+                        <th style={{ textAlign: 'center' }}>Early Bird</th>
+                        <th style={{ textAlign: 'center' }}>Regular</th>
+                        <th style={{ textAlign: 'center' }}>Late</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>IEEE Student Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
-                          INR {(_pricing.base_conf_student_ieee_inr || 9000).toLocaleString('en-IN')}
-                        </td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0b4f30' }}>₹9,000</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0f52ba' }}>₹10,000</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#b91c1c' }}>₹11,000</td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>Non-IEEE Student Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
-                          INR {(_pricing.base_conf_student_non_ieee_inr || 10000).toLocaleString('en-IN')}
-                        </td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0b4f30' }}>₹10,000</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0f52ba' }}>₹11,000</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#b91c1c' }}>₹12,000</td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>IEEE Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
-                          INR {(_pricing.base_conf_prof_ieee_inr || 10000).toLocaleString('en-IN')}
-                        </td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0b4f30' }}>₹10,000</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0f52ba' }}>₹11,000</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#b91c1c' }}>₹12,000</td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>Non-IEEE Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
-                          INR {(_pricing.base_conf_prof_non_ieee_inr || 11000).toLocaleString('en-IN')}
-                        </td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0b4f30' }}>₹11,000</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0f52ba' }}>₹12,000</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#b91c1c' }}>₹13,000</td>
                       </tr>
                     </tbody>
                   </table>
@@ -399,7 +401,7 @@ export default function PaymentPage({
               </div>
 
               {/* Foreign Delegates Table */}
-              <div className="glass-card" style={{ flex: '1 1 450px', padding: '2rem', minWidth: '0' }}>
+              <div className="glass-card" style={{ flex: '1 1 480px', padding: '2rem', minWidth: '0' }}>
                 <h3 style={{ fontSize: '1.35rem', color: '#091d36', marginBottom: '1.25rem', fontWeight: 800 }}>
                   Foreign Delegates (Fees in USD, GST Inclusive)
                 </h3>
@@ -407,34 +409,36 @@ export default function PaymentPage({
                   <table className="registration-table">
                     <thead>
                       <tr>
-                        <th style={{ textAlign: 'left', width: '60%' }}>Category</th>
-                        <th style={{ textAlign: 'right' }}>Fee (incl. GST)</th>
+                        <th style={{ textAlign: 'left', width: '40%' }}>Category</th>
+                        <th style={{ textAlign: 'center' }}>Early Bird</th>
+                        <th style={{ textAlign: 'center' }}>Regular</th>
+                        <th style={{ textAlign: 'center' }}>Late</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>IEEE Student Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
-                          USD {(_pricing.base_conf_student_ieee_usd || 150).toLocaleString()}
-                        </td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0b4f30' }}>USD 150</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0f52ba' }}>USD 175</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#b91c1c' }}>USD 200</td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>Non-IEEE Student Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
-                          USD {(_pricing.base_conf_student_non_ieee_usd || 200).toLocaleString()}
-                        </td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0b4f30' }}>USD 200</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0f52ba' }}>USD 225</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#b91c1c' }}>USD 250</td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>IEEE Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
-                          USD {(_pricing.base_conf_prof_ieee_usd || 200).toLocaleString()}
-                        </td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0b4f30' }}>USD 200</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0f52ba' }}>USD 225</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#b91c1c' }}>USD 250</td>
                       </tr>
                       <tr>
                         <td style={{ textAlign: 'left', fontWeight: 600 }}>Non-IEEE Member</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700, color: '#0b4f30' }}>
-                          USD {(_pricing.base_conf_prof_non_ieee_usd || 250).toLocaleString()}
-                        </td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0b4f30' }}>USD 250</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#0f52ba' }}>USD 275</td>
+                        <td style={{ textAlign: 'center', fontWeight: 700, color: '#b91c1c' }}>USD 300</td>
                       </tr>
                     </tbody>
                   </table>
