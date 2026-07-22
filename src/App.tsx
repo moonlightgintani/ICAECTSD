@@ -2413,7 +2413,7 @@ function App() {
                 }}
               />
 
-              {/* Dark overlay for rich high-contrast golden INDICON typography */}
+              {/* Dark overlay for rich high-contrast golden AECTSD typography */}
               <div style={{
                 position: 'absolute',
                 inset: 0,
@@ -2421,19 +2421,19 @@ function App() {
                 zIndex: 1
               }} />
 
-              <div className="indicon-hero-wrapper">
+              <div className="AECTSD-hero-wrapper">
                 {/* 1. Floating 3-Logo White Banner */}
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="indicon-logo-banner"
+                  className="AECTSD-logo-banner"
                 >
-                  <img src={srecLogo} alt="SREC Logo" className="indicon-banner-logo" />
-                  <div className="indicon-logo-divider" />
-                  <img src={acLogo} alt="AECTSD Logo" className="indicon-banner-logo" />
-                  <div className="indicon-logo-divider" />
-                  <img src={logo2} alt="SNR Trust Logo" className="indicon-banner-logo" />
+                  <img src={srecLogo} alt="SREC Logo" className="AECTSD-banner-logo" />
+                  <div className="AECTSD-logo-divider" />
+                  <img src={acLogo} alt="AECTSD Logo" className="AECTSD-banner-logo" />
+                  <div className="AECTSD-logo-divider" />
+                  <img src={logo2} alt="SNR Trust Logo" className="AECTSD-banner-logo" />
                 </motion.div>
 
 
@@ -2443,7 +2443,7 @@ function App() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.8 }}
-                  className="indicon-hero-title"
+                  className="AECTSD-hero-title"
                 >
                   {info.hero_title ? (
                     info.hero_title.includes(' ') ? (
@@ -2463,7 +2463,7 @@ function App() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4, duration: 0.8 }}
-                  className="indicon-hero-subtitle"
+                  className="AECTSD-hero-subtitle"
                 >
                   {info.hero_subtitle || 'SECOND INTERNATIONAL CONFERENCE ON ADVANCES IN ENGINEERING AND COMPUTING TECHNOLOGIES FOR SUSTAINABLE DEVELOPMENT'}
                 </motion.p>
@@ -2473,7 +2473,7 @@ function App() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5, duration: 0.6 }}
-                  className="indicon-date-pill"
+                  className="AECTSD-date-pill"
                 >
                   <Calendar size={18} />
                   <span>
@@ -2486,24 +2486,24 @@ function App() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.55, duration: 0.6 }}
-                  className="indicon-countdown-bar"
+                  className="AECTSD-countdown-bar"
                 >
-                  <div className="indicon-countdown-title">
+                  <div className="AECTSD-countdown-title">
                     <Clock size={15} />
                     <span>{info.hero_countdown_title || 'CONFERENCE COUNTDOWN'}</span>
                   </div>
-                  <div className="indicon-countdown-units">
+                  <div className="AECTSD-countdown-units">
                     {[
                       { label: info.label_days || 'Days', value: timeLeft.days },
                       { label: info.label_hours || 'Hours', value: timeLeft.hours },
                       { label: info.label_mins || 'Mins', value: timeLeft.minutes },
                       { label: info.label_secs || 'Secs', value: timeLeft.seconds }
                     ].map((t, idx) => (
-                      <div key={idx} className="indicon-countdown-box">
-                        <span className="indicon-countdown-val">
+                      <div key={idx} className="AECTSD-countdown-box">
+                        <span className="AECTSD-countdown-val">
                           {String(t.value).padStart(2, '0')}
                         </span>
-                        <span className="indicon-countdown-lbl">{t.label}</span>
+                        <span className="AECTSD-countdown-lbl">{t.label}</span>
                       </div>
                     ))}
                   </div>
@@ -2514,11 +2514,11 @@ function App() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.6 }}
-                  className="indicon-action-row"
+                  className="AECTSD-action-row"
                 >
                   <button
                     onClick={() => scrollToSection('paper-submission')}
-                    className="indicon-btn-yellow"
+                    className="AECTSD-btn-yellow"
                   >
                     {info.hero_btn_submit || 'Submit Paper'}
                   </button>
@@ -2530,7 +2530,7 @@ function App() {
                       link.setAttribute('download', 'AECTSD_2027_Brochure.pdf');
                       document.body.appendChild(link);
                     }}
-                    className="indicon-btn-outline"
+                    className="AECTSD-btn-outline"
                   >
                     {info.hero_btn_brochure || 'Download Brochure'}
                   </button>
@@ -2545,24 +2545,24 @@ function App() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 60, scale: 0.85 }}
                     transition={{ delay: 0.8, duration: 0.6, type: 'spring', stiffness: 120 }}
-                    className="indicon-toast-card"
+                    className="AECTSD-toast-card"
                   >
                     {/* Close X Button for Mobile & Desktop */}
                     <button
                       onClick={() => setToastOpen(false)}
-                      className="indicon-toast-close-btn"
+                      className="AECTSD-toast-close-btn"
                       title="Dismiss notification"
                     >
                       <X size={15} />
                     </button>
 
-                    <div className="indicon-toast-header">
-                      <div className="indicon-toast-icon">
+                    <div className="AECTSD-toast-header">
+                      <div className="AECTSD-toast-icon">
                         <FileText size={18} />
                       </div>
                       <div style={{ flex: 1, paddingRight: '1rem' }}>
-                        <div className="indicon-toast-title">{info.cmt_portal_badge || 'CMT PORTAL LIVE'}</div>
-                        <div className="indicon-toast-desc">{info.cmt_portal_desc || 'Paper submission for AECTSD 2027 is now open via Microsoft CMT.'}</div>
+                        <div className="AECTSD-toast-title">{info.cmt_portal_badge || 'CMT PORTAL LIVE'}</div>
+                        <div className="AECTSD-toast-desc">{info.cmt_portal_desc || 'Paper submission for AECTSD 2027 is now open via Microsoft CMT.'}</div>
                       </div>
                     </div>
                     <a
@@ -2575,7 +2575,7 @@ function App() {
                       }}
                       target={info.cmt_portal_url ? "_blank" : "_self"}
                       rel="noopener noreferrer"
-                      className="indicon-toast-btn"
+                      className="AECTSD-toast-btn"
                     >
                       {info.cmt_portal_btn_label || 'SUBMIT PAPER →'}
                     </a>
