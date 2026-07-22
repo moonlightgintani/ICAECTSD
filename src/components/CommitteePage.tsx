@@ -226,7 +226,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
             transition={{ duration: 0.3 }}
           >
             {committeeTab === 'steering' && (
-              <div className="centered-flex-grid" style={{ gap: '2rem', justifyContent: 'center' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', justifyContent: 'center' }}>
                 {committeeMembers
                   .filter((member) => member.category === 'steering')
                   .map((member, mIdx) => (
@@ -237,12 +237,12 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                         background: '#ffffff',
                         border: '1px solid #cbd5e1',
                         borderRadius: '1.5rem',
-                        padding: '2.25rem 2rem',
+                        padding: '2rem 1.5rem',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         textAlign: 'center',
-                        width: '280px',
+                        width: '100%',
                         boxShadow: '0 8px 30px rgba(0, 0, 0, 0.03)',
                         transition: 'all 0.3s ease'
                       }}
@@ -345,10 +345,10 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                             textAlign: 'center', 
                             marginBottom: '2rem' 
                           }}>
-                            The {sub.label} Committee
+                            {sub.label.endsWith('Committee') ? sub.label : `The ${sub.label}`}
                           </h4>
 
-                          <div className="centered-flex-grid" style={{ gap: '2rem', justifyContent: 'center' }}>
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', justifyContent: 'center' }}>
                             {members.map((member, mIdx) => (
                               <div 
                                 key={mIdx} 
@@ -357,12 +357,12 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                                   background: '#ffffff',
                                   border: '1px solid #cbd5e1',
                                   borderRadius: '1.5rem',
-                                  padding: '2.25rem 2rem',
+                                  padding: '2rem 1.5rem',
                                   display: 'flex',
                                   flexDirection: 'column',
                                   alignItems: 'center',
                                   textAlign: 'center',
-                                  width: '280px',
+                                  width: '100%',
                                   boxShadow: '0 8px 30px rgba(0, 0, 0, 0.03)',
                                   transition: 'all 0.3s ease'
                                 }}
@@ -409,7 +409,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
             )}
 
             {committeeTab === 'advisory' && (
-              <div className="centered-flex-grid" style={{ gap: '2rem', justifyContent: 'center' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', justifyContent: 'center' }}>
                 {committeeMembers
                   .filter(m => m.category === 'advisory')
                   .map((adviser, index) => (
@@ -420,12 +420,12 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                         background: '#ffffff',
                         border: '1px solid #cbd5e1',
                         borderRadius: '1.5rem',
-                        padding: '2.25rem 2rem',
+                        padding: '2rem 1.5rem',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         textAlign: 'center',
-                        width: '280px',
+                        width: '100%',
                         boxShadow: '0 8px 30px rgba(0, 0, 0, 0.03)',
                         transition: 'all 0.3s ease'
                       }}
