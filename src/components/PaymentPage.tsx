@@ -506,33 +506,63 @@ export default function PaymentPage({
             </div>
 
             {/* Note & Action card linking to form */}
-            <div className="glass-card" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '1.5rem', border: '1px solid rgba(15, 82, 186, 0.2)' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(217, 119, 6, 0.1)', color: '#d97706', padding: '0.5rem 1.25rem', borderRadius: '2rem', fontSize: '0.9rem', fontWeight: 700 }}>
-                <span>⏳</span> Important: Registration window closes on 10 November 2026.
-              </div>
+            <div className="glass-card" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '1.5rem', border: info?.registration_enabled === 'false' ? '2px solid #fca5a5' : '1px solid rgba(15, 82, 186, 0.2)', background: info?.registration_enabled === 'false' ? '#fef2f2' : undefined }}>
+              {info?.registration_enabled === 'false' ? (
+                <>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#fee2e2', color: '#991b1b', padding: '0.5rem 1.25rem', borderRadius: '2rem', fontSize: '0.9rem', fontWeight: 800 }}>
+                    <span>🔴</span> Registration Portal Currently Closed
+                  </div>
+                  <h4 style={{ fontSize: '1.4rem', color: '#991b1b', fontWeight: 800, margin: 0 }}>Registrations are Paused</h4>
+                  <p style={{ fontSize: '0.95rem', color: '#7f1d1d', maxWidth: '550px', margin: 0, lineHeight: '1.5' }}>
+                    The conference administrator has temporarily disabled new registrations. Please contact the conference secretariat for further assistance.
+                  </p>
+                  <button
+                    disabled
+                    className="btn"
+                    style={{
+                      padding: '0.85rem 2.5rem',
+                      fontSize: '0.95rem',
+                      fontWeight: 700,
+                      background: '#cbd5e1',
+                      color: '#64748b',
+                      border: 'none',
+                      borderRadius: '30px',
+                      cursor: 'not-allowed'
+                    }}
+                  >
+                    Registration Closed
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(217, 119, 6, 0.1)', color: '#d97706', padding: '0.5rem 1.25rem', borderRadius: '2rem', fontSize: '0.9rem', fontWeight: 700 }}>
+                    <span>⏳</span> Important: Registration window closes on 10 November 2026.
+                  </div>
 
-              <h4 style={{ fontSize: '1.4rem', color: '#091d36', fontWeight: 800, margin: 0 }}>Ready to Proceed?</h4>
-              <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', maxWidth: '550px', margin: 0, lineHeight: '1.5' }}>
-                Click the button below to open the dynamic registration calculator, select your options, and securely submit your details.
-              </p>
+                  <h4 style={{ fontSize: '1.4rem', color: '#091d36', fontWeight: 800, margin: 0 }}>Ready to Proceed?</h4>
+                  <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', maxWidth: '550px', margin: 0, lineHeight: '1.5' }}>
+                    Click the button below to open the dynamic registration calculator, select your options, and securely submit your details.
+                  </p>
 
-              <button
-                onClick={() => setPortalTab('form')}
-                className="btn btn-primary"
-                style={{
-                  padding: '0.85rem 2.5rem',
-                  fontSize: '0.95rem',
-                  fontWeight: 700,
-                  background: 'linear-gradient(135deg, #091d36 0%, #0f52ba 100%)',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: '30px',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 15px rgba(15, 82, 186, 0.3)'
-                }}
-              >
-                Proceed to Registration
-              </button>
+                  <button
+                    onClick={() => setPortalTab('form')}
+                    className="btn btn-primary"
+                    style={{
+                      padding: '0.85rem 2.5rem',
+                      fontSize: '0.95rem',
+                      fontWeight: 700,
+                      background: 'linear-gradient(135deg, #091d36 0%, #0f52ba 100%)',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '30px',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 15px rgba(15, 82, 186, 0.3)'
+                    }}
+                  >
+                    Proceed to Registration
+                  </button>
+                </>
+              )}
             </div>
           </>
         )}
@@ -1007,11 +1037,26 @@ export default function PaymentPage({
                         <button
                           type="submit"
                           className="btn btn-primary"
-                          disabled={regSubmitting}
+                          disabled={regSubmitting || info?.registration_enabled === 'false'}
                           onClick={() => setShowRegValidation(true)}
-                          style={{ marginTop: '0.5rem', width: '100%', padding: '0.7rem', background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent-cyan) 100%)', fontSize: '0.9rem', border: 'none', color: '#ffffff', borderRadius: '0.5rem', fontWeight: 700, cursor: 'pointer' }}
+                          style={{
+                            marginTop: '0.5rem',
+                            width: '100%',
+                            padding: '0.7rem',
+                            background: info?.registration_enabled === 'false' ? '#cbd5e1' : 'linear-gradient(135deg, var(--accent) 0%, var(--accent-cyan) 100%)',
+                            fontSize: '0.9rem',
+                            border: 'none',
+                            color: info?.registration_enabled === 'false' ? '#64748b' : '#ffffff',
+                            borderRadius: '0.5rem',
+                            fontWeight: 700,
+                            cursor: info?.registration_enabled === 'false' ? 'not-allowed' : 'pointer'
+                          }}
                         >
-                          {regSubmitting ? 'Submitting...' : 'Submit Registration & Payment'}
+                          {info?.registration_enabled === 'false'
+                            ? 'Registration Closed by Admin'
+                            : regSubmitting
+                            ? 'Submitting...'
+                            : 'Submit Registration & Payment'}
                         </button>
                       </form>
                     )}
