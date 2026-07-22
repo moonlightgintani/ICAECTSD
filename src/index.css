@@ -3397,45 +3397,47 @@ footer h6 {
   flex-direction: row !important;
 }
 
-.admin-topbar-v2 {
-  height: 60px;
-  background: #111827;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+/* ==========================================================================
+   ULTRA-MODERN EXECUTIVE ADMIN DASHBOARD STYLES (Porsche / Stripe / Linear Theme)
+   ========================================================================== */
+
+.admin-layout-v2 {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1.5rem;
-  color: #ffffff;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  flex-direction: row;
+  min-height: 100vh;
+  width: 100%;
+  background: #f4f6f9;
+  font-family: var(--font-sans);
+  color: #0f172a;
 }
 
+/* 1. Dark Glass Sidebar Navigation */
 .admin-sidebar-v2 {
-  width: 260px;
-  min-width: 260px;
-  background: linear-gradient(180deg, #111827 0%, #0d1520 100%);
-  border-right: 1px solid rgba(255,255,255,0.06);
+  width: 270px;
+  min-width: 270px;
+  background: linear-gradient(180deg, #0b1120 0%, #060913 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   color: #ffffff;
-  box-shadow: 4px 0 30px rgba(0,0,0,0.35);
+  box-shadow: 6px 0 35px rgba(0, 0, 0, 0.4);
   z-index: 999;
   position: sticky;
   top: 0;
   height: 100vh;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 }
 
 .admin-sidebar-group-title {
-  font-size: 0.675rem;
+  font-size: 0.65rem;
   font-weight: 800;
   color: #64748b;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 1.25rem 1.25rem 0.5rem 1.25rem;
+  padding: 1.35rem 1.25rem 0.5rem 1.25rem;
 }
 
 .admin-sidebar-item {
@@ -3443,71 +3445,125 @@ footer h6 {
   align-items: center;
   justify-content: space-between;
   width: calc(100% - 1.5rem);
-  margin: 0.15rem 0.75rem;
-  padding: 0.65rem 0.85rem;
-  border-radius: 0.5rem;
-  border: none;
+  margin: 0.2rem 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.6rem;
+  border: 1px solid transparent;
   background: transparent;
   color: #94a3b8;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: left;
 }
 
 .admin-sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #f8fafc;
-  transform: translateX(3px);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.08);
+  transform: translateX(4px);
 }
 
 .admin-sidebar-item.active {
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
-  font-weight: 700;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.45);
+  font-weight: 800;
 }
 
 .admin-sidebar-badge {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.14);
   color: #ffffff;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 0.1rem 0.45rem;
-  border-radius: 10px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
 .admin-sidebar-item.active .admin-sidebar-badge {
   background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
 }
 
+/* 2. Topbar Navigation */
+.admin-topbar-v2 {
+  height: 64px;
+  background: #0b1120;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.75rem;
+  color: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* 3. Executive KPI Tiles */
 .admin-kpi-tile {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 0.85rem;
-  padding: 1rem 1.25rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  gap: 1rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
 
 .admin-kpi-tile:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px -4px rgba(15, 23, 42, 0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.12);
+  border-color: #cbd5e1;
 }
 
+/* 4. Table & Cards Section UI */
+.admin-table-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+}
+
+.admin-table-card table th {
+  padding: 0.9rem 1.25rem;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 800;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.admin-table-card table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.15s ease;
+}
+
+.admin-table-card table tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* 5. Centered Modal Backdrop Overlay */
 .admin-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(11, 17, 32, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -3518,13 +3574,13 @@ footer h6 {
 
 .admin-modal-card {
   background: #ffffff;
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.9);
   border-radius: 1.25rem;
-  max-width: 840px;
+  max-width: 820px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35);
+  box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.4);
   padding: 2.25rem;
   position: relative;
   animation: adminModalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -3533,7 +3589,7 @@ footer h6 {
 @keyframes adminModalPop {
   0% {
     opacity: 0;
-    transform: scale(0.95) translateY(10px);
+    transform: scale(0.95) translateY(12px);
   }
   100% {
     opacity: 1;
@@ -3548,7 +3604,7 @@ footer h6 {
     bottom: 0 !important;
     left: -280px !important;
     z-index: 1001 !important;
-    transition: transform 0.3s ease !important;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
   .admin-sidebar-open {
     transform: translateX(280px) !important;
