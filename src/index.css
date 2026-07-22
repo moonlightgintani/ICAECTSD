@@ -610,6 +610,7 @@ h6 {
 }
 
 @media (max-width: 849px) {
+
   .ieee-sb-btn-nav.desktop-btn,
   .contact-btn-nav.desktop-btn {
     display: none !important;
@@ -2787,8 +2788,8 @@ td {
   }
 }
 
-/* IEEE INDICON 2026 Style Layout & Hero Styling */
-.indicon-hero-wrapper {
+/* IEEE AECTSD 2026 Style Layout & Hero Styling */
+.AECTSD-hero-wrapper {
   position: relative;
   z-index: 2;
   max-width: 1200px;
@@ -2803,7 +2804,7 @@ td {
 }
 
 /* Floating 3-Logo White Banner Card */
-.indicon-logo-banner {
+.AECTSD-logo-banner {
   background: #ffffff;
   border-radius: 50px;
   padding: 1.35rem 4.5rem;
@@ -2816,24 +2817,24 @@ td {
   max-width: 95%;
 }
 
-.indicon-banner-logo {
+.AECTSD-banner-logo {
   height: 88px;
   width: auto;
   object-fit: contain;
   transition: transform 0.3s ease;
 }
 
-.indicon-banner-logo:hover {
+.AECTSD-banner-logo:hover {
   transform: scale(1.05);
 }
 
-.indicon-logo-divider {
+.AECTSD-logo-divider {
   width: 1.5px;
   height: 60px;
   background: #cbd5e1;
 }
 
-.indicon-banner-subtext {
+.AECTSD-banner-subtext {
   font-size: 0.85rem;
   font-weight: 800;
   color: #fbbf24;
@@ -2842,7 +2843,7 @@ td {
 }
 
 /* Massive Golden Serif Hero Title */
-.indicon-hero-title {
+.AECTSD-hero-title {
   font-family: 'Times New Roman', Georgia, serif;
   font-size: 4.2rem;
   font-weight: 900;
@@ -2853,10 +2854,10 @@ td {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.indicon-hero-subtitle {
+.AECTSD-hero-subtitle {
   font-size: 1.1rem;
   font-weight: 600;
   color: #ffffff;
@@ -2865,11 +2866,11 @@ td {
   margin: 0;
   line-height: 1.6;
   text-transform: uppercase;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 /* Golden Date & Location Pill */
-.indicon-date-pill {
+.AECTSD-date-pill {
   background: #fbbf24;
   color: #091d36;
   font-size: 0.95rem;
@@ -2884,7 +2885,7 @@ td {
 }
 
 /* Live Countdown Timer Bar */
-.indicon-countdown-bar {
+.AECTSD-countdown-bar {
   background: rgba(15, 5, 10, 0.6);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -2920,7 +2921,7 @@ td {
   background: #f58220 !important;
 }
 
-.indicon-countdown-title {
+.AECTSD-countdown-title {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -2930,26 +2931,26 @@ td {
   letter-spacing: 0.08em;
 }
 
-.indicon-countdown-units {
+.AECTSD-countdown-units {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.indicon-countdown-box {
+.AECTSD-countdown-box {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.indicon-countdown-val {
+.AECTSD-countdown-val {
   font-size: 1.35rem;
   font-weight: 800;
   color: #ffffff;
   line-height: 1;
 }
 
-.indicon-countdown-lbl {
+.AECTSD-countdown-lbl {
   font-size: 0.65rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.7);
@@ -2958,7 +2959,7 @@ td {
 }
 
 /* Action Buttons */
-.indicon-action-row {
+.AECTSD-action-row {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2967,7 +2968,7 @@ td {
   flex-wrap: wrap;
 }
 
-.indicon-btn-yellow {
+.AECTSD-btn-yellow {
   background: #fbbf24;
   color: #091d36;
   font-size: 1rem;
@@ -2980,12 +2981,12 @@ td {
   transition: all 0.3s ease;
 }
 
-.indicon-btn-yellow:hover {
+.AECTSD-btn-yellow:hover {
   transform: translateY(-2px);
   background: #f59e0b;
 }
 
-.indicon-btn-outline {
+.AECTSD-btn-outline {
   background: rgba(9, 29, 54, 0.6);
   color: #ffffff;
   font-size: 1rem;
@@ -2998,14 +2999,14 @@ td {
   transition: all 0.3s ease;
 }
 
-.indicon-btn-outline:hover {
+.AECTSD-btn-outline:hover {
   transform: translateY(-2px);
   background: rgba(255, 255, 255, 0.15);
   border-color: #ffffff;
 }
 
 /* Bottom Left Floating CMT Pop-Up Toast Notification Card */
-.indicon-toast-card {
+.AECTSD-toast-card {
   position: fixed;
   bottom: 2rem;
   left: 2rem;
@@ -3025,13 +3026,13 @@ td {
   text-align: left;
 }
 
-.indicon-toast-header {
+.AECTSD-toast-header {
   display: flex;
   align-items: flex-start;
   gap: 0.85rem;
 }
 
-.indicon-toast-icon {
+.AECTSD-toast-icon {
   background: #fbbf24;
   color: #091d36;
   width: 38px;
@@ -3043,7 +3044,7 @@ td {
   flex-shrink: 0;
 }
 
-.indicon-toast-title {
+.AECTSD-toast-title {
   font-size: 0.85rem;
   font-weight: 800;
   color: #fbbf24;
@@ -3051,14 +3052,14 @@ td {
   letter-spacing: 0.05em;
 }
 
-.indicon-toast-desc {
+.AECTSD-toast-desc {
   font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.4;
   margin-top: 2px;
 }
 
-.indicon-toast-btn {
+.AECTSD-toast-btn {
   background: #ffffff;
   color: #091d36;
   font-size: 0.8rem;
@@ -3071,11 +3072,11 @@ td {
   transition: all 0.2s ease;
 }
 
-.indicon-toast-btn:hover {
+.AECTSD-toast-btn:hover {
   background: #fbbf24;
 }
 
-.indicon-toast-close-btn {
+.AECTSD-toast-close-btn {
   position: absolute;
   top: 0.65rem;
   right: 0.65rem;
@@ -3093,18 +3094,18 @@ td {
   z-index: 5;
 }
 
-.indicon-toast-close-btn:hover {
+.AECTSD-toast-close-btn:hover {
   background: #fbbf24;
   color: #091d36;
 }
 
 /* Mobile View Comprehensive Responsive Overrides */
 @media (max-width: 1024px) {
-  .indicon-hero-title {
+  .AECTSD-hero-title {
     font-size: 3.2rem;
   }
 
-  .indicon-toast-card {
+  .AECTSD-toast-card {
     position: fixed;
     bottom: 1.5rem;
     left: 1.5rem;
@@ -3114,11 +3115,11 @@ td {
 
 /* Mobile View Comprehensive Responsive Overrides */
 @media (max-width: 1024px) {
-  .indicon-hero-title {
+  .AECTSD-hero-title {
     font-size: 3.2rem;
   }
 
-  .indicon-toast-card {
+  .AECTSD-toast-card {
     position: fixed;
     bottom: 1.5rem;
     left: 1.5rem;
@@ -3226,7 +3227,9 @@ td {
 }
 
 @media (max-width: 768px) {
-  html, body {
+
+  html,
+  body {
     overflow-x: hidden !important;
     width: 100% !important;
   }
@@ -3235,7 +3238,8 @@ td {
     padding: 3.5rem 0 !important;
   }
 
-  .container, .section-container {
+  .container,
+  .section-container {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
     width: 100% !important;
@@ -3269,9 +3273,9 @@ td {
     padding: 1rem 0.75rem !important;
   }
 
-  div[style*="position: fixed"] > div[style*="max-width: 720px"],
-  div[style*="position: fixed"] > div[style*="maxWidth: 720px"],
-  div[style*="position: fixed"] > div[style*="maxWidth: 600px"] {
+  div[style*="position: fixed"]>div[style*="max-width: 720px"],
+  div[style*="position: fixed"]>div[style*="maxWidth: 720px"],
+  div[style*="position: fixed"]>div[style*="maxWidth: 600px"] {
     max-width: 94vw !important;
     width: 94vw !important;
     padding: 1.5rem 1.25rem !important;
@@ -3283,7 +3287,7 @@ td {
 }
 
 @media (max-width: 640px) {
-  .indicon-logo-banner {
+  .AECTSD-logo-banner {
     padding: 0.45rem 0.85rem !important;
     gap: 0.6rem !important;
     border-radius: 9999px !important;
@@ -3294,24 +3298,24 @@ td {
     margin: 0 auto 0.75rem !important;
   }
 
-  .indicon-banner-logo {
+  .AECTSD-banner-logo {
     height: 34px !important;
     max-height: 34px !important;
   }
 
-  .indicon-hero-title {
+  .AECTSD-hero-title {
     font-size: 1.85rem !important;
     line-height: 1.15 !important;
     margin: 0.25rem 0 !important;
   }
 
-  .indicon-hero-subtitle {
+  .AECTSD-hero-subtitle {
     font-size: 0.75rem !important;
     line-height: 1.45 !important;
     padding: 0 0.5rem !important;
   }
 
-  .indicon-date-pill {
+  .AECTSD-date-pill {
     font-size: 0.72rem !important;
     padding: 0.45rem 0.85rem !important;
     border-radius: 20px !important;
@@ -3319,7 +3323,7 @@ td {
     max-width: 96% !important;
   }
 
-  .indicon-countdown-bar {
+  .AECTSD-countdown-bar {
     flex-direction: column !important;
     gap: 0.5rem !important;
     padding: 0.75rem 0.85rem !important;
@@ -3328,36 +3332,36 @@ td {
     max-width: 100% !important;
   }
 
-  .indicon-countdown-units {
+  .AECTSD-countdown-units {
     gap: 0.5rem !important;
     width: 100% !important;
     justify-content: space-around !important;
   }
 
-  .indicon-countdown-val {
+  .AECTSD-countdown-val {
     font-size: 1.2rem !important;
   }
 
-  .indicon-countdown-lbl {
+  .AECTSD-countdown-lbl {
     font-size: 0.62rem !important;
   }
 
-  .indicon-action-row {
+  .AECTSD-action-row {
     flex-direction: column !important;
     width: 100% !important;
     max-width: 100% !important;
     gap: 0.65rem !important;
   }
 
-  .indicon-btn-yellow,
-  .indicon-btn-outline {
+  .AECTSD-btn-yellow,
+  .AECTSD-btn-outline {
     width: 100% !important;
     padding: 0.85rem 1.25rem !important;
     font-size: 0.9rem !important;
     border-radius: 14px !important;
   }
 
-  .indicon-toast-card {
+  .AECTSD-toast-card {
     position: fixed !important;
     bottom: 0.75rem !important;
     left: 0.75rem !important;
