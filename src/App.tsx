@@ -70,8 +70,8 @@ import PaymentPage from './components/PaymentPage';
 const NAV_ITEMS = [
   { id: 'home', label: 'Home' },
   { id: 'about', label: 'About' },
-  { id: 'call-for-papers', label: 'Tracks' },
   { id: 'speakers', label: 'Speakers' },
+  { id: 'call-for-papers', label: 'Tracks' },
   { id: 'important-dates', label: 'Important Dates' },
   { id: 'registration', label: 'Registration' },
   { id: 'call-for-papers-main', label: 'Call For Papers' },

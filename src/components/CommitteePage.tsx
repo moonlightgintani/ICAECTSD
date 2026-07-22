@@ -71,7 +71,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
   const SUBCOMMITTEES = [
     { id: 'patrons', label: 'Patrons' },
     { id: 'general-chairs', label: 'General Chairs' },
-    { id: 'executive and finance', label: 'Executive & Finance' },
+    { id: 'executive', label: 'Executive' },
     { id: 'publication', label: 'Publication' },
     { id: 'arrangements', label: 'Arrangements' },
     { id: 'registration', label: 'Registration' },
@@ -298,8 +298,8 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                             return role.includes('patron');
                           case 'general-chairs':
                             return role.includes('general chair') || role.includes('general co-chair');
-                          case 'executive and finance':
-                            return role.includes('executive and finance') || role.includes('organizing chair') || role.includes('organizing co-chair') || role.includes('organizing secretary') || role.includes('joint secretary') || role.includes('session chair') || role.includes('convenor') || role.includes('conference chair') || role.includes('co-convenor') || role.includes('finance');
+                          case 'executive':
+                            return role.includes('executive') || role.includes('organizing chair') || role.includes('organizing co-chair') || role.includes('organizing secretary') || role.includes('joint secretary') || role.includes('session chair') || role.includes('convenor') || role.includes('conference chair') || role.includes('co-convenor') || role.includes('finance');
                            case 'publication':
                             return role.includes('publication');
                           case 'arrangements':
