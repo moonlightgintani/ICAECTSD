@@ -6,7 +6,7 @@ import Tru2 from '../assets/tru2 (2).png';
 import balamurgunImg from '../assets/bala.jpeg';
 import trust1Img from '../assets/trust1.png';
 import logo5 from '../assets/logo5.jpg';
-import principalImg from '../assets/principal.png';
+import principalImg from '../assets/principal.jpg';
 import kingsyImg from '../assets/Kingsy.png';
 import sakthivelImg from '../assets/Sakthivel.png';
 import radhaImg from '../assets/Screenshot 2026-07-10 142828.png';
