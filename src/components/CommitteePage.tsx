@@ -300,7 +300,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                           case 'general-chairs':
                             return role.includes('general chair') || role.includes('general co-chair');
                           case 'executive':
-                            return role.includes('executive committee') || role.includes('organizing chair') || role.includes('organizing co-chair') || role.includes('organizing secretary') || role.includes('joint secretary') || role.includes('session chair') || role.includes('convenor') || role.includes('conference chair') || role.includes('co-convenor');
+                            return role.includes('executive') || role.includes('organizing chair') || role.includes('organizing co-chair') || role.includes('organizing secretary') || role.includes('joint secretary') || role.includes('session chair') || role.includes('convenor') || role.includes('conference chair') || role.includes('co-convenor');
                           case 'finance':
                             return role.includes('finance');
                           case 'publication':
