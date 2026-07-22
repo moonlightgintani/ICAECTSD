@@ -1290,22 +1290,44 @@ export default function AdminPage({
     );
   }
 
-  // Define sidebar navigation tabs
-  const tabs = [
-    { id: 'registrations', label: 'Registrations Log', icon: <Database size={16} /> },
-    { id: 'general', label: 'General Configurations', icon: <Activity size={16} /> },
-    { id: 'milestones', label: 'Timeline Milestones', icon: <Calendar size={16} /> },
-    { id: 'pricing', label: 'Registration Pricing', icon: <DollarSign size={16} /> },
-    { id: 'speakers', label: 'Keynote Speakers', icon: <Users size={16} /> },
-    { id: 'tracks', label: 'Academic Tracks', icon: <Layers size={16} /> },
-    { id: 'committee', label: 'Committee List', icon: <Briefcase size={16} /> },
-    { id: 'workshops', label: 'Tutorial Workshops', icon: <BookOpen size={16} /> },
-    { id: 'coordinators', label: 'Coordinators & Contacts', icon: <Users size={16} /> },
-    { id: 'stats', label: 'Dashboard Stats', icon: <BarChart2 size={16} /> },
-    { id: 'explore', label: 'Explore Sights & Stays', icon: <MapPin size={16} /> }
+  // Define grouped sidebar navigation categories & tabs
+  const tabGroups = [
+    {
+      category: 'OVERVIEW & LOGS',
+      items: [
+        { id: 'registrations', label: 'Registrations Log', icon: <Database size={16} />, badge: submittedRegistrations.length },
+        { id: 'stats', label: 'Dashboard Stats', icon: <BarChart2 size={16} />, badge: stats.length }
+      ]
+    },
+    {
+      category: 'CONFERENCE SETUP',
+      items: [
+        { id: 'general', label: 'General Info & Links', icon: <Activity size={16} /> },
+        { id: 'milestones', label: 'Timeline Milestones', icon: <Calendar size={16} />, badge: importantDates.length },
+        { id: 'pricing', label: 'Registration Fees', icon: <DollarSign size={16} /> }
+      ]
+    },
+    {
+      category: 'PROGRAM & TEAM',
+      items: [
+        { id: 'speakers', label: 'Keynote Speakers', icon: <Users size={16} />, badge: speakers.length },
+        { id: 'tracks', label: 'Academic Tracks', icon: <Layers size={16} />, badge: departments.length },
+        { id: 'committee', label: 'Committee Members', icon: <Briefcase size={16} />, badge: committeeMembers.length },
+        { id: 'workshops', label: 'Tutorial Workshops', icon: <BookOpen size={16} />, badge: workshops.length },
+        { id: 'coordinators', label: 'Coordinators & Contacts', icon: <Users size={16} />, badge: coordinators.length }
+      ]
+    },
+    {
+      category: 'VISITOR GUIDE',
+      items: [
+        { id: 'explore', label: 'Explore Sights & Stays', icon: <MapPin size={16} /> }
+      ]
+    }
   ];
 
+  const tabs = tabGroups.flatMap(g => g.items);
   const isEditingAny = editingSpeaker || editingWorkshop || editingCommittee || editingDept || editingMilestone || editingCoordinator || editingStat || editingTouristPlace || editingWeekendStay || editingHotel;
+
 
   if (isEditingAny) {
     return (
@@ -2149,179 +2171,90 @@ export default function AdminPage({
   }
 
   return (
-    <div className="admin-layout">
-      {/* Mobile Top Header */}
-      <header className="admin-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+    <div className="admin-layout-v2" style={{ flexDirection: 'column' }}>
+      {/* Global Topbar Navigation Header */}
+      <header className="admin-topbar-v2">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             style={{
-              background: '#f1f5f9',
+              background: 'rgba(255, 255, 255, 0.08)',
               border: 'none',
               borderRadius: '0.375rem',
               padding: '0.5rem',
               cursor: 'pointer',
-              color: '#334155',
+              color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}
-            title="Toggle Sidebar"
+            title="Toggle Navigation"
           >
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Shield size={18} style={{ color: '#2563eb' }} />
-            <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#0f172a' }}>Admin Portal</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{
+              background: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)',
+              padding: '0.4rem',
+              borderRadius: '0.5rem',
+              color: '#ffffff',
+              display: 'flex',
+              boxShadow: '0 0 12px rgba(59, 130, 246, 0.4)'
+            }}>
+              <Shield size={20} />
+            </div>
+            <div>
+              <span style={{ fontSize: '0.95rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff' }}>SREC AECTSD</span>
+              <span style={{ fontSize: '0.7rem', color: '#38bdf8', marginLeft: '0.5rem', fontWeight: 700, background: 'rgba(56, 189, 248, 0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px' }}>
+                ADMIN CONSOLE
+              </span>
+            </div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            if (onClose) onClose();
-            else window.location.hash = '#/';
-          }}
-          style={{
+
+        {/* Database Status Indicator & Global Actions */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem',
             fontSize: '0.75rem',
-            fontWeight: 700,
-            padding: '0.4rem 0.8rem',
-            background: '#eff6ff',
-            color: '#2563eb',
-            border: 'none',
-            borderRadius: '0.375rem',
-            cursor: 'pointer'
-          }}
-        >
-          Exit
-        </button>
-      </header>
-
-      {/* Sidebar Backdrop Overlay on Mobile */}
-      {sidebarOpen && (
-        <div
-          onClick={() => setSidebarOpen(false)}
-          style={{
-            position: 'fixed',
-            top: '70px',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(15, 23, 42, 0.4)',
-            backdropFilter: 'blur(3px)',
-            zIndex: 998
-          }}
-        />
-      )}
-
-      {/* Sidebar Navigation */}
-      <div className={`admin-sidebar ${sidebarOpen ? 'admin-sidebar-open' : ''}`} style={{ top: '70px' }}>
-        {/* Sidebar Header */}
-        <div className="admin-sidebar-header">
-          <div className="admin-sidebar-logo-box">
-            <Shield size={20} />
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            padding: '0.35rem 0.75rem',
+            borderRadius: '20px'
+          }}>
+            <span style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: isSupabaseConfigured ? '#10b981' : '#f59e0b',
+              boxShadow: isSupabaseConfigured ? '0 0 8px #10b981' : '0 0 8px #f59e0b'
+            }} />
+            <span style={{ color: '#cbd5e1', fontWeight: 600 }}>
+              {isSupabaseConfigured ? 'Database Connected' : 'Local Storage Mode'}
+            </span>
           </div>
-          <div>
-            <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800 }}>SREC Admin</h4>
-            <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>AECTSD 2027 Console</span>
-          </div>
-        </div>
 
-        {/* Supabase Status Indicator */}
-        <div style={{
-          padding: '0.5rem 1.5rem',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          fontSize: '0.75rem',
-          background: 'rgba(6, 11, 20, 0.4)'
-        }}>
-          <span style={{
-            width: '8px',
-            height: '8px',
-            borderRadius: '50%',
-            background: isSupabaseConfigured ? '#10b981' : '#f59e0b',
-            display: 'inline-block',
-            boxShadow: isSupabaseConfigured ? '0 0 8px #10b981' : '0 0 8px #f59e0b'
-          }} />
-          <span style={{ color: '#cbd5e1', fontWeight: 600 }}>
-            {isSupabaseConfigured ? 'Database Connected' : 'Offline Mode (Local Storage)'}
-          </span>
-        </div>
-
-        {/* User Session Info */}
-        <div style={{
-          padding: '1rem 1.5rem',
-          background: 'rgba(255, 255, 255, 0.03)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          fontSize: '0.75rem'
-        }}>
-          <span style={{ color: '#94a3b8' }}>Signed in as:</span>
-          <div style={{ fontWeight: 700, color: '#60a5fa', marginTop: '0.15rem' }}>{adminUser}</div>
-        </div>
-
-        {/* Tab Selection Navigation */}
-        <nav className="admin-sidebar-nav">
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id);
-                  setSearchTerm('');
-                  setSidebarOpen(false);
-                }}
-                className={`admin-sidebar-link ${isActive ? 'active' : ''}`}
-              >
-                {tab.icon}
-                {tab.label}
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Sidebar Footer Operations */}
-        <div className="admin-sidebar-footer">
           <button
             onClick={handleRefresh}
             style={{
-              width: '100%',
-              padding: '0.6rem',
-              background: 'rgba(255, 255, 255, 0.05)',
-              color: '#ffffff',
+              background: 'rgba(255, 255, 255, 0.06)',
+              color: '#f8fafc',
               border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '0.375rem',
-              fontSize: '0.8rem',
-              fontWeight: 600,
+              padding: '0.45rem 0.85rem',
+              borderRadius: '0.5rem',
+              fontSize: '0.775rem',
+              fontWeight: 700,
               cursor: 'pointer',
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem'
+              gap: '0.4rem',
+              transition: 'all 0.2s'
             }}
+            title="Refresh database records"
           >
-            <RefreshCw size={14} /> Refresh Data
-          </button>
-          
-          <button
-            onClick={handleAdminLogout}
-            style={{
-              width: '100%',
-              padding: '0.6rem',
-              background: 'rgba(239, 68, 68, 0.15)',
-              color: '#f87171',
-              border: '1px solid rgba(239, 68, 68, 0.25)',
-              borderRadius: '0.375rem',
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem'
-            }}
-          >
-            <LogOut size={14} /> Log Out
+            <RefreshCw size={14} /> Refresh
           </button>
 
           <button
@@ -2330,38 +2263,191 @@ export default function AdminPage({
               else window.location.hash = '#/'; 
             }}
             style={{
-              width: '100%',
-              padding: '0.6rem',
-              background: '#2563eb',
+              background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
               color: '#ffffff',
               border: 'none',
-              borderRadius: '0.375rem',
-              fontSize: '0.8rem',
+              padding: '0.45rem 0.95rem',
+              borderRadius: '0.5rem',
+              fontSize: '0.775rem',
               fontWeight: 700,
               cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'
+            }}
+          >
+            <ExternalLink size={14} /> Main Site
+          </button>
+
+          <button
+            onClick={handleAdminLogout}
+            style={{
+              background: 'rgba(239, 68, 68, 0.15)',
+              color: '#f87171',
+              border: '1px solid rgba(239, 68, 68, 0.25)',
+              padding: '0.45rem 0.75rem',
+              borderRadius: '0.5rem',
+              fontSize: '0.775rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem'
+            }}
+            title="Sign out of admin panel"
+          >
+            <LogOut size={14} /> Log Out
+          </button>
+        </div>
+      </header>
+
+      {/* Main Content Workspace Split View */}
+      <div style={{ display: 'flex', flex: 1, minHeight: 'calc(100vh - 64px)' }}>
+        {/* Sidebar Backdrop Overlay on Mobile */}
+        {sidebarOpen && (
+          <div
+            onClick={() => setSidebarOpen(false)}
+            style={{
+              position: 'fixed',
+              top: '64px',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(15, 23, 42, 0.5)',
+              backdropFilter: 'blur(4px)',
+              zIndex: 998
+            }}
+          />
+        )}
+
+        {/* Categorized Navigation Sidebar */}
+        <aside className={`admin-sidebar-v2 ${sidebarOpen ? 'admin-sidebar-open' : ''}`}>
+          {/* Admin Profile Session Header */}
+          <div style={{
+            padding: '1.25rem 1.25rem',
+            background: 'rgba(255, 255, 255, 0.03)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem'
+          }}>
+            <div style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.5rem',
-              boxShadow: '0 4px 10px rgba(37, 99, 235, 0.2)'
-            }}
-          >
-            <ArrowLeft size={14} /> Return to Site
-          </button>
-        </div>
-      </div>
-
-      {/* Main Content Workspace Wrapper */}
-      <div className="admin-main-container">
-        <main className="admin-content">
-          {/* Workspace Title Card */}
-          <div className="admin-view-title-card">
+              fontWeight: 800,
+              fontSize: '1rem',
+              color: '#ffffff'
+            }}>
+              {adminUser ? adminUser[0].toUpperCase() : 'A'}
+            </div>
             <div>
-              <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0, letterSpacing: '-0.025em', color: '#0f172a' }}>
+              <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#f8fafc' }}>{adminUser}</div>
+              <div style={{ fontSize: '0.7rem', color: '#10b981', fontWeight: 600 }}>● Logged In</div>
+            </div>
+          </div>
+
+          {/* Grouped Tab Links */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: '0.5rem 0' }}>
+            {tabGroups.map((group, gIdx) => (
+              <div key={gIdx}>
+                <div className="admin-sidebar-group-title">{group.category}</div>
+                {group.items.map((tab) => {
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => {
+                        setActiveTab(tab.id);
+                        setSearchTerm('');
+                        setSidebarOpen(false);
+                      }}
+                      className={`admin-sidebar-item ${isActive ? 'active' : ''}`}
+                    >
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                        {tab.icon}
+                        {tab.label}
+                      </span>
+                      {tab.badge !== undefined && (
+                        <span className="admin-sidebar-badge">
+                          {tab.badge}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+
+          <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid rgba(255, 255, 255, 0.06)', fontSize: '0.7rem', color: '#64748b', textAlign: 'center' }}>
+            AECTSD 2027 Console
+          </div>
+        </aside>
+
+        {/* Content Workspace Area */}
+        <main className="admin-content" style={{ flex: 1, padding: '2rem 2.5rem', background: '#f8fafc', overflowY: 'auto' }}>
+          {/* Executive KPI Summary Header Tiles */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+            gap: '1.25rem',
+            marginBottom: '2rem'
+          }}>
+            <div className="admin-kpi-tile">
+              <div style={{ background: 'rgba(37, 99, 235, 0.1)', color: '#2563eb', padding: '0.75rem', borderRadius: '0.6rem', display: 'flex' }}>
+                <Database size={22} />
+              </div>
+              <div>
+                <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>REGISTRATIONS</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', marginTop: '0.1rem' }}>{submittedRegistrations.length}</div>
+              </div>
+            </div>
+
+            <div className="admin-kpi-tile">
+              <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '0.75rem', borderRadius: '0.6rem', display: 'flex' }}>
+                <Users size={22} />
+              </div>
+              <div>
+                <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>KEYNOTE SPEAKERS</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', marginTop: '0.1rem' }}>{speakers.length}</div>
+              </div>
+            </div>
+
+            <div className="admin-kpi-tile">
+              <div style={{ background: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6', padding: '0.75rem', borderRadius: '0.6rem', display: 'flex' }}>
+                <Layers size={22} />
+              </div>
+              <div>
+                <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>ACADEMIC TRACKS</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', marginTop: '0.1rem' }}>{departments.length}</div>
+              </div>
+            </div>
+
+            <div className="admin-kpi-tile">
+              <div style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', padding: '0.75rem', borderRadius: '0.6rem', display: 'flex' }}>
+                <Briefcase size={22} />
+              </div>
+              <div>
+                <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>COMMITTEE MEMBERS</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', marginTop: '0.1rem' }}>{committeeMembers.length}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Active Tab View Title Card */}
+          <div className="admin-view-title-card" style={{ background: '#ffffff', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.03)' }}>
+            <div>
+              <h1 style={{ fontSize: '1.65rem', fontWeight: 800, margin: 0, letterSpacing: '-0.02em', color: '#0f172a' }}>
                 {tabs.find(t => t.id === activeTab)?.label}
               </h1>
-              <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.25rem 0 0 0' }}>
-                Database manager and interactive panel for SREC webpage components.
+              <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0 0' }}>
+                Database manager and configuration panel for SREC webpage.
               </p>
             </div>
             
@@ -2371,7 +2457,7 @@ export default function AdminPage({
                 <Search size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                 <input
                   type="text"
-                  placeholder={`Search list...`}
+                  placeholder={`Search ${tabs.find(t => t.id === activeTab)?.label}...`}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="admin-search-input"
@@ -2379,6 +2465,835 @@ export default function AdminPage({
               </div>
             )}
           </div>
+
+          {/* Modal Editing Backdrop Overlay */}
+          {isEditingAny && (
+            <div className="admin-modal-overlay">
+              <div className="admin-modal-card">
+                {/* Modal Title & Close Button */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '1rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ background: 'linear-gradient(135deg, #2563eb, #1d4ed8)', padding: '0.5rem', borderRadius: '0.5rem', color: '#ffffff', display: 'flex' }}>
+                      <Edit size={20} />
+                    </div>
+                    <h2 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>
+                      {editingSpeaker && (editingSpeaker.id ? 'Edit Speaker Details' : 'Add New Speaker')}
+                      {editingWorkshop && (editingWorkshop.id ? 'Edit Workshop Details' : 'Add New Workshop')}
+                      {editingCommittee && (editingCommittee.id ? 'Edit Committee Member' : 'Add Committee Member')}
+                      {editingDept && (editingDept.id ? 'Edit Academic Track' : 'Add Academic Track')}
+                      {editingMilestone && (editingMilestone.id ? 'Edit Milestone Date' : 'Add Milestone Date')}
+                      {editingCoordinator && (editingCoordinator.id ? 'Edit Coordinator Contact' : 'Add Coordinator')}
+                      {editingStat && (editingStat.id ? 'Edit Stat Metric' : 'Add Stat Metric')}
+                      {editingTouristPlace && (editingTouristPlace.id ? 'Edit Tourist Place' : 'Add Tourist Place')}
+                      {editingWeekendStay && (editingWeekendStay.id ? 'Edit Weekend Getaway' : 'Add Weekend Getaway')}
+                      {editingHotel && (editingHotel.id ? 'Edit Hotel Listing' : 'Add Hotel Listing')}
+                    </h2>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setEditingSpeaker(null);
+                      setEditingWorkshop(null);
+                      setEditingCommittee(null);
+                      setEditingDept(null);
+                      setEditingMilestone(null);
+                      setEditingCoordinator(null);
+                      setEditingStat(null);
+                      setEditingTouristPlace(null);
+                      setEditingWeekendStay(null);
+                      setEditingHotel(null);
+                    }}
+                    style={{
+                      border: 'none',
+                      background: '#f1f5f9',
+                      color: '#64748b',
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '50%',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.2s'
+                    }}
+                    title="Close editor modal"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                {/* 1. Milestone Form */}
+                {editingMilestone && (
+                  <form onSubmit={handleSaveMilestone}>
+                    <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingMilestone.id ? 'Edit Milestone' : 'Add New Milestone'}</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="ms_date" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Date Display (e.g. 15 Dec 2026)</label>
+                        <input
+                          id="ms_date"
+                          type="text"
+                          required
+                          value={editingMilestone.event_date}
+                          onChange={(e) => setEditingMilestone({ ...editingMilestone, event_date: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="ms_title" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Milestone Title</label>
+                        <input
+                          id="ms_title"
+                          type="text"
+                          required
+                          value={editingMilestone.title}
+                          onChange={(e) => setEditingMilestone({ ...editingMilestone, title: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="ms_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
+                        <input
+                          id="ms_sort"
+                          type="number"
+                          required
+                          value={editingMilestone.sort_order || 1}
+                          onChange={(e) => setEditingMilestone({ ...editingMilestone, sort_order: Number(e.target.value) })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label htmlFor="ms_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Short Description</label>
+                      <input
+                        id="ms_desc"
+                        type="text"
+                        value={editingMilestone.desc || ''}
+                        onChange={(e) => setEditingMilestone({ ...editingMilestone, desc: e.target.value })}
+                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                      />
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                      <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Milestone</button>
+                      <button type="button" onClick={() => setEditingMilestone(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                    </div>
+                  </form>
+                )}
+
+                {/* 2. Speaker Form */}
+                {editingSpeaker && (
+                  <form onSubmit={handleSaveSpeaker}>
+                    <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingSpeaker.id ? 'Edit Speaker' : 'Add New Speaker'}</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="spk_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Speaker Name</label>
+                        <input
+                          id="spk_name"
+                          type="text"
+                          required
+                          value={editingSpeaker.name}
+                          onChange={(e) => setEditingSpeaker({ ...editingSpeaker, name: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="spk_img" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Photo / Image URL</label>
+                        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
+                          <input
+                            id="spk_img"
+                            type="text"
+                            value={editingSpeaker.image_url || ''}
+                            onChange={(e) => setEditingSpeaker({ ...editingSpeaker, image_url: e.target.value })}
+                            placeholder="https://example.com/avatar.jpg"
+                            style={{ flex: 1, padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem' }}
+                          />
+                          <div style={{ position: 'relative', overflow: 'hidden' }}>
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              style={{ padding: '0.5rem 1rem', height: '100%', fontSize: '0.8rem', whiteSpace: 'nowrap' }}
+                            >
+                              {uploadingSpeakerImage ? 'Uploading...' : 'Upload'}
+                            </button>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleSpeakerImageUpload}
+                              disabled={uploadingSpeakerImage}
+                              style={{
+                                position: 'absolute',
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                                left: 0,
+                                opacity: 0,
+                                cursor: 'pointer'
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="spk_des" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Designation (Title)</label>
+                        <input
+                          id="spk_des"
+                          type="text"
+                          required
+                          value={editingSpeaker.title || ''}
+                          onChange={(e) => setEditingSpeaker({ ...editingSpeaker, title: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="spk_inst" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Institution / University (Role)</label>
+                        <input
+                          id="spk_inst"
+                          type="text"
+                          required
+                          value={editingSpeaker.role || ''}
+                          onChange={(e) => setEditingSpeaker({ ...editingSpeaker, role: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="spk_talk" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Talk Title (Topic)</label>
+                        <input
+                          id="spk_talk"
+                          type="text"
+                          required
+                          value={editingSpeaker.talk || ''}
+                          onChange={(e) => setEditingSpeaker({ ...editingSpeaker, talk: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="spk_color" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Theme Color</label>
+                        <input
+                          id="spk_color"
+                          type="text"
+                          required
+                          value={editingSpeaker.color || '#3b82f6'}
+                          onChange={(e) => setEditingSpeaker({ ...editingSpeaker, color: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                      <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Speaker</button>
+                      <button type="button" onClick={() => setEditingSpeaker(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                    </div>
+                  </form>
+                )}
+
+                {/* 3. Track Form */}
+                {editingDept && (
+                  <form onSubmit={handleSaveDept}>
+                    <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingDept.id ? 'Edit Academic Track' : 'Add New Academic Track'}</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="trk_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Track Name</label>
+                        <input
+                          id="trk_name"
+                          type="text"
+                          required
+                          value={editingDept.name}
+                          onChange={(e) => setEditingDept({ ...editingDept, name: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="trk_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
+                        <input
+                          id="trk_sort"
+                          type="number"
+                          required
+                          value={editingDept.sort_order || 1}
+                          onChange={(e) => setEditingDept({ ...editingDept, sort_order: Number(e.target.value) })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label htmlFor="trk_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Description (Topics list, comma separated)</label>
+                      <textarea
+                        id="trk_desc"
+                        value={editingDept.description || ''}
+                        onChange={(e) => setEditingDept({ ...editingDept, description: e.target.value })}
+                        rows={6}
+                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', fontFamily: 'inherit' }}
+                      />
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                      <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Track</button>
+                      <button type="button" onClick={() => setEditingDept(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                    </div>
+                  </form>
+                )}
+
+                {/* 4. Committee Form */}
+                {editingCommittee && (
+                  <form onSubmit={handleSaveCommittee}>
+                    <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingCommittee.id ? 'Edit Committee Member' : 'Add Committee Member'}</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="mem_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Member Name</label>
+                        <input
+                          id="mem_name"
+                          type="text"
+                          required
+                          value={editingCommittee.name}
+                          onChange={(e) => setEditingCommittee({ ...editingCommittee, name: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="mem_cat" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Category Group</label>
+                        <select
+                          id="mem_cat"
+                          value={editingCommittee.category}
+                          onChange={(e) => setEditingCommittee({ ...editingCommittee, category: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        >
+                          <option value="steering">Steering / Advisory / Leadership</option>
+                          <option value="organizing">Organizing Committee</option>
+                          <option value="advisory">National / International Advisory</option>
+                          <option value="technical">Technical Program Committee</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label htmlFor="mem_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
+                        <input
+                          id="mem_sort"
+                          type="number"
+                          required
+                          value={editingCommittee.sort_order || 1}
+                          onChange={(e) => setEditingCommittee({ ...editingCommittee, sort_order: Number(e.target.value) })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        {editingCommittee.category === 'organizing' ? (
+                          <>
+                            <label htmlFor="mem_sub" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Subgroup Title (For Organizing Committee)</label>
+                            <select
+                              id="mem_sub"
+                              value={editingCommittee.role || ''}
+                              onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
+                              style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', background: '#ffffff' }}
+                            >
+                              <option value="">Select Subgroup...</option>
+                              <option value="Executive Committee">Executive Committee</option>
+                              <option value="Patrons">Patrons</option>
+                              <option value="General Chairs">General Chairs</option>
+                              <option value="Finance">Finance</option>
+                              <option value="Publication">Publication</option>
+                              <option value="Arrangements">Arrangements</option>
+                              <option value="Registration">Registration</option>
+                              <option value="Tutorials & Workshops">Tutorials & Workshops</option>
+                              <option value="Technical Review">Technical Review</option>
+                              <option value="Outreach & Promotion">Outreach & Promotion</option>
+                              <option value="Website & Media">Website & Media</option>
+                              <option value="Hospitality">Hospitality</option>
+                              <option value="General Members">General Members</option>
+                            </select>
+                          </>
+                        ) : (
+                          <>
+                            <label htmlFor="mem_role" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Role / Designation</label>
+                            <input
+                              id="mem_role"
+                              type="text"
+                              placeholder="e.g. Advisory Chair, Reviewer, etc."
+                              value={editingCommittee.role || ''}
+                              onChange={(e) => setEditingCommittee({ ...editingCommittee, role: e.target.value })}
+                              style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                            />
+                          </>
+                        )}
+                      </div>
+                      <div>
+                        <label htmlFor="mem_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Affiliation / Description</label>
+                        <input
+                          id="mem_desc"
+                          type="text"
+                          placeholder="e.g. Professor, IIT Bombay"
+                          value={editingCommittee.desc || ''}
+                          onChange={(e) => setEditingCommittee({ ...editingCommittee, desc: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                      <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Member</button>
+                      <button type="button" onClick={() => setEditingCommittee(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                    </div>
+                  </form>
+                )}
+
+                {/* 5. Workshop Form */}
+                {editingWorkshop && (
+                  <form onSubmit={handleSaveWorkshop}>
+                    <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingWorkshop.id ? 'Edit Workshop' : 'Add New Workshop'}</h4>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label htmlFor="wk_title" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Workshop Title</label>
+                      <input
+                        id="wk_title"
+                        type="text"
+                        required
+                        value={editingWorkshop.title}
+                        onChange={(e) => setEditingWorkshop({ ...editingWorkshop, title: e.target.value })}
+                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                      />
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="wk_spk" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Lead Instructor Name</label>
+                        <input
+                          id="wk_spk"
+                          type="text"
+                          required
+                          value={editingWorkshop.speaker}
+                          onChange={(e) => setEditingWorkshop({ ...editingWorkshop, speaker: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="wk_des" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Instructor Designation</label>
+                        <input
+                          id="wk_des"
+                          type="text"
+                          value={editingWorkshop.speaker_designation || ''}
+                          onChange={(e) => setEditingWorkshop({ ...editingWorkshop, speaker_designation: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="wk_inst" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Instructor University / Organization</label>
+                        <input
+                          id="wk_inst"
+                          type="text"
+                          value={editingWorkshop.speaker_institution || ''}
+                          onChange={(e) => setEditingWorkshop({ ...editingWorkshop, speaker_institution: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="wk_date" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Date</label>
+                        <input
+                          id="wk_date"
+                          type="text"
+                          value={editingWorkshop.date || ''}
+                          onChange={(e) => setEditingWorkshop({ ...editingWorkshop, date: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="wk_time" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Time</label>
+                        <input
+                          id="wk_time"
+                          type="text"
+                          value={editingWorkshop.time || ''}
+                          onChange={(e) => setEditingWorkshop({ ...editingWorkshop, time: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label htmlFor="wk_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Short Abstract / Outline</label>
+                      <textarea
+                        id="wk_desc"
+                        value={editingWorkshop.desc || ''}
+                        onChange={(e) => setEditingWorkshop({ ...editingWorkshop, desc: e.target.value })}
+                        rows={4}
+                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', fontFamily: 'inherit' }}
+                      />
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                      <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Workshop</button>
+                      <button type="button" onClick={() => setEditingWorkshop(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                    </div>
+                  </form>
+                )}
+
+                {/* 6. Coordinator Form */}
+                {editingCoordinator && (
+                  <form onSubmit={handleSaveCoordinator}>
+                    <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingCoordinator.id ? 'Edit Coordinator Details' : 'Add New Coordinator'}</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="co_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Coordinator Name</label>
+                        <input
+                          id="co_name"
+                          type="text"
+                          required
+                          value={editingCoordinator.name}
+                          onChange={(e) => setEditingCoordinator({ ...editingCoordinator, name: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="co_role" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Role / Association (e.g. Co-convenor)</label>
+                        <input
+                          id="co_role"
+                          type="text"
+                          value={editingCoordinator.role || ''}
+                          onChange={(e) => setEditingCoordinator({ ...editingCoordinator, role: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="co_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
+                        <input
+                          id="co_sort"
+                          type="number"
+                          required
+                          value={editingCoordinator.sort_order || 1}
+                          onChange={(e) => setEditingCoordinator({ ...editingCoordinator, sort_order: Number(e.target.value) })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="co_phone" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Mobile Number</label>
+                        <input
+                          id="co_phone"
+                          type="text"
+                          required
+                          value={editingCoordinator.phone}
+                          onChange={(e) => setEditingCoordinator({ ...editingCoordinator, phone: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="co_email" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Email Address</label>
+                        <input
+                          id="co_email"
+                          type="email"
+                          required
+                          value={editingCoordinator.email}
+                          onChange={(e) => setEditingCoordinator({ ...editingCoordinator, email: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                      <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Contact</button>
+                      <button type="button" onClick={() => setEditingCoordinator(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                    </div>
+                  </form>
+                )}
+
+                {/* 7. Stat Form */}
+                {editingStat && (
+                  <form onSubmit={handleSaveStat}>
+                    <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingStat.id ? 'Edit Stat Metric' : 'Add New Stat Metric'}</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="st_key" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Unique Database Key</label>
+                        <input
+                          id="st_key"
+                          type="text"
+                          required
+                          placeholder="e.g. tracks_count"
+                          value={editingStat.key}
+                          onChange={(e) => setEditingStat({ ...editingStat, key: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="st_val" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Value Display (e.g. 10+, 500+)</label>
+                        <input
+                          id="st_val"
+                          type="text"
+                          required
+                          value={editingStat.value}
+                          onChange={(e) => setEditingStat({ ...editingStat, value: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="st_lbl" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Metric Label</label>
+                        <input
+                          id="st_lbl"
+                          type="text"
+                          required
+                          value={editingStat.label}
+                          onChange={(e) => setEditingStat({ ...editingStat, label: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="st_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
+                        <input
+                          id="st_sort"
+                          type="number"
+                          required
+                          value={editingStat.sort_order || 1}
+                          onChange={(e) => setEditingStat({ ...editingStat, sort_order: Number(e.target.value) })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label htmlFor="st_ico" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Icon Name (e.g. Users, Layers, Award, Sparkles)</label>
+                      <input
+                        id="st_ico"
+                        type="text"
+                        value={editingStat.icon || ''}
+                        onChange={(e) => setEditingStat({ ...editingStat, icon: e.target.value })}
+                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                      />
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                      <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Metric</button>
+                      <button type="button" onClick={() => setEditingStat(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                    </div>
+                  </form>
+                )}
+
+                {/* Explore Page - Tourist Place Form */}
+                {editingTouristPlace && (
+                  <form onSubmit={handleSaveTouristPlace}>
+                    <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingTouristPlace.id ? 'Edit Tourist Place' : 'Add New Tourist Place'}</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="tp_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Name</label>
+                        <input
+                          id="tp_name"
+                          type="text"
+                          required
+                          value={editingTouristPlace.name || ''}
+                          onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, name: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="tp_category" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Category (e.g. Temples, Parks, Sightseeing)</label>
+                        <input
+                          id="tp_category"
+                          type="text"
+                          required
+                          value={editingTouristPlace.category || ''}
+                          onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, category: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label htmlFor="tp_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Description</label>
+                      <textarea
+                        id="tp_desc"
+                        required
+                        rows={3}
+                        value={editingTouristPlace.description || ''}
+                        onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, description: e.target.value })}
+                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', fontFamily: 'inherit' }}
+                      />
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="tp_img" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Image URL</label>
+                        <input
+                          id="tp_img"
+                          type="text"
+                          value={editingTouristPlace.image_url || ''}
+                          onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, image_url: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="tp_map" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Google Maps URL</label>
+                        <input
+                          id="tp_map"
+                          type="text"
+                          value={editingTouristPlace.map_url || ''}
+                          onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, map_url: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="tp_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
+                        <input
+                          id="tp_sort"
+                          type="number"
+                          value={editingTouristPlace.sort_order || 0}
+                          onChange={(e) => setEditingTouristPlace({ ...editingTouristPlace, sort_order: Number(e.target.value) })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                      <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Place</button>
+                      <button type="button" onClick={() => setEditingTouristPlace(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                    </div>
+                  </form>
+                )}
+
+                {/* Explore Page - Weekend Stay Form */}
+                {editingWeekendStay && (
+                  <form onSubmit={handleSaveWeekendStay}>
+                    <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingWeekendStay.id ? 'Edit Weekend Getaway' : 'Add New Weekend Getaway'}</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="ws_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Name</label>
+                        <input
+                          id="ws_name"
+                          type="text"
+                          required
+                          value={editingWeekendStay.name || ''}
+                          onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, name: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="ws_category" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Category (e.g. Hill Station, Wildlife)</label>
+                        <input
+                          id="ws_category"
+                          type="text"
+                          required
+                          value={editingWeekendStay.category || ''}
+                          onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, category: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label htmlFor="ws_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Description</label>
+                      <textarea
+                        id="ws_desc"
+                        required
+                        rows={3}
+                        value={editingWeekendStay.description || ''}
+                        onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, description: e.target.value })}
+                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', fontFamily: 'inherit' }}
+                      />
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="ws_img" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Image URL</label>
+                        <input
+                          id="ws_img"
+                          type="text"
+                          value={editingWeekendStay.image_url || ''}
+                          onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, image_url: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="ws_map" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Google Maps URL</label>
+                        <input
+                          id="ws_map"
+                          type="text"
+                          value={editingWeekendStay.map_url || ''}
+                          onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, map_url: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="ws_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
+                        <input
+                          id="ws_sort"
+                          type="number"
+                          value={editingWeekendStay.sort_order || 0}
+                          onChange={(e) => setEditingWeekendStay({ ...editingWeekendStay, sort_order: Number(e.target.value) })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                      <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Getaway</button>
+                      <button type="button" onClick={() => setEditingWeekendStay(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                    </div>
+                  </form>
+                )}
+
+                {/* Explore Page - Hotel Form */}
+                {editingHotel && (
+                  <form onSubmit={handleSaveHotel}>
+                    <h4 style={{ margin: '0 0 1rem 0', fontWeight: 700 }}>{editingHotel.id ? 'Edit Hotel' : 'Add New Hotel'}</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="h_name" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Hotel Name</label>
+                        <input
+                          id="h_name"
+                          type="text"
+                          required
+                          value={editingHotel.name || ''}
+                          onChange={(e) => setEditingHotel({ ...editingHotel, name: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="h_category" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Category (e.g. Luxury Hotels, Budget Stay)</label>
+                        <input
+                          id="h_category"
+                          type="text"
+                          required
+                          value={editingHotel.category || ''}
+                          onChange={(e) => setEditingHotel({ ...editingHotel, category: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label htmlFor="h_desc" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Description</label>
+                      <textarea
+                        id="h_desc"
+                        required
+                        rows={3}
+                        value={editingHotel.description || ''}
+                        onChange={(e) => setEditingHotel({ ...editingHotel, description: e.target.value })}
+                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem', fontFamily: 'inherit' }}
+                      />
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label htmlFor="h_img" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Image URL</label>
+                        <input
+                          id="h_img"
+                          type="text"
+                          value={editingHotel.image_url || ''}
+                          onChange={(e) => setEditingHotel({ ...editingHotel, image_url: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="h_map" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Google Maps / Booking Link</label>
+                        <input
+                          id="h_map"
+                          type="text"
+                          value={editingHotel.map_url || ''}
+                          onChange={(e) => setEditingHotel({ ...editingHotel, map_url: e.target.value })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="h_sort" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Sort Order</label>
+                        <input
+                          id="h_sort"
+                          type="number"
+                          value={editingHotel.sort_order || 0}
+                          onChange={(e) => setEditingHotel({ ...editingHotel, sort_order: Number(e.target.value) })}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '0.25rem', marginTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
+                      <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Save Hotel</button>
+                      <button type="button" onClick={() => setEditingHotel(null)} className="btn btn-secondary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>Cancel</button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </div>
+          )}
+
 
         {/* Dashboard Tab Panels */}
         
