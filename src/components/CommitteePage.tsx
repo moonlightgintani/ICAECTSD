@@ -71,8 +71,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
   const SUBCOMMITTEES = [
     { id: 'patrons', label: 'Patrons' },
     { id: 'general-chairs', label: 'General Chairs' },
-    { id: 'executive', label: 'Executive Committee' },
-    { id: 'finance', label: 'Finance' },
+    { id: 'executive and finance', label: 'Executive & Finance' },
     { id: 'publication', label: 'Publication' },
     { id: 'arrangements', label: 'Arrangements' },
     { id: 'registration', label: 'Registration' },
@@ -299,11 +298,9 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                             return role.includes('patron');
                           case 'general-chairs':
                             return role.includes('general chair') || role.includes('general co-chair');
-                          case 'executive':
-                            return role.includes('executive') || role.includes('organizing chair') || role.includes('organizing co-chair') || role.includes('organizing secretary') || role.includes('joint secretary') || role.includes('session chair') || role.includes('convenor') || role.includes('conference chair') || role.includes('co-convenor');
-                          case 'finance':
-                            return role.includes('finance');
-                          case 'publication':
+                          case 'executive and finance':
+                            return role.includes('executive and finance') || role.includes('organizing chair') || role.includes('organizing co-chair') || role.includes('organizing secretary') || role.includes('joint secretary') || role.includes('session chair') || role.includes('convenor') || role.includes('conference chair') || role.includes('co-convenor') || role.includes('finance');
+                           case 'publication':
                             return role.includes('publication');
                           case 'arrangements':
                             return role.includes('arrangement') || role.includes('reception') || role.includes('local arrangements') || role.includes('venue');
