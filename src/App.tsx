@@ -1929,7 +1929,28 @@ function App() {
       console.warn('Database log warning:', dbErr);
     }
 
-    // 2. Direct Instant Email Dispatch via Environment Variable or Edge Function
+    // 2. Instant Primary Email Dispatch via Formspree Endpoint
+    const formspreeEndpoint = info.formspree_url || 'https://formspree.io/f/xlgqwbbd';
+    try {
+      await fetch(formspreeEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject || 'General Inquiry',
+          message: formData.message
+        })
+      });
+      console.log('Instant contact email dispatched via Formspree!');
+    } catch (fsErr) {
+      console.warn('Formspree dispatch warning:', fsErr);
+    }
+
+    // 3. Fallback Resend Dispatch (if API key is present)
     const resendApiKey = info.resend_api_key || import.meta.env.VITE_RESEND_API_KEY || '';
     if (resendApiKey) {
       try {
@@ -1954,7 +1975,7 @@ function App() {
                   <p style="margin: 0 0 10px;"><strong>Sender Email:</strong> <a href="mailto:${formData.email}">${formData.email}</a></p>
                   <p style="margin: 0 0 10px;"><strong>Subject:</strong> ${formData.subject || 'General Inquiry'}</p>
                   <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-                  <h4 style="margin: 0 0 10px; color: #092147;">Message:</h4>
+                  <h4 style="margin: 0 0 10px; color: #091d36;">Message:</h4>
                   <p style="white-space: pre-wrap; background: #f8fafc; padding: 16px; border-radius: 6px; border: 1px solid #cbd5e1; margin: 0;">${formData.message}</p>
                 </div>
               </div>
@@ -1962,7 +1983,6 @@ function App() {
             reply_to: formData.email
           })
         });
-        console.log('Automated contact email sent via Resend API!');
       } catch (resendErr) {
         console.warn('Resend email send warning:', resendErr);
       }

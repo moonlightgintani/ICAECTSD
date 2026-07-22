@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  aectsd-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aectsd_2027_web
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
