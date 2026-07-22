@@ -1960,25 +1960,6 @@ function App() {
       }
     }
 
-    // 3. Construct mailto URL with pre-filled content
-    const mailSubject = encodeURIComponent(`[AECTSD 2027 Inquiry] ${formData.subject || 'General Query'}`);
-    const mailBody = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject || 'General Query'}\n\nMessage:\n${formData.message}`
-    );
-    const mailtoUrl = `mailto:${targetEmail}?subject=${mailSubject}&body=${mailBody}`;
-
-    // 4. Construct WhatsApp URL with pre-filled content
-    const waText = encodeURIComponent(
-      `*New Inquiry for AECTSD 2027*\n\n*Name:* ${formData.name}\n*Email:* ${formData.email}\n*Subject:* ${formData.subject || 'General Query'}\n\n*Message:*\n${formData.message}`
-    );
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${waText}`;
-
-    // Launch WhatsApp & Mailto
-    window.open(whatsappUrl, '_blank');
-    setTimeout(() => {
-      window.location.href = mailtoUrl;
-    }, 400);
-
     setFormSubmitted(true);
   };
 
