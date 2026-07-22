@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { MapPin, Mail, MessageSquare, Shield, ChevronRight } from 'lucide-react';
+import { MapPin, Mail, MessageSquare, Shield, ChevronRight, Smartphone } from 'lucide-react';
 import logo3 from '../assets/logo.png';
 
 interface FooterProps {
@@ -368,10 +368,41 @@ export default function Footer({ copyright, onNavigate }: FooterProps) {
             Hosted by Sri Ramakrishna Engineering College, Coimbatore
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
             <span>
               Designed & Developed by <strong style={{ color: '#ffffff', fontWeight: 800 }}>Surya Narayanan K S</strong>
             </span>
+
+            {/* Android APK Download Button */}
+            <button
+              onClick={() => {
+                if ((window as any).deferredPrompt) {
+                  (window as any).deferredPrompt.prompt();
+                } else {
+                  alert('📱 AECTSD 2027 App is PWA/APK ready!\n\nTo install on your Android device:\n1. Tap your browser menu (3 dots)\n2. Select "Add to Home screen" or "Install App".');
+                }
+              }}
+              style={{
+                textDecoration: 'none',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.3rem 0.75rem',
+                borderRadius: '20px',
+                border: 'none',
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                color: '#ffffff',
+                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              title="Download & Install AECTSD 2027 Android App"
+            >
+              <Smartphone size={13} /> 
+            </button>
+
             <a
               href="/?page=admin"
               target="_blank"

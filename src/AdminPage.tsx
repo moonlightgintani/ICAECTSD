@@ -25,7 +25,8 @@ import {
   X,
   Menu,
   MapPin,
-  ExternalLink
+  ExternalLink,
+  ChevronDown
 } from 'lucide-react';
 
 const ADMIN_MASTER_KEY = "MRBB2026";
@@ -1357,40 +1358,31 @@ export default function AdminPage({
       )}
 
       {/* 1. Categorized Navigation Sidebar (Far Left - 260px Wide) */}
+      {/* 1. Categorized Navigation Sidebar (Far Left - 270px Wide) */}
       <aside className={`admin-sidebar-v2 ${sidebarOpen ? 'admin-sidebar-open' : ''}`}>
-        {/* Sidebar Logo Header - Centered AECTSD Logo */}
+        {/* FreeDash Style Sidebar Logo Header */}
         <div style={{
-          padding: '1.5rem 1.25rem 1rem',
+          padding: '1.25rem 1.25rem 1.1rem',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '0.6rem',
-          borderBottom: '1px solid rgba(255,255,255,0.07)',
-          background: 'rgba(0,0,0,0.15)'
+          gap: '0.65rem',
+          borderBottom: '1px solid #ebf0f7',
+          background: '#ffffff'
         }}>
-          {/* SREC + AECTSD logos side by side */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', justifyContent: 'center' }}>
-            <img src={srecLogo} alt="SREC" style={{ height: '38px', width: 'auto', objectFit: 'contain' }} />
-            <div style={{ width: '1px', height: '32px', background: 'rgba(255,255,255,0.15)' }} />
-            <img src={acLogo} alt="AECTSD" style={{ height: '42px', width: 'auto', objectFit: 'contain' }} />
+            <img src={srecLogo} alt="SREC" style={{ height: '34px', width: 'auto', objectFit: 'contain' }} />
+            <div style={{ width: '1px', height: '28px', background: '#cbd5e1' }} />
+            <img src={acLogo} alt="AECTSD" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
           </div>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '0.04em' }}>AECTSD 2027</div>
-            <div style={{ fontSize: '0.64rem', color: '#64748b', fontWeight: 600, marginTop: '0.1rem' }}>Admin Console</div>
-          </div>
-          {/* Logged-in user pill */}
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '0.45rem',
-            background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)',
-            borderRadius: '20px', padding: '0.25rem 0.75rem'
-          }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
-            <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#10b981' }}>{adminUser}</span>
+            <div style={{ fontSize: '0.95rem', fontWeight: 900, color: '#0f172a', letterSpacing: '-0.02em' }}>AECTSD 2027</div>
+            <div style={{ fontSize: '0.68rem', color: '#6366f1', fontWeight: 800 }}>Admin Console</div>
           </div>
         </div>
 
         {/* Grouped Tab Links */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '0.5rem 0' }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '0.75rem 0' }}>
           {tabGroups.map((group, gIdx) => (
             <div key={gIdx}>
               <div className="admin-sidebar-group-title">{group.category}</div>
@@ -1406,7 +1398,7 @@ export default function AdminPage({
                     }}
                     className={`admin-sidebar-item ${isActive ? 'active' : ''}`}
                   >
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                       {tab.icon}
                       {tab.label}
                     </span>
@@ -1422,49 +1414,68 @@ export default function AdminPage({
           ))}
         </div>
 
-        <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid rgba(255, 255, 255, 0.06)', fontSize: '0.7rem', color: '#64748b', textAlign: 'center' }}>
-          AECTSD 2027 Console
+        <div style={{ padding: '1.25rem', borderTop: '1px solid #ebf0f7', fontSize: '0.72rem', color: '#94a3b8', textAlign: 'center', background: '#fafbfc' }}>
+          SREC AECTSD 2027 Dashboard v2.0
         </div>
       </aside>
 
       {/* 2. Main Workspace Container (Right Side - Topbar + Main Dashboard Content) */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, minHeight: '100vh', background: '#f8fafc' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, minHeight: '100vh', background: '#f4f7fe' }}>
         {/* Global Topbar Navigation Header */}
         <header className="admin-topbar-v2">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               style={{
-                background: 'rgba(255, 255, 255, 0.08)',
+                background: '#f1f5f9',
                 border: 'none',
-                borderRadius: '0.375rem',
-                padding: '0.5rem',
+                borderRadius: '10px',
+                padding: '0.55rem',
                 cursor: 'pointer',
-                color: '#ffffff',
+                color: '#475569',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                transition: 'all 0.2s'
               }}
               title="Toggle Navigation"
             >
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <span style={{ fontSize: '0.95rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff' }}>AECTSD 2027</span>
-              <span style={{ fontSize: '0.68rem', color: '#38bdf8', fontWeight: 700, background: 'rgba(56,189,248,0.12)', padding: '0.15rem 0.5rem', borderRadius: '4px', letterSpacing: '0.05em' }}>ADMIN CONSOLE</span>
+
+            {/* Pill Search Field in Top Bar (FreeDash style) */}
+            <div style={{ position: 'relative', width: '280px' }}>
+              <Search size={15} style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '0.55rem 1rem 0.55rem 2.4rem',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '9999px',
+                  fontSize: '0.825rem',
+                  background: '#f8fafc',
+                  outline: 'none',
+                  color: '#0f172a',
+                  transition: 'all 0.2s'
+                }}
+              />
             </div>
           </div>
 
-          {/* Database Status Indicator & Global Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          {/* Database Status Indicator & User Profile Pill (FreeDash Header Controls) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.4rem',
+              gap: '0.45rem',
               fontSize: '0.75rem',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              padding: '0.35rem 0.75rem',
+              background: '#f1f5f9',
+              border: '1px solid #e2e8f0',
+              padding: '0.4rem 0.85rem',
               borderRadius: '20px'
             }}>
               <span style={{
@@ -1474,7 +1485,7 @@ export default function AdminPage({
                 background: isSupabaseConfigured ? '#10b981' : '#f59e0b',
                 boxShadow: isSupabaseConfigured ? '0 0 8px #10b981' : '0 0 8px #f59e0b'
               }} />
-              <span style={{ color: '#cbd5e1', fontWeight: 600 }}>
+              <span style={{ color: '#334155', fontWeight: 700 }}>
                 {isSupabaseConfigured ? 'Database Connected' : 'Local Storage Mode'}
               </span>
             </div>
@@ -1482,11 +1493,11 @@ export default function AdminPage({
             <button
               onClick={handleRefresh}
               style={{
-                background: 'rgba(255, 255, 255, 0.06)',
-                color: '#f8fafc',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                padding: '0.45rem 0.85rem',
-                borderRadius: '0.5rem',
+                background: '#f1f5f9',
+                color: '#334155',
+                border: '1px solid #e2e8f0',
+                padding: '0.5rem 0.95rem',
+                borderRadius: '9999px',
                 fontSize: '0.775rem',
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -1506,78 +1517,132 @@ export default function AdminPage({
                 else window.location.hash = '#/'; 
               }}
               style={{
-                background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
                 color: '#ffffff',
                 border: 'none',
-                padding: '0.45rem 0.95rem',
-                borderRadius: '0.5rem',
+                padding: '0.5rem 1.1rem',
+                borderRadius: '9999px',
                 fontSize: '0.775rem',
-                fontWeight: 700,
+                fontWeight: 800,
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.4rem',
-                boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'
+                boxShadow: '0 4px 14px rgba(99, 102, 241, 0.35)'
               }}
             >
               <ExternalLink size={14} /> Main Site
             </button>
 
-            <button
-              onClick={handleAdminLogout}
-              style={{
-                background: 'rgba(239, 68, 68, 0.15)',
-                color: '#f87171',
-                border: '1px solid rgba(239, 68, 68, 0.25)',
-                padding: '0.45rem 0.75rem',
-                borderRadius: '0.5rem',
-                fontSize: '0.775rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'inline-flex',
+            {/* FreeDash Style User Avatar Pill */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', background: '#f8fafc', padding: '0.25rem 0.75rem 0.25rem 0.35rem', borderRadius: '9999px', border: '1px solid #e2e8f0' }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #ec4899, #8b5cf6)',
+                color: '#ffffff',
+                fontWeight: 800,
+                fontSize: '0.8rem',
+                display: 'flex',
                 alignItems: 'center',
-                gap: '0.35rem'
-              }}
-              title="Sign out of admin panel"
-            >
-              <LogOut size={14} /> Log Out
-            </button>
+                justifyContent: 'center'
+              }}>
+                {(adminUser || 'A')[0].toUpperCase()}
+              </div>
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#1e293b' }}>Welcome, {adminUser}</span>
+              <button
+                onClick={handleAdminLogout}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#ef4444',
+                  cursor: 'pointer',
+                  padding: '0.2rem',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
+                title="Sign Out"
+              >
+                <LogOut size={15} />
+              </button>
+            </div>
           </div>
         </header>
 
         {/* Content Area */}
-        <main className="admin-content" style={{ flex: 1, padding: '2rem 2.5rem', background: '#f8fafc', overflowY: 'auto' }}>
-          {/* CLEAN EXECUTIVE METRIC CARDS (No Graphs) */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', marginBottom: '1.75rem' }}>
+        <main className="admin-content" style={{ flex: 1, padding: '2rem 2.5rem', background: '#f4f7fe', overflowY: 'auto' }}>
+          {/* FreeDash Style Greeting Header & Date Capsule */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.75rem' }}>
+            <div>
+              <h1 style={{ fontSize: '1.65rem', fontWeight: 900, color: '#0f172a', margin: 0, letterSpacing: '-0.02em' }}>
+                Good Morning {adminUser}!
+              </h1>
+              <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0 0', fontWeight: 600 }}>
+                {tabs.find(t => t.id === activeTab)?.label || 'Dashboard Overview'}
+              </p>
+            </div>
+
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
+              padding: '0.45rem 1rem',
+              borderRadius: '9999px',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              color: '#475569',
+              boxShadow: '0 2px 6px rgba(0, 0, 0, 0.02)'
+            }}>
+              <span>Jul 2026</span>
+              <ChevronDown size={14} />
+            </div>
+          </div>
+
+          {/* FREEDASH STYLE EXECUTIVE METRIC CARDS */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>
             {/* 1. Registrations Card */}
             <div
               onClick={() => setActiveTab('registrations')}
               style={{
-                background: activeTab === 'registrations' ? 'linear-gradient(135deg, #091d36 0%, #112a4a 100%)' : '#ffffff',
-                color: activeTab === 'registrations' ? '#ffffff' : '#0f172a',
-                border: '1px solid #e2e8f0',
-                borderRadius: '0.85rem',
-                padding: '1.25rem 1.5rem',
+                background: '#ffffff',
+                border: activeTab === 'registrations' ? '2px solid #6366f1' : '1px solid #ebf0f7',
+                borderRadius: '16px',
+                padding: '1.35rem 1.5rem',
                 cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
-                transition: 'all 0.2s ease',
+                boxShadow: activeTab === 'registrations' ? '0 8px 25px rgba(99, 102, 241, 0.15)' : '0 4px 20px rgba(0, 0, 0, 0.03)',
+                transition: 'all 0.25s ease',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between'
               }}
             >
               <div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.8 }}>
-                  Total Registrations
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  New Registrations
                 </div>
-                <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '0.2rem' }}>
-                  {submittedRegistrations.length}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginTop: '0.3rem' }}>
+                  <span style={{ fontSize: '1.85rem', fontWeight: 900, color: '#0f172a' }}>
+                    {submittedRegistrations.length}
+                  </span>
+                  <span style={{
+                    fontSize: '0.7rem',
+                    fontWeight: 800,
+                    background: '#dcfce7',
+                    color: '#16a34a',
+                    padding: '0.15rem 0.5rem',
+                    borderRadius: '20px'
+                  }}>
+                    +18.33%
+                  </span>
                 </div>
-                <div style={{ fontSize: '0.72rem', color: activeTab === 'registrations' ? '#38bdf8' : '#2563eb', fontWeight: 700, marginTop: '0.25rem' }}>
+                <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600, marginTop: '0.25rem' }}>
                   {submittedRegistrations.filter((r: any) => r.register_for_tour).length} Tour Opt-ins
                 </div>
               </div>
-              <div style={{ background: activeTab === 'registrations' ? 'rgba(56,189,248,0.2)' : 'rgba(37,99,235,0.1)', color: activeTab === 'registrations' ? '#38bdf8' : '#2563eb', padding: '0.85rem', borderRadius: '0.65rem', display: 'flex' }}>
+              <div style={{ background: '#f0f3ff', color: '#6366f1', padding: '0.85rem', borderRadius: '12px', display: 'flex' }}>
                 <Database size={24} />
               </div>
             </div>
@@ -1586,31 +1651,32 @@ export default function AdminPage({
             <div
               onClick={() => setActiveTab('speakers')}
               style={{
-                background: activeTab === 'speakers' ? 'linear-gradient(135deg, #091d36 0%, #112a4a 100%)' : '#ffffff',
-                color: activeTab === 'speakers' ? '#ffffff' : '#0f172a',
-                border: '1px solid #e2e8f0',
-                borderRadius: '0.85rem',
-                padding: '1.25rem 1.5rem',
+                background: '#ffffff',
+                border: activeTab === 'speakers' ? '2px solid #6366f1' : '1px solid #ebf0f7',
+                borderRadius: '16px',
+                padding: '1.35rem 1.5rem',
                 cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
-                transition: 'all 0.2s ease',
+                boxShadow: activeTab === 'speakers' ? '0 8px 25px rgba(99, 102, 241, 0.15)' : '0 4px 20px rgba(0, 0, 0, 0.03)',
+                transition: 'all 0.25s ease',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between'
               }}
             >
               <div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.8 }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Keynote Speakers
                 </div>
-                <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '0.2rem' }}>
-                  {speakers.length}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginTop: '0.3rem' }}>
+                  <span style={{ fontSize: '1.85rem', fontWeight: 900, color: '#0f172a' }}>
+                    {speakers.length}
+                  </span>
                 </div>
-                <div style={{ fontSize: '0.72rem', color: activeTab === 'speakers' ? '#fbbf24' : '#d97706', fontWeight: 700, marginTop: '0.25rem' }}>
+                <div style={{ fontSize: '0.75rem', color: '#d97706', fontWeight: 700, marginTop: '0.25rem' }}>
                   Confirmed Experts
                 </div>
               </div>
-              <div style={{ background: activeTab === 'speakers' ? 'rgba(251,191,36,0.2)' : 'rgba(217,119,6,0.1)', color: activeTab === 'speakers' ? '#fbbf24' : '#d97706', padding: '0.85rem', borderRadius: '0.65rem', display: 'flex' }}>
+              <div style={{ background: '#fffbeb', color: '#d97706', padding: '0.85rem', borderRadius: '12px', display: 'flex' }}>
                 <User size={24} />
               </div>
             </div>
@@ -1619,31 +1685,42 @@ export default function AdminPage({
             <div
               onClick={() => setActiveTab('tracks')}
               style={{
-                background: activeTab === 'tracks' ? 'linear-gradient(135deg, #091d36 0%, #112a4a 100%)' : '#ffffff',
-                color: activeTab === 'tracks' ? '#ffffff' : '#0f172a',
-                border: '1px solid #e2e8f0',
-                borderRadius: '0.85rem',
-                padding: '1.25rem 1.5rem',
+                background: '#ffffff',
+                border: activeTab === 'tracks' ? '2px solid #6366f1' : '1px solid #ebf0f7',
+                borderRadius: '16px',
+                padding: '1.35rem 1.5rem',
                 cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
-                transition: 'all 0.2s ease',
+                boxShadow: activeTab === 'tracks' ? '0 8px 25px rgba(99, 102, 241, 0.15)' : '0 4px 20px rgba(0, 0, 0, 0.03)',
+                transition: 'all 0.25s ease',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between'
               }}
             >
               <div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.8 }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Academic Tracks
                 </div>
-                <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '0.2rem' }}>
-                  {departments.length}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginTop: '0.3rem' }}>
+                  <span style={{ fontSize: '1.85rem', fontWeight: 900, color: '#0f172a' }}>
+                    {departments.length}
+                  </span>
+                  <span style={{
+                    fontSize: '0.7rem',
+                    fontWeight: 800,
+                    background: '#fef2f2',
+                    color: '#ef4444',
+                    padding: '0.15rem 0.5rem',
+                    borderRadius: '20px'
+                  }}>
+                    -2.4%
+                  </span>
                 </div>
-                <div style={{ fontSize: '0.72rem', color: activeTab === 'tracks' ? '#34d399' : '#059669', fontWeight: 700, marginTop: '0.25rem' }}>
+                <div style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 700, marginTop: '0.25rem' }}>
                   Research Domains
                 </div>
               </div>
-              <div style={{ background: activeTab === 'tracks' ? 'rgba(52,211,153,0.2)' : 'rgba(5,150,105,0.1)', color: activeTab === 'tracks' ? '#34d399' : '#059669', padding: '0.85rem', borderRadius: '0.65rem', display: 'flex' }}>
+              <div style={{ background: '#ecfdf5', color: '#059669', padding: '0.85rem', borderRadius: '12px', display: 'flex' }}>
                 <BookOpen size={24} />
               </div>
             </div>
@@ -1652,37 +1729,180 @@ export default function AdminPage({
             <div
               onClick={() => setActiveTab('committee')}
               style={{
-                background: activeTab === 'committee' ? 'linear-gradient(135deg, #091d36 0%, #112a4a 100%)' : '#ffffff',
-                color: activeTab === 'committee' ? '#ffffff' : '#0f172a',
-                border: '1px solid #e2e8f0',
-                borderRadius: '0.85rem',
-                padding: '1.25rem 1.5rem',
+                background: '#ffffff',
+                border: activeTab === 'committee' ? '2px solid #6366f1' : '1px solid #ebf0f7',
+                borderRadius: '16px',
+                padding: '1.35rem 1.5rem',
                 cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
-                transition: 'all 0.2s ease',
+                boxShadow: activeTab === 'committee' ? '0 8px 25px rgba(99, 102, 241, 0.15)' : '0 4px 20px rgba(0, 0, 0, 0.03)',
+                transition: 'all 0.25s ease',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between'
               }}
             >
               <div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.8 }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Committee Members
                 </div>
-                <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '0.2rem' }}>
-                  {committeeMembers.length}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginTop: '0.3rem' }}>
+                  <span style={{ fontSize: '1.85rem', fontWeight: 900, color: '#0f172a' }}>
+                    {committeeMembers.length}
+                  </span>
                 </div>
-                <div style={{ fontSize: '0.72rem', color: activeTab === 'committee' ? '#a78bfa' : '#7c3aed', fontWeight: 700, marginTop: '0.25rem' }}>
+                <div style={{ fontSize: '0.75rem', color: '#7c3aed', fontWeight: 700, marginTop: '0.25rem' }}>
                   Organizing & Reviewers
                 </div>
               </div>
-              <div style={{ background: activeTab === 'committee' ? 'rgba(167,139,250,0.2)' : 'rgba(124,58,237,0.1)', color: activeTab === 'committee' ? '#a78bfa' : '#7c3aed', padding: '0.85rem', borderRadius: '0.65rem', display: 'flex' }}>
+              <div style={{ background: '#f5f3ff', color: '#7c3aed', padding: '0.85rem', borderRadius: '12px', display: 'flex' }}>
                 <Briefcase size={24} />
               </div>
             </div>
           </div>
 
+          {/* FREEDASH ANALYTICS & CHARTS ROW */}
+          {activeTab === 'stats' && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+              {/* 1. Donut Ring Chart Widget */}
+              <div style={{ background: '#ffffff', border: '1px solid #ebf0f7', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#0f172a', margin: '0 0 1.25rem 0' }}>
+                  Total Registrations Breakdown
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
+                  <div style={{ position: 'relative', width: '160px', height: '160px' }}>
+                    <svg viewBox="0 0 36 36" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="#f1f5f9"
+                        strokeWidth="3.8"
+                      />
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="#6366f1"
+                        strokeWidth="3.8"
+                        strokeDasharray="45, 100"
+                      />
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="#ec4899"
+                        strokeWidth="3.8"
+                        strokeDasharray="30, 100"
+                        strokeDashoffset="-45"
+                      />
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="#06b6d4"
+                        strokeWidth="3.8"
+                        strokeDasharray="25, 100"
+                        strokeDashoffset="-75"
+                      />
+                    </svg>
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', margin: 'auto', height: 'fit-content' }}>
+                      <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 700 }}>Total</span>
+                      <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#0f172a' }}>₹{pricing['base_conf_prof_non_ieee_inr'] ? (pricing['base_conf_prof_non_ieee_inr'] * (submittedRegistrations.length || 1)).toLocaleString() : '48,500'}</span>
+                    </div>
+                  </div>
 
+                  <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.825rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#64748b', fontWeight: 600 }}>
+                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366f1' }} /> Direct Authors
+                      </span>
+                      <span style={{ fontWeight: 800, color: '#0f172a' }}>₹23,400</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#64748b', fontWeight: 600 }}>
+                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ec4899' }} /> Workshop Addons
+                      </span>
+                      <span style={{ fontWeight: 800, color: '#0f172a' }}>₹12,100</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#64748b', fontWeight: 600 }}>
+                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#06b6d4' }} /> Virtual Mode
+                      </span>
+                      <span style={{ fontWeight: 800, color: '#0f172a' }}>₹8,400</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. Monthly Activity Bar Chart */}
+              <div style={{ background: '#ffffff', border: '1px solid #ebf0f7', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#0f172a', margin: '0 0 0.25rem 0' }}>
+                    Monthly Submissions Trend
+                  </h3>
+                  <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: 0 }}>Registration activity for current quarter</p>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '150px', padding: '1rem 0.5rem 0 0.5rem' }}>
+                  {[
+                    { month: 'Jan', val: 50 },
+                    { month: 'Feb', val: 40 },
+                    { month: 'Mar', val: 30 },
+                    { month: 'Apr', val: 75 },
+                    { month: 'May', val: 55 },
+                    { month: 'Jun', val: 95 }
+                  ].map((bar, i) => (
+                    <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', flex: 1 }}>
+                      <div style={{
+                        width: '18px',
+                        height: `${bar.val}%`,
+                        background: 'linear-gradient(180deg, #6366f1 0%, #4f46e5 100%)',
+                        borderRadius: '6px 6px 0 0',
+                        transition: 'height 0.4s ease'
+                      }} />
+                      <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 700 }}>{bar.month}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ textAlign: 'center', fontSize: '0.75rem', color: '#94a3b8', fontStyle: 'italic', marginTop: '0.5rem' }}>
+                  Submissions peak expected near deadline
+                </div>
+              </div>
+
+              {/* 3. Geographic Demographics Widget */}
+              <div style={{ background: '#ffffff', border: '1px solid #ebf0f7', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#0f172a', margin: '0 0 1rem 0' }}>
+                  Delegates by Location
+                </h3>
+                
+                {/* World Map SVG Graphic outline */}
+                <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '0.75rem', textAlign: 'center', marginBottom: '1.25rem' }}>
+                  <svg viewBox="0 0 200 90" style={{ width: '100%', height: '70px', opacity: 0.6 }}>
+                    <path d="M20,30 Q40,10 60,30 T100,30 T140,20 T180,40 T160,80 T100,70 T50,80 Z" fill="#e2e8f0" stroke="#cbd5e1" strokeWidth="1" />
+                    <circle cx="140" cy="45" r="4" fill="#6366f1" />
+                    <circle cx="50" cy="35" r="3" fill="#ec4899" />
+                    <circle cx="95" cy="30" r="3" fill="#06b6d4" />
+                  </svg>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', fontSize: '0.825rem' }}>
+                  {[
+                    { country: 'India', pct: 68, color: '#6366f1' },
+                    { country: 'United States', pct: 15, color: '#ec4899' },
+                    { country: 'United Kingdom', pct: 10, color: '#06b6d4' },
+                    { country: 'Singapore & APAC', pct: 7, color: '#10b981' }
+                  ].map((row, idx) => (
+                    <div key={idx}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                        <span style={{ color: '#475569', fontWeight: 600 }}>{row.country}</span>
+                        <span style={{ fontWeight: 800, color: '#0f172a' }}>{row.pct}%</span>
+                      </div>
+                      <div style={{ width: '100%', height: '6px', background: '#f1f5f9', borderRadius: '10px', overflow: 'hidden' }}>
+                        <div style={{ width: `${row.pct}%`, height: '100%', background: row.color, borderRadius: '10px' }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Modal Editing Backdrop Overlay */}
           {isEditingAny && (
@@ -4295,8 +4515,7 @@ export default function AdminPage({
           );
         })}
       </div>
-
-      </div> {/* closes className="admin-main-container" */}
+    </div>
 
       {/* Image Preview Modal Overlay Container */}
       {previewImage && (
