@@ -40,7 +40,8 @@ import {
   Plug,
   Sliders,
   Atom,
-  Satellite
+  Satellite,
+  Smartphone
 } from 'lucide-react';
 import Footer from './components/Footer';
 import acLogo from './assets/logo.png';
@@ -49,13 +50,13 @@ import logo2 from './assets/logo2.png';
 import Tru1 from './assets/tru2 (1).png';
 import Tru2 from './assets/tru2 (2).png';
 import chatbotIcon from './assets/chatbot.gif';
-import heroBg from './assets/hero.jpg';
+import heroBg from './assets/hero.png';
 import karpagamImg from './assets/karpagam.png';
 import jansiImg from './assets/jansi.png';
 import balamurgunImg from './assets/bala.jpeg';
 import trust1Img from './assets/trust1.png';
 import logo5 from './assets/logo5.jpg';
-import principalImg from './assets/principal.jpg';
+import principalImg from './assets/principal.png';
 import kingsyImg from './assets/Kingsy.png';
 import sakthivelImg from './assets/Sakthivel.png';
 import radhaImg from './assets/Screenshot 2026-07-10 142828.png';
@@ -2077,20 +2078,20 @@ function App() {
   };
 
   const getMemberImage = (name: string, imageUrl?: string): string => {
-    if (name.includes('Sundar')) return logo5;
-    if (name.includes('Narendran')) return trust1Img;
-    if (name.includes('Lakshminarayanaswamy')) return Tru2;
-    if (name.includes('Ramakrishna')) return Tru1;
+    if (imageUrl && imageUrl !== 'no_file' && imageUrl !== '') return imageUrl;
+    if (name.includes('Sundar Ramakrishnan') || name.includes('R. Sundar')) return logo5;
+    if (name.includes('Thiru')) return trust1Img;
     if (name.includes('Balamurugan')) return balamurgunImg;
     if (name.includes('Soundarrajan')) return principalImg;
-    if (name.includes('Sakthivel')) return sakthivelImg;
-    if (name.includes('Radha')) return radhaImg;
-    if (name.includes('Brindha')) return brindhaImg;
+    if (name.includes('P. Sakthivel')) return sakthivelImg;
+    if (name.includes('S. Radha')) return radhaImg;
+    if (name.includes('S. Brindha')) return brindhaImg;
     if (name.toLowerCase().includes('kingsy')) return kingsyImg;
+    if (name.includes('Ramakrishna')) return Tru1;
+    if (name.includes('Lakshminarayanaswamy')) return Tru2;
+    //if (name.includes('Praveen Kumar')) return praveenkumarImg;
     if (name.includes('Karpagam')) return karpagamImg;
     if (name.includes('Jansi')) return jansiImg;
-    if (name.includes('Thiru')) return trust1Img;
-    if (imageUrl && imageUrl !== 'no_file' && imageUrl !== '' && imageUrl.length > 5) return imageUrl;
     // if (name.includes('Aravindaguru'))   return aravindaguruImg;
     // if (name.includes('Sowntharya'))     return sowntharImage;
     // if (name.includes('N. Saranya'))     return saranyaImg;
@@ -2250,10 +2251,9 @@ function App() {
 
               {/* Desktop Navigation Action Buttons */}
               <div className="header-right-container" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-
                 {/* Download Android APK Button */}
                 <a
-                  href="https://github.com/moonlightgintani/ICAECTSD/releases/download/v1.0.0-apk/aectsd-2027.apk"
+                  href="/aectsd-2027.apk"
                   download="aectsd-2027.apk"
                   style={{
                     background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
@@ -2271,7 +2271,7 @@ function App() {
                   }}
                   title="Download AECTSD 2027 Android APK"
                 >
-                  📱 Download APK
+                  <Smartphone size={13} /> Download APK
                 </a>
 
                 {/* IEEE SREC SB Portal Link */}
@@ -2348,9 +2348,8 @@ function App() {
 
               {/* Action Buttons inside Mobile Drawer */}
               <div className="mobile-action-row" style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-                {/* Download APK Button */}
                 <a
-                  href="https://github.com/moonlightgintani/ICAECTSD/releases/download/v1.0.0-apk/aectsd-2027.apk"
+                  href="/aectsd-2027.apk"
                   download="aectsd-2027.apk"
                   style={{
                     width: '100%',
@@ -2369,10 +2368,9 @@ function App() {
                   }}
                   title="Download AECTSD 2027 Android APK"
                 >
-                  📱 Download Android APK
+                  <Smartphone size={16} /> Download Android APK
                 </a>
                 <a
-
                   href={info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/"}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -2900,7 +2898,7 @@ function App() {
                           <ExternalLink size={14} /> IEEE Paper Templates
                         </a>
                         <a
-                          href="https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText=AECTSD%202025"
+                          href="https://ieee-aectsd.srec.ac.in"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="btn btn-secondary"
@@ -3694,9 +3692,8 @@ function App() {
                                   <div style={{ width: '100%', height: '140px', overflow: 'hidden', background: '#090e17' }}>
                                     <img
                                       src={getMemberImage(leadCoord.name, leadCoord.image_url)}
-                                      onError={(e) => { (e.target as HTMLImageElement).src = getMemberImage(leadCoord.name); }}
                                       alt={leadCoord.name}
-                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', imageRendering: 'smooth', transform: 'translateZ(0)' }}
+                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
                                     />
                                   </div>
                                   <div style={{ padding: '0.8rem 0.6rem', background: 'linear-gradient(180deg, #0d1520 0%, #151d2a 100%)' }}>
@@ -3751,7 +3748,6 @@ function App() {
                                   <div style={{ width: '100%', height: '135px', overflow: 'hidden', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <img
                                       src={getMemberImage(coord.name, coord.image_url)}
-                                      onError={(e) => { (e.target as HTMLImageElement).src = getMemberImage(coord.name); }}
                                       alt={coord.name}
                                       style={{
                                         width: '100%',
