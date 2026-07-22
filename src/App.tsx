@@ -1904,8 +1904,6 @@ function App() {
     if (!formData.name || !formData.email || !formData.message) return;
 
     const targetEmail = info.contact_email || info.emailjs_recipient || 'aectsd2027@srec.ac.in';
-    const whatsappNumber = '919080296675';
-
     // 1. Store message in Supabase database & localStorage
     const newMsg = {
       id: Date.now(),
