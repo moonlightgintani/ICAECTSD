@@ -375,7 +375,7 @@ export default function Footer({ copyright, onNavigate }: FooterProps) {
 
             {/* Android APK Download Button */}
             <a
-              href="/aectsd-2027.apk"
+              href="https://github.com/moonlightgintani/ICAECTSD/releases/download/v1.0.0-apk/aectsd-2027.apk"
               download="aectsd-2027.apk"
               style={{
                 textDecoration: 'none',
