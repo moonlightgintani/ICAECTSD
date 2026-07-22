@@ -29,17 +29,19 @@
   scroll-behavior: smooth;
 }
 
-* {
+/* NATIVE APK / MOBILE APP OVERRIDES */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  touch-action: manipulation; /* Prevents double-tap zoom for native APK feel */
 }
 
-html,
-body {
-  overflow-x: hidden;
-  width: 100%;
-  position: relative;
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overscroll-behavior-y: none;
 }
 
 body {
@@ -48,6 +50,44 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-overflow-scrolling: touch;
+  user-select: none;
+  -webkit-user-select: none;
+  animation: apkAppFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Allow text selection in inputs and text paragraphs */
+input, textarea, p, span, h1, h2, h3, h4, h5, h6 {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* ENTRY & PAGE TRANSITION ANIMATIONS */
+@keyframes apkAppFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.apk-card-entry {
+  animation: apkCardScaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) ease-out;
+}
+
+@keyframes apkCardScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 /* Custom Scrollbar */
@@ -3398,7 +3438,7 @@ footer h6 {
 }
 
 /* ==========================================================================
-   ULTRA-MODERN EXECUTIVE ADMIN DASHBOARD STYLES (Porsche / Stripe / Linear Theme)
+   FREEDASH MODERN LIGHT EXECUTIVE ADMIN DASHBOARD STYLES
    ========================================================================== */
 
 .admin-layout-v2 {
@@ -3406,36 +3446,36 @@ footer h6 {
   flex-direction: row;
   min-height: 100vh;
   width: 100%;
-  background: #f4f6f9;
+  background: #f4f7fe;
   font-family: var(--font-sans);
-  color: #0f172a;
+  color: #1e293b;
 }
 
-/* 1. Dark Glass Sidebar Navigation */
+/* 1. Crisp White Modern Sidebar Navigation */
 .admin-sidebar-v2 {
   width: 270px;
   min-width: 270px;
-  background: linear-gradient(180deg, #0b1120 0%, #060913 100%);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border-right: 1px solid #ebf0f7;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  color: #ffffff;
-  box-shadow: 6px 0 35px rgba(0, 0, 0, 0.4);
+  color: #1e293b;
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.02);
   z-index: 999;
   position: sticky;
   top: 0;
   height: 100vh;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  scrollbar-color: #cbd5e1 transparent;
 }
 
 .admin-sidebar-group-title {
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   font-weight: 800;
-  color: #64748b;
-  letter-spacing: 0.1em;
+  color: #94a3b8;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 1.35rem 1.25rem 0.5rem 1.25rem;
 }
@@ -3446,41 +3486,38 @@ footer h6 {
   justify-content: space-between;
   width: calc(100% - 1.5rem);
   margin: 0.2rem 0.75rem;
-  padding: 0.7rem 0.9rem;
-  border-radius: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
   border: 1px solid transparent;
   background: transparent;
-  color: #94a3b8;
-  font-size: 0.85rem;
+  color: #64748b;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: left;
 }
 
 .admin-sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.08);
-  transform: translateX(4px);
+  background: #f8fafc;
+  color: #1e293b;
+  transform: translateX(3px);
 }
 
 .admin-sidebar-item.active {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.45);
-  font-weight: 800;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+  font-weight: 700;
 }
 
 .admin-sidebar-badge {
-  background: rgba(255, 255, 255, 0.14);
-  color: #ffffff;
-  font-size: 0.68rem;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.7rem;
   font-weight: 800;
-  padding: 0.15rem 0.5rem;
+  padding: 0.15rem 0.55rem;
   border-radius: 20px;
-  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
 .admin-sidebar-item.active .admin-sidebar-badge {
@@ -3488,65 +3525,65 @@ footer h6 {
   color: #ffffff;
 }
 
-/* 2. Topbar Navigation */
+/* 2. Topbar Navigation Header */
 .admin-topbar-v2 {
-  height: 64px;
-  background: #0b1120;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  height: 70px;
+  background: #ffffff;
+  border-bottom: 1px solid #ebf0f7;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.75rem;
-  color: #ffffff;
+  padding: 0 2rem;
+  color: #0f172a;
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 /* 3. Executive KPI Tiles */
 .admin-kpi-tile {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 1rem;
-  padding: 1.25rem 1.5rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  border: 1px solid #ebf0f7;
+  border-radius: 16px;
+  padding: 1.35rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   display: flex;
   align-items: center;
   gap: 1rem;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s ease;
   cursor: pointer;
 }
 
 .admin-kpi-tile:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
   border-color: #cbd5e1;
 }
 
 /* 4. Table & Cards Section UI */
 .admin-table-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+  border: 1px solid #ebf0f7;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   overflow: hidden;
 }
 
 .admin-table-card table th {
-  padding: 0.9rem 1.25rem;
+  padding: 0.95rem 1.25rem;
   background: #f8fafc;
-  color: #475569;
+  color: #64748b;
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: 800;
-  border-bottom: 2px solid #f1f5f9;
+  border-bottom: 1px solid #ebf0f7;
 }
 
 .admin-table-card table td {
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #ebf0f7;
   transition: background-color 0.15s ease;
 }
 
@@ -3561,9 +3598,9 @@ footer h6 {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(11, 17, 32, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -3574,13 +3611,13 @@ footer h6 {
 
 .admin-modal-card {
   background: #ffffff;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: 1.25rem;
+  border: 1px solid #ebf0f7;
+  border-radius: 20px;
   max-width: 820px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.4);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   padding: 2.25rem;
   position: relative;
   animation: adminModalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
