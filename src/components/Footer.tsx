@@ -374,14 +374,9 @@ export default function Footer({ copyright, onNavigate }: FooterProps) {
             </span>
 
             {/* Android APK Download Button */}
-            <button
-              onClick={() => {
-                if ((window as any).deferredPrompt) {
-                  (window as any).deferredPrompt.prompt();
-                } else {
-                  alert('📱 AECTSD 2027 App is PWA/APK ready!\n\nTo install on your Android device:\n1. Tap your browser menu (3 dots)\n2. Select "Add to Home screen" or "Install App".');
-                }
-              }}
+            <a
+              href="/aectsd-2027.apk"
+              download="aectsd-2027.apk"
               style={{
                 textDecoration: 'none',
                 fontSize: '0.75rem',
@@ -398,10 +393,10 @@ export default function Footer({ copyright, onNavigate }: FooterProps) {
                 cursor: 'pointer',
                 transition: 'all 0.2s'
               }}
-              title="Download & Install AECTSD 2027 Android App"
+              title="Download AECTSD 2027 Android APK"
             >
-              <Smartphone size={13} /> 
-            </button>
+              <Smartphone size={13} /> Download APK
+            </a>
 
             <a
               href="/?page=admin"

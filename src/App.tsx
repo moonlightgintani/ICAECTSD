@@ -2717,7 +2717,7 @@ function App() {
                   style={{ textAlign: 'center', marginBottom: '4rem' }}
                 >
                   <h2 style={{ fontSize: '2.5rem', color: 'var(--text-primary)', marginTop: '0.5rem', fontWeight: 800 }}>
-                    {info.logo_title || "IEEE AECTSD 2027"}
+                    {info.logo_title || "AECTSD 2027"}
                   </h2>
                   <div style={{ height: '3.5px', width: '80px', background: '#f58220', margin: '1rem auto 0', borderRadius: '2px' }} />
                 </motion.div>
