@@ -1929,8 +1929,8 @@ function App() {
       console.warn('Database log warning:', dbErr);
     }
 
-    // 2. Direct Instant Email Dispatch via Resend API Key
-    const resendApiKey = info.resend_api_key || 're_bHrRHAU2_fiR4MeEVAjrLHFWH1FZ8Q1Av';
+    // 2. Direct Instant Email Dispatch via Environment Variable or Edge Function
+    const resendApiKey = info.resend_api_key || import.meta.env.VITE_RESEND_API_KEY || '';
     if (resendApiKey) {
       try {
         await fetch('https://api.resend.com/emails', {
