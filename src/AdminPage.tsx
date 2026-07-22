@@ -14,6 +14,7 @@ import {
   Calendar, 
   DollarSign, 
   Users, 
+  User,
   BarChart2, 
   ArrowLeft, 
   BookOpen, 
@@ -198,10 +199,8 @@ export default function AdminPage({
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
-  // Search & Filter & Graph Controls
+  // Search & Filter Controls
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [graphPeriod, setGraphPeriod] = useState<'day' | 'month' | 'year'>('month');
-  const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
 
   // Editing state variables (Generic Modal/Forms)
   const [editingSpeaker, setEditingSpeaker] = useState<any | null>(null);
@@ -2387,420 +2386,138 @@ export default function AdminPage({
 
         {/* Content Area */}
         <main className="admin-content" style={{ flex: 1, padding: '2rem 2.5rem', background: '#f8fafc', overflowY: 'auto' }}>
-          {/* Executive KPI Summary Header Tiles with Working Mini Sparklines */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '1.25rem',
-            marginBottom: '2rem'
-          }}>
-            {/* KPI 1: Registrations */}
-            <div className="admin-kpi-tile" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '1rem', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                <div>
-                  <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>REGISTRATIONS</div>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginTop: '0.1rem' }}>
-                    {submittedRegistrations.length}
-                    <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 700, marginLeft: '0.5rem' }}>+14.2% ↑</span>
-                  </div>
-                </div>
-                <div style={{ background: 'rgba(37, 99, 235, 0.1)', color: '#2563eb', padding: '0.65rem', borderRadius: '0.6rem', display: 'flex' }}>
-                  <Database size={20} />
-                </div>
-              </div>
-              {/* SVG Sparkline Graph */}
-              <svg width="100%" height="32" viewBox="0 0 100 30" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="blueSpark" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <path d="M0,25 Q15,10 30,18 T60,8 T90,14 T100,5 L100,30 L0,30 Z" fill="url(#blueSpark)" />
-                <path d="M0,25 Q15,10 30,18 T60,8 T90,14 T100,5" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" />
-              </svg>
-            </div>
-
-            {/* KPI 2: Speakers */}
-            <div className="admin-kpi-tile" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '1rem', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                <div>
-                  <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>KEYNOTE SPEAKERS</div>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginTop: '0.1rem' }}>
-                    {speakers.length}
-                    <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 700, marginLeft: '0.5rem' }}>+8.5% ↑</span>
-                  </div>
-                </div>
-                <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '0.65rem', borderRadius: '0.6rem', display: 'flex' }}>
-                  <Users size={20} />
-                </div>
-              </div>
-              {/* SVG Sparkline Graph */}
-              <svg width="100%" height="32" viewBox="0 0 100 30" preserveAspectRatio="none">
-                <rect x="5" y="15" width="10" height="15" rx="2" fill="#10b981" opacity="0.6" />
-                <rect x="23" y="10" width="10" height="20" rx="2" fill="#10b981" opacity="0.8" />
-                <rect x="41" y="18" width="10" height="12" rx="2" fill="#10b981" opacity="0.5" />
-                <rect x="59" y="8" width="10" height="22" rx="2" fill="#10b981" opacity="0.9" />
-                <rect x="77" y="4" width="10" height="26" rx="2" fill="#10b981" />
-              </svg>
-            </div>
-
-            {/* KPI 3: Academic Tracks */}
-            <div className="admin-kpi-tile" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '1rem', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                <div>
-                  <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>ACADEMIC TRACKS</div>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginTop: '0.1rem' }}>
-                    {departments.length}
-                    <span style={{ fontSize: '0.75rem', color: '#8b5cf6', fontWeight: 700, marginLeft: '0.5rem' }}>Active</span>
-                  </div>
-                </div>
-                <div style={{ background: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6', padding: '0.65rem', borderRadius: '0.6rem', display: 'flex' }}>
-                  <Layers size={20} />
-                </div>
-              </div>
-              {/* SVG Sparkline Graph */}
-              <svg width="100%" height="32" viewBox="0 0 100 30" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="purpleSpark" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <path d="M0,20 Q25,2 50,15 T100,5 L100,30 L0,30 Z" fill="url(#purpleSpark)" />
-                <path d="M0,20 Q25,2 50,15 T100,5" fill="none" stroke="#8b5cf6" strokeWidth="2.5" strokeLinecap="round" />
-              </svg>
-            </div>
-
-            {/* KPI 4: Committee */}
-            <div className="admin-kpi-tile" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '1rem', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                <div>
-                  <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>COMMITTEE MEMBERS</div>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginTop: '0.1rem' }}>
-                    {committeeMembers.length}
-                    <span style={{ fontSize: '0.75rem', color: '#f59e0b', fontWeight: 700, marginLeft: '0.5rem' }}>+24.1% ↑</span>
-                  </div>
-                </div>
-                <div style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', padding: '0.65rem', borderRadius: '0.6rem', display: 'flex' }}>
-                  <Briefcase size={20} />
-                </div>
-              </div>
-              {/* SVG Sparkline Graph */}
-              <svg width="100%" height="32" viewBox="0 0 100 30" preserveAspectRatio="none">
-                <path d="M0,28 L20,20 L40,24 L60,10 L80,16 L100,2" fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" />
-              </svg>
-            </div>
-          </div>
-
-          {/* MAIN TRAFFIC & SUBMISSIONS WORKING INTERACTIVE GRAPH (CoreUI Pro Style) */}
-          <div style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
-            borderRadius: '1rem',
-            padding: '1.75rem',
-            marginBottom: '2rem',
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.03)'
-          }}>
-            {/* Graph Header Controls */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+          {/* CLEAN EXECUTIVE METRIC CARDS (No Graphs) */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', marginBottom: '1.75rem' }}>
+            {/* 1. Registrations Card */}
+            <div
+              onClick={() => setActiveTab('registrations')}
+              style={{
+                background: activeTab === 'registrations' ? 'linear-gradient(135deg, #091d36 0%, #112a4a 100%)' : '#ffffff',
+                color: activeTab === 'registrations' ? '#ffffff' : '#0f172a',
+                border: '1px solid #e2e8f0',
+                borderRadius: '0.85rem',
+                padding: '1.25rem 1.5rem',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
               <div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.01em' }}>
-                  Traffic & Registrations Analytics
-                </h3>
-                <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.25rem 0 0' }}>
-                  Live breakdown of paper submissions, registrations, and visitor engagement.
-                </p>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.8 }}>
+                  Total Registrations
+                </div>
+                <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '0.2rem' }}>
+                  {submittedRegistrations.length}
+                </div>
+                <div style={{ fontSize: '0.72rem', color: activeTab === 'registrations' ? '#38bdf8' : '#2563eb', fontWeight: 700, marginTop: '0.25rem' }}>
+                  {submittedRegistrations.filter((r: any) => r.register_for_tour).length} Tour Opt-ins
+                </div>
               </div>
-
-              {/* Day / Month / Year Interactive Period Selectors */}
-              <div style={{ display: 'flex', alignItems: 'center', background: '#f1f5f9', padding: '0.25rem', borderRadius: '0.6rem', border: '1px solid #cbd5e1' }}>
-                {(['day', 'month', 'year'] as const).map((period) => (
-                  <button
-                    key={period}
-                    onClick={() => setGraphPeriod(period)}
-                    style={{
-                      background: graphPeriod === period ? '#2563eb' : 'transparent',
-                      color: graphPeriod === period ? '#ffffff' : '#64748b',
-                      border: 'none',
-                      padding: '0.4rem 1rem',
-                      borderRadius: '0.45rem',
-                      fontSize: '0.8rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      textTransform: 'capitalize',
-                      transition: 'all 0.2s ease',
-                      boxShadow: graphPeriod === period ? '0 2px 8px rgba(37,99,235,0.3)' : 'none'
-                    }}
-                  >
-                    {period}
-                  </button>
-                ))}
+              <div style={{ background: activeTab === 'registrations' ? 'rgba(56,189,248,0.2)' : 'rgba(37,99,235,0.1)', color: activeTab === 'registrations' ? '#38bdf8' : '#2563eb', padding: '0.85rem', borderRadius: '0.65rem', display: 'flex' }}>
+                <Database size={24} />
               </div>
             </div>
 
-            {/* Interactive SVG Main Area Graph */}
-            {(() => {
-              const graphData = graphPeriod === 'day' ? [
-                { label: 'Mon', count: 14, views: 60 },
-                { label: 'Tue', count: 28, views: 95 },
-                { label: 'Wed', count: 42, views: 140 },
-                { label: 'Thu', count: 68, views: 180 },
-                { label: 'Fri', count: 95, views: 210 },
-                { label: 'Sat', count: 125, views: 245 },
-                { label: 'Sun', count: 160, views: 290 }
-              ] : graphPeriod === 'month' ? [
-                { label: 'Jan', count: 18, views: 80 },
-                { label: 'Feb', count: 35, views: 110 },
-                { label: 'Mar', count: 62, views: 160 },
-                { label: 'Apr', count: 98, views: 220 },
-                { label: 'May', count: 145, views: 280 },
-                { label: 'Jun', count: 190, views: 320 },
-                { label: 'Jul', count: 240, views: 390 },
-                { label: 'Aug', count: 310, views: 450 },
-                { label: 'Sep', count: 385, views: 510 },
-                { label: 'Oct', count: 460, views: 580 },
-                { label: 'Nov', count: 520, views: 640 },
-                { label: 'Dec', count: 600, views: 720 }
-              ] : [
-                { label: '2023', count: 120, views: 400 },
-                { label: '2024', count: 280, views: 850 },
-                { label: '2025', count: 450, views: 1300 },
-                { label: '2026', count: 680, views: 1900 },
-                { label: '2027', count: 1250, views: 3200 }
-              ];
-
-              const width = 800;
-              const height = 240;
-              const padding = 35;
-              const maxVal = Math.max(...graphData.map(d => Math.max(d.count, d.views))) * 1.15 || 100;
-
-              const getX = (index: number) => padding + (index * (width - 2 * padding)) / (graphData.length - 1);
-              const getY = (val: number) => height - padding - ((val / maxVal) * (height - 2 * padding));
-
-              const points = graphData.map((d, i) => ({ x: getX(i), y: getY(d.count), val: d.count, views: d.views, label: d.label }));
-              const viewPoints = graphData.map((d, i) => ({ x: getX(i), y: getY(d.views) }));
-
-              // Smooth curve path string generator
-              const pathD = points.reduce((acc, p, i, a) => {
-                if (i === 0) return `M ${p.x},${p.y}`;
-                const prev = a[i - 1];
-                const cx = (prev.x + p.x) / 2;
-                return `${acc} C ${cx},${prev.y} ${cx},${p.y} ${p.x},${p.y}`;
-              }, '');
-
-              const areaD = `${pathD} L ${points[points.length - 1].x},${height - padding} L ${points[0].x},${height - padding} Z`;
-
-              const viewPathD = viewPoints.reduce((acc, p, i, a) => {
-                if (i === 0) return `M ${p.x},${p.y}`;
-                const prev = a[i - 1];
-                const cx = (prev.x + p.x) / 2;
-                return `${acc} C ${cx},${prev.y} ${cx},${p.y} ${p.x},${p.y}`;
-              }, '');
-
-              return (
-                <div style={{ position: 'relative', width: '100%', overflowX: 'auto' }}>
-                  <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`} style={{ overflow: 'visible' }}>
-                    <defs>
-                      <linearGradient id="mainAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#2563eb" stopOpacity="0.35" />
-                        <stop offset="100%" stopColor="#2563eb" stopOpacity="0.0" />
-                      </linearGradient>
-                      <linearGradient id="viewAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#10b981" stopOpacity="0.25" />
-                        <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
-                      </linearGradient>
-                    </defs>
-
-                    {/* Horizontal Gridlines */}
-                    {[0.25, 0.5, 0.75, 1].map((ratio, idx) => {
-                      const yVal = height - padding - ratio * (height - 2 * padding);
-                      const labelVal = Math.round(maxVal * ratio);
-                      return (
-                        <g key={idx}>
-                          <line x1={padding} y1={yVal} x2={width - padding} y2={yVal} stroke="#e2e8f0" strokeDasharray="4 4" />
-                          <text x={padding - 8} y={yVal + 4} fill="#94a3b8" fontSize="10" textAnchor="end" fontWeight="600">{labelVal}</text>
-                        </g>
-                      );
-                    })}
-
-                    {/* Fill Gradient Area */}
-                    <path d={areaD} fill="url(#mainAreaGrad)" />
-
-                    {/* Secondary Trend Line (Views) */}
-                    <path d={viewPathD} fill="none" stroke="#10b981" strokeWidth="2" strokeDasharray="5 5" opacity="0.8" />
-
-                    {/* Primary Curve Line (Registrations) */}
-                    <path d={pathD} fill="none" stroke="#2563eb" strokeWidth="3.5" strokeLinecap="round" />
-
-                    {/* Data Points & Interactive Hover Circles */}
-                    {points.map((p, idx) => {
-                      const isHovered = hoveredPoint === idx;
-                      return (
-                        <g key={idx} onMouseEnter={() => setHoveredPoint(idx)} onMouseLeave={() => setHoveredPoint(null)} style={{ cursor: 'pointer' }}>
-                          <circle cx={p.x} cy={p.y} r={isHovered ? 7 : 4.5} fill="#ffffff" stroke="#2563eb" strokeWidth={isHovered ? 3.5 : 2.5} style={{ transition: 'all 0.2s ease' }} />
-                          {/* X Axis Labels */}
-                          <text x={p.x} y={height - 10} fill="#64748b" fontSize="11" textAnchor="middle" fontWeight="700">{p.label}</text>
-                        </g>
-                      );
-                    })}
-                  </svg>
-
-                  {/* Dynamic Tooltip on Hover */}
-                  {hoveredPoint !== null && (
-                    <div style={{
-                      position: 'absolute',
-                      left: `${(hoveredPoint / (graphData.length - 1)) * 80 + 10}%`,
-                      top: '20px',
-                      background: '#0f172a',
-                      color: '#ffffff',
-                      padding: '0.6rem 0.9rem',
-                      borderRadius: '0.5rem',
-                      fontSize: '0.85rem',
-                      fontWeight: 700,
-                      boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
-                      zIndex: 10,
-                      pointerEvents: 'none'
-                    }}>
-                      <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{graphData[hoveredPoint].label} Metrics</div>
-                      <div style={{ color: '#60a5fa', marginTop: '0.15rem' }}>Submissions: {graphData[hoveredPoint].count}</div>
-                      <div style={{ color: '#34d399', fontSize: '0.75rem' }}>Pageviews: {graphData[hoveredPoint].views}</div>
-                    </div>
-                  )}
+            {/* 2. Keynote Speakers Card */}
+            <div
+              onClick={() => setActiveTab('speakers')}
+              style={{
+                background: activeTab === 'speakers' ? 'linear-gradient(135deg, #091d36 0%, #112a4a 100%)' : '#ffffff',
+                color: activeTab === 'speakers' ? '#ffffff' : '#0f172a',
+                border: '1px solid #e2e8f0',
+                borderRadius: '0.85rem',
+                padding: '1.25rem 1.5rem',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.8 }}>
+                  Keynote Speakers
                 </div>
-              );
-            })()}
-
-            {/* Graph Legend & Summary */}
-            <div style={{ display: 'flex', justifyContent: 'space-around', borderTop: '1px solid #e2e8f0', marginTop: '1.5rem', paddingTop: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
-                  <span style={{ width: '12px', height: '3px', background: '#2563eb', borderRadius: '2px' }} />
-                  Paper Submissions
+                <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '0.2rem' }}>
+                  {speakers.length}
                 </div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#0f172a', marginTop: '0.1rem' }}>
-                  {submittedRegistrations.length > 0 ? submittedRegistrations.length : 184} (60%)
+                <div style={{ fontSize: '0.72rem', color: activeTab === 'speakers' ? '#fbbf24' : '#d97706', fontWeight: 700, marginTop: '0.25rem' }}>
+                  Confirmed Experts
                 </div>
               </div>
-
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
-                  <span style={{ width: '12px', height: '3px', background: '#10b981', borderRadius: '2px' }} />
-                  Page Visits & Inquiries
-                </div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#0f172a', marginTop: '0.1rem' }}>
-                  78,706 Views (80%)
-                </div>
-              </div>
-
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
-                  <span style={{ width: '12px', height: '3px', background: '#f59e0b', borderRadius: '2px' }} />
-                  Conversion Rate
-                </div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#0f172a', marginTop: '0.1rem' }}>
-                  40.15% ↑
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* SECONDARY WORKING GRAPHS GRID (Bar Chart + Donut Progress Chart) */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
-            {/* Graph 2: Academic Track Distribution Bar Graph */}
-            <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
-              <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', margin: '0 0 1rem 0' }}>
-                Academic Track Distribution
-              </h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                {(() => {
-                  const colors = ['#2563eb', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4', '#ec4899', '#3b82f6'];
-                  const trackList = departments.length > 0 ? departments.map((dept, i) => {
-                    const count = submittedRegistrations.filter((r: any) => 
-                      (r.paper_title && r.paper_title.toLowerCase().includes(dept.name.toLowerCase())) ||
-                      (r.paper_id && String(r.paper_id).includes(String(i + 1)))
-                    ).length;
-                    return {
-                      name: dept.name,
-                      count: count > 0 ? count : (i === 0 ? 12 : i === 1 ? 8 : i === 2 ? 6 : 4),
-                      color: colors[i % colors.length]
-                    };
-                  }) : [
-                    { name: 'AI, Data Science & Computing', count: 12, color: '#2563eb' },
-                    { name: 'Biomedical & Healthcare', count: 8, color: '#10b981' },
-                    { name: 'Renewable Energy & Power', count: 6, color: '#f59e0b' },
-                    { name: 'VLSI, Embedded & IoT', count: 4, color: '#8b5cf6' },
-                    { name: 'Cyber Security & Networks', count: 3, color: '#06b6d4' }
-                  ];
-
-                  const maxTrackCount = Math.max(...trackList.map(t => t.count)) || 1;
-
-                  return trackList.slice(0, 6).map((track, idx) => {
-                    const pct = Math.round((track.count / maxTrackCount) * 100);
-                    return (
-                      <div key={idx}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '0.3rem' }}>
-                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '80%' }}>{track.name}</span>
-                          <span>{track.count} {track.count === 1 ? 'paper' : 'papers'}</span>
-                        </div>
-                        <div style={{ width: '100%', height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
-                          <div style={{ width: `${pct}%`, height: '100%', background: track.color, borderRadius: '4px', transition: 'width 0.6s ease' }} />
-                        </div>
-                      </div>
-                    );
-                  });
-                })()}
+              <div style={{ background: activeTab === 'speakers' ? 'rgba(251,191,36,0.2)' : 'rgba(217,119,6,0.1)', color: activeTab === 'speakers' ? '#fbbf24' : '#d97706', padding: '0.85rem', borderRadius: '0.65rem', display: 'flex' }}>
+                <User size={24} />
               </div>
             </div>
 
-            {/* Graph 3: Attendee Tour & Payment Verification Donut Chart */}
-            <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
-              <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', margin: '0 0 1rem 0' }}>
-                Tour Request & Payment Verification
-              </h4>
-              {(() => {
-                const totalRegs = submittedRegistrations.length || 1;
-                const tourRequested = submittedRegistrations.filter((r: any) => r.register_for_tour || (r.preferred_tour_place && r.preferred_tour_place !== 'None')).length;
-                const tourPct = submittedRegistrations.length > 0 ? Math.round((tourRequested / totalRegs) * 100) : 75;
-                const nonTourPct = 100 - tourPct;
-                const proofCount = submittedRegistrations.filter((r: any) => r.screenshot_name || r.payment_proof_url).length;
-                const proofPct = submittedRegistrations.length > 0 ? Math.round((proofCount / totalRegs) * 100) : 100;
+            {/* 3. Academic Tracks Card */}
+            <div
+              onClick={() => setActiveTab('tracks')}
+              style={{
+                background: activeTab === 'tracks' ? 'linear-gradient(135deg, #091d36 0%, #112a4a 100%)' : '#ffffff',
+                color: activeTab === 'tracks' ? '#ffffff' : '#0f172a',
+                border: '1px solid #e2e8f0',
+                borderRadius: '0.85rem',
+                padding: '1.25rem 1.5rem',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.8 }}>
+                  Academic Tracks
+                </div>
+                <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '0.2rem' }}>
+                  {departments.length}
+                </div>
+                <div style={{ fontSize: '0.72rem', color: activeTab === 'tracks' ? '#34d399' : '#059669', fontWeight: 700, marginTop: '0.25rem' }}>
+                  Research Domains
+                </div>
+              </div>
+              <div style={{ background: activeTab === 'tracks' ? 'rgba(52,211,153,0.2)' : 'rgba(5,150,105,0.1)', color: activeTab === 'tracks' ? '#34d399' : '#059669', padding: '0.85rem', borderRadius: '0.65rem', display: 'flex' }}>
+                <BookOpen size={24} />
+              </div>
+            </div>
 
-                return (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                    {/* SVG Donut Chart */}
-                    <div style={{ position: 'relative', width: '120px', height: '120px', flexShrink: 0 }}>
-                      <svg width="120" height="120" viewBox="0 0 42 42">
-                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e2e8f0" strokeWidth="4.5" />
-                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#2563eb" strokeWidth="4.5" strokeDasharray={`${tourPct} ${100 - tourPct}`} strokeDashoffset="25" />
-                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#10b981" strokeWidth="4.5" strokeDasharray={`${nonTourPct} ${100 - nonTourPct}`} strokeDashoffset={`${25 + tourPct}`} />
-                      </svg>
-                      <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-                        <span style={{ fontSize: '1.1rem', fontWeight: 900, color: '#0f172a' }}>{tourPct}%</span>
-                        <span style={{ fontSize: '0.6rem', color: '#64748b', fontWeight: 700 }}>Tour Ratio</span>
-                      </div>
-                    </div>
-
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#2563eb', display: 'inline-block' }} />
-                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#334155' }}>Tour Requested</span>
-                        <span style={{ marginLeft: 'auto', fontSize: '0.85rem', fontWeight: 800, color: '#2563eb' }}>{tourPct}% ({tourRequested})</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
-                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#334155' }}>Proof Attached</span>
-                        <span style={{ marginLeft: 'auto', fontSize: '0.85rem', fontWeight: 800, color: '#10b981' }}>{proofPct}% ({proofCount})</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#f59e0b', display: 'inline-block' }} />
-                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#334155' }}>Verification Status</span>
-                        <span style={{ marginLeft: 'auto', fontSize: '0.85rem', fontWeight: 800, color: '#f59e0b' }}>Active</span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })()}
+            {/* 4. Committee Members Card */}
+            <div
+              onClick={() => setActiveTab('committee')}
+              style={{
+                background: activeTab === 'committee' ? 'linear-gradient(135deg, #091d36 0%, #112a4a 100%)' : '#ffffff',
+                color: activeTab === 'committee' ? '#ffffff' : '#0f172a',
+                border: '1px solid #e2e8f0',
+                borderRadius: '0.85rem',
+                padding: '1.25rem 1.5rem',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.8 }}>
+                  Committee Members
+                </div>
+                <div style={{ fontSize: '1.85rem', fontWeight: 900, marginTop: '0.2rem' }}>
+                  {committeeMembers.length}
+                </div>
+                <div style={{ fontSize: '0.72rem', color: activeTab === 'committee' ? '#a78bfa' : '#7c3aed', fontWeight: 700, marginTop: '0.25rem' }}>
+                  Organizing & Reviewers
+                </div>
+              </div>
+              <div style={{ background: activeTab === 'committee' ? 'rgba(167,139,250,0.2)' : 'rgba(124,58,237,0.1)', color: activeTab === 'committee' ? '#a78bfa' : '#7c3aed', padding: '0.85rem', borderRadius: '0.65rem', display: 'flex' }}>
+                <Briefcase size={24} />
+              </div>
             </div>
           </div>
 
