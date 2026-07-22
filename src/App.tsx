@@ -40,7 +40,8 @@ import {
   Plug,
   Sliders,
   Atom,
-  Satellite
+  Satellite,
+  Smartphone
 } from 'lucide-react';
 import Footer from './components/Footer';
 import acLogo from './assets/logo.png';
@@ -2249,7 +2250,30 @@ function App() {
               </nav>
 
               {/* Desktop Navigation Action Buttons */}
-              <div className="header-right-container">
+              <div className="header-right-container" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                {/* Download Android APK Button */}
+                <a
+                  href="/aectsd-2027.apk"
+                  download="aectsd-2027.apk"
+                  style={{
+                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    color: '#ffffff',
+                    padding: '0.45rem 0.95rem',
+                    borderRadius: '20px',
+                    fontWeight: 800,
+                    fontSize: '0.75rem',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+                    transition: 'all 0.2s'
+                  }}
+                  title="Download AECTSD 2027 Android APK"
+                >
+                  <Smartphone size={13} /> Download APK
+                </a>
+
                 {/* IEEE SREC SB Portal Link */}
                 <a
                   href={info.ieee_sb_url || "https://www.ieeesrec.in/"}
@@ -2323,7 +2347,29 @@ function App() {
               ))}
 
               {/* Action Buttons inside Mobile Drawer */}
-              <div className="mobile-action-row">
+              <div className="mobile-action-row" style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                <a
+                  href="/aectsd-2027.apk"
+                  download="aectsd-2027.apk"
+                  style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    padding: '0.75rem 1rem',
+                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    color: '#ffffff',
+                    borderRadius: '12px',
+                    fontWeight: 800,
+                    fontSize: '0.85rem',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)'
+                  }}
+                  title="Download AECTSD 2027 Android APK"
+                >
+                  <Smartphone size={16} /> Download Android APK
+                </a>
                 <a
                   href={info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/"}
                   target="_blank"
@@ -2829,26 +2875,50 @@ function App() {
                           The proceedings of the previous edition (<strong>AECTSD 2025</strong>) have been successfully published in <strong>IEEE Xplore</strong> and indexed in <strong>Scopus</strong>.
                         </p>
                       </div>
-                      <a
-                        href="https://ieee-aectsd.srec.ac.in"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-secondary"
-                        style={{
-                          fontSize: '0.85rem',
-                          padding: '0.5rem 1.25rem',
-                          background: 'rgba(59, 130, 246, 0.08)',
-                          border: '1px solid rgba(59, 130, 246, 0.2)',
-                          color: '#0f52ba',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '0.35rem',
-                          textDecoration: 'none',
-                          fontWeight: 700
-                        }}
-                      >
-                        Visit Previous Edition
-                      </a>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+                        <a
+                          href="https://www.ieee.org/conferences/publishing/templates.html"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            fontSize: '0.85rem',
+                            padding: '0.5rem 1.25rem',
+                            background: 'linear-gradient(135deg, #0f52ba 0%, #091d36 100%)',
+                            color: '#ffffff',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            textDecoration: 'none',
+                            fontWeight: 700,
+                            borderRadius: '8px',
+                            boxShadow: '0 4px 12px rgba(15, 82, 186, 0.25)',
+                            transition: 'all 0.2s'
+                          }}
+                        >
+                          <ExternalLink size={14} /> IEEE Paper Templates
+                        </a>
+                        <a
+                          href="https://ieee-aectsd.srec.ac.in"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-secondary"
+                          style={{
+                            fontSize: '0.85rem',
+                            padding: '0.5rem 1.25rem',
+                            background: 'rgba(59, 130, 246, 0.08)',
+                            border: '1px solid rgba(59, 130, 246, 0.2)',
+                            color: '#0f52ba',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            textDecoration: 'none',
+                            fontWeight: 700,
+                            borderRadius: '8px'
+                          }}
+                        >
+                          Visit Previous Edition
+                        </a>
+                      </div>
                     </div>
                   </motion.div>
 
