@@ -17,6 +17,7 @@ import {
   Award,
   ChevronRight,
   CheckCircle,
+  MessageSquare,
   Menu,
   X,
   FileText,
@@ -1900,11 +1901,31 @@ function App() {
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setFormSubmitted(true);
+    if (!formData.name || !formData.email || !formData.message) return;
+
+    const targetEmail = info.contact_email || 'aectsd2027@srec.ac.in';
+    const whatsappNumber = '919080296675';
+
+    // 1. Construct mailto URL with pre-filled content
+    const mailSubject = encodeURIComponent(`[AECTSD 2027 Inquiry] ${formData.subject || 'General Query'}`);
+    const mailBody = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject || 'General Query'}\n\nMessage:\n${formData.message}`
+    );
+    const mailtoUrl = `mailto:${targetEmail}?subject=${mailSubject}&body=${mailBody}`;
+
+    // 2. Construct WhatsApp URL with pre-filled content
+    const waText = encodeURIComponent(
+      `*New Inquiry for AECTSD 2027*\n\n*Name:* ${formData.name}\n*Email:* ${formData.email}\n*Subject:* ${formData.subject || 'General Query'}\n\n*Message:*\n${formData.message}`
+    );
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${waText}`;
+
+    // Open WhatsApp in new tab and launch mail client
+    window.open(whatsappUrl, '_blank');
     setTimeout(() => {
-      setFormSubmitted(false);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 4000);
+      window.location.href = mailtoUrl;
+    }, 400);
+
+    setFormSubmitted(true);
   };
 
 
@@ -3356,14 +3377,49 @@ function App() {
                       <div style={{
                         background: 'rgba(34, 197, 94, 0.1)',
                         border: '1px solid rgba(34, 197, 94, 0.3)',
-                        borderRadius: '0.5rem',
-                        padding: '1.5rem',
+                        borderRadius: '0.75rem',
+                        padding: '2rem 1.5rem',
                         textAlign: 'center',
                         color: '#4ade80'
                       }}>
-                        <CheckCircle size={36} style={{ margin: '0 auto 1rem' }} />
-                        <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>{info.contact_form_success_title || 'Message Sent!'}</h4>
-                        <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{info.contact_form_success_desc || 'Thank you for reaching out. We will get back to you shortly.'}</p>
+                        <CheckCircle size={42} style={{ margin: '0 auto 1rem', color: '#10b981' }} />
+                        <h4 style={{ fontSize: '1.3rem', marginBottom: '0.5rem', fontWeight: 800, color: '#ffffff' }}>
+                          {info.contact_form_success_title || 'Message Prepared & Sent!'}
+                        </h4>
+                        <p style={{ fontSize: '0.9rem', color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+                          {info.contact_form_success_desc || 'Your inquiry was automatically prepared and dispatched to Email & WhatsApp.'}
+                        </p>
+                        <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                          <a
+                            href={`mailto:${info.contact_email || 'aectsd2027@srec.ac.in'}?subject=${encodeURIComponent(`[AECTSD 2027 Inquiry] ${formData.subject}`)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-primary"
+                            style={{ fontSize: '0.85rem', padding: '0.6rem 1.15rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}
+                          >
+                            <Mail size={15} /> Send via Email
+                          </a>
+                          <a
+                            href={`https://wa.me/919080296675?text=${encodeURIComponent(`*New Inquiry for AECTSD 2027*\n\n*Name:* ${formData.name}\n*Email:* ${formData.email}\n*Subject:* ${formData.subject || 'General Query'}\n\n*Message:*\n${formData.message}`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              fontSize: '0.85rem',
+                              padding: '0.6rem 1.15rem',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.4rem',
+                              textDecoration: 'none',
+                              background: '#10b981',
+                              color: '#ffffff',
+                              borderRadius: '0.5rem',
+                              fontWeight: 700,
+                              boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
+                            }}
+                          >
+                            <MessageSquare size={15} /> Send via WhatsApp
+                          </a>
+                        </div>
                       </div>
                     ) : (
                       <form onSubmit={handleContactSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
