@@ -1929,7 +1929,46 @@ function App() {
       console.warn('Database log warning:', dbErr);
     }
 
-    // 2. Automated Background Email via EmailJS (if service ID is provided)
+    // 2. Direct Instant Email Dispatch via Resend API Key
+    const resendApiKey = info.resend_api_key || 're_bHrRHAU2_fiR4MeEVAjrLHFWH1FZ8Q1Av';
+    if (resendApiKey) {
+      try {
+        await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${resendApiKey}`
+          },
+          body: JSON.stringify({
+            from: 'AECTSD 2027 Portal <onboarding@resend.dev>',
+            to: [targetEmail],
+            subject: `[AECTSD 2027 Inquiry] ${formData.subject || 'New Contact Inquiry'}`,
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                <div style="background-color: #092147; padding: 20px; text-align: center; color: white;">
+                  <h2 style="margin: 0; color: #ffffff;">AECTSD 2027 Inquiry Notification</h2>
+                  <p style="margin: 5px 0 0; opacity: 0.8; font-size: 14px;">Sri Ramakrishna Engineering College</p>
+                </div>
+                <div style="padding: 24px; color: #334155; background-color: #ffffff;">
+                  <p style="margin: 0 0 10px;"><strong>Name:</strong> ${formData.name}</p>
+                  <p style="margin: 0 0 10px;"><strong>Sender Email:</strong> <a href="mailto:${formData.email}">${formData.email}</a></p>
+                  <p style="margin: 0 0 10px;"><strong>Subject:</strong> ${formData.subject || 'General Inquiry'}</p>
+                  <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+                  <h4 style="margin: 0 0 10px; color: #092147;">Message:</h4>
+                  <p style="white-space: pre-wrap; background: #f8fafc; padding: 16px; border-radius: 6px; border: 1px solid #cbd5e1; margin: 0;">${formData.message}</p>
+                </div>
+              </div>
+            `,
+            reply_to: formData.email
+          })
+        });
+        console.log('Automated contact email sent via Resend API!');
+      } catch (resendErr) {
+        console.warn('Resend email send warning:', resendErr);
+      }
+    }
+
+    // 3. Fallback EmailJS Dispatch (if service ID is configured)
     const serviceId = info.emailjs_service_id;
     const templateId = info.emailjs_template_id;
     const publicKey = info.emailjs_public_key;
