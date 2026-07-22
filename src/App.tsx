@@ -8,7 +8,6 @@ import {
 } from 'framer-motion';
 import {
   Calendar,
-  MapPin,
   Clock,
   Download,
   ExternalLink,
@@ -2545,10 +2544,10 @@ function App() {
               <AnimatePresence>
                 {toastOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: 60, scale: 0.85 }}
+                    initial={{ opacity: 0, y: 50, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 60, scale: 0.85 }}
-                    transition={{ delay: 0.8, duration: 0.6, type: 'spring', stiffness: 120 }}
+                    exit={{ opacity: 0, y: 40, scale: 0.85, transition: { duration: 0.25, ease: 'easeInOut' } }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     className="AECTSD-toast-card"
                   >
                     {/* Close X Button for Mobile & Desktop */}
@@ -2570,14 +2569,17 @@ function App() {
                       </div>
                     </div>
                     <a
-                      href={info.cmt_portal_url || '#paper-submission'}
+                      href={info.cmt_link || info.cmt_portal_url || "https://cmt3.research.microsoft.com/aectsd2025"}
                       onClick={(e) => {
-                        if (!info.cmt_portal_url || info.cmt_portal_url === '#paper-submission') {
-                          e.preventDefault();
-                          scrollToSection('paper-submission');
+                        e.preventDefault();
+                        const link = info.cmt_link || info.cmt_portal_url;
+                        if (link && link !== '#paper-submission') {
+                          window.open(link, "_blank");
+                        } else {
+                          scrollToSection('guidelines');
                         }
                       }}
-                      target={info.cmt_portal_url ? "_blank" : "_self"}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="AECTSD-toast-btn"
                     >
@@ -3617,150 +3619,6 @@ function App() {
                     </div>
                   </motion.div>
                 </div>
-
-                <div id="location-map" />
-
-                <div className="grid-2-col" style={{ gap: '2rem', marginBottom: '3.5rem', alignItems: 'stretch' }}>
-                  {/* Left: How to Reach & Mini Map */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                    {/* College Mini Map */}
-                    <motion.div
-                      initial={{ opacity: 0, x: -30 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6 }}
-                      className="map-container"
-                      style={{ height: '320px', overflow: 'hidden', borderRadius: '1rem' }}
-                    >
-                      <iframe
-                        title="SREC Campus Map"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.150328964016!2d76.9632117754871!3d11.102171853099849!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8f7000afa766b%3A0x2b5757b8d520a3af!2sSri%20Ramakrishna%20Engineering%20College!5e0!3m2!1sen!2sin!4v1780992469751!5m2!1sen!2sin"
-                        allowFullScreen={true}
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        style={{ width: '100%', height: '100%', border: 0 }}
-                      />
-                    </motion.div>
-                  </div>
-
-                  {/* Right: How to Reach details */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="glass-card"
-                    style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', background: '#f8fafc', border: '1px solid #e2e8f0' }}
-                  >
-                    <h3 style={{ fontSize: '1.4rem', color: '#091d36', marginBottom: '1.25rem', fontWeight: 700 }}>How to Reach</h3>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '1.5rem' }}>
-                      <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
-                        <div style={{ background: 'rgba(59, 130, 246, 0.08)', padding: '0.5rem', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0 }}>
-                          <MapPin size={20} />
-                        </div>
-                        <div>
-                          <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: '0 0 0.15rem', color: '#091d36' }}>Coimbatore International Airport</h4>
-                          <span style={{ fontSize: '0.88rem', color: '#475569' }}>Distance: ~20 km | Approx. 40 minutes travel time</span>
-                        </div>
-                      </div>
-
-                      <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
-                        <div style={{ background: 'rgba(59, 130, 246, 0.08)', padding: '0.5rem', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0 }}>
-                          <MapPin size={20} />
-                        </div>
-                        <div>
-                          <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: '0 0 0.15rem', color: '#091d36' }}>Coimbatore Junction Railway Station</h4>
-                          <span style={{ fontSize: '0.88rem', color: '#475569' }}>Distance: ~15 km | Approx. 30 minutes travel time</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', padding: '1rem', borderRadius: '0.5rem', fontSize: '0.88rem', color: '#1e3a8a', lineHeight: '1.5' }}>
-                      <p style={{ margin: '0 0 0.5rem' }}>
-                        💡 <strong>Cab Hire Note:</strong> Candidates can hire a car (Red Taxi, Go Taxi, or OLA) directly from Coimbatore Airport or Railway Station to reach SREC.
-                      </p>
-                      <p style={{ margin: 0 }}>
-                        🚗 <strong>Auto-Rickshaw Note:</strong> Candidates can also hire an auto-rickshaw from <strong>Thudiyalur</strong> (nearest town, ~4 km away) to reach SREC.
-                      </p>
-                    </div>
-                  </motion.div>
-                </div>
-
-
-
-                {/* QR Navigation Cards */}
-                <div className="qr-section">
-                  <h3 style={{ fontSize: '1.75rem', color: '#091d36', fontWeight: 800, textAlign: 'center', marginBottom: '0.5rem' }}>
-                    Navigate with QR Codes: Find Your Way Easily!
-                  </h3>
-                  <p style={{ color: '#475569', fontSize: '0.95rem', textAlign: 'center', marginBottom: '2.5rem' }}>
-                    Scan the QR codes below on your mobile device to open live GPS directions directly in Google Maps.
-                  </p>
-
-                  <div className="qr-card-grid">
-                    {[
-                      {
-                        route: "Route Saravanampatti - SREC",
-                        url: "https://www.google.com/maps/dir/Saravanampatti,+Coimbatore,+Tamil+Nadu/Sri+Ramakrishna+Engineering+College,+Vattamalaipalayam,+Coimbatore,+Tamil+Nadu+641022/"
-                      },
-                      {
-                        route: "Route Gandhipuram - SREC",
-                        url: "https://www.google.com/maps/dir/Gandhipuram,+Coimbatore,+Tamil+Nadu/Sri+Ramakrishna+Engineering+College,+Vattamalaipalayam,+Coimbatore,+Tamil+Nadu+641022/"
-                      },
-                      {
-                        route: "Route CBE Railway Station - SREC",
-                        url: "https://www.google.com/maps/dir/Coimbatore+Junction,+State+Bank+Rd,+Gopalapuram,+Coimbatore,+Tamil+Nadu+641018/Sri+Ramakrishna+Engineering+College,+Vattamalaipalayam,+Coimbatore,+Tamil+Nadu+641022/"
-                      }
-                    ].map((qr, qidx) => (
-                      <motion.div
-                        key={qidx}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: qidx * 0.15 }}
-                        className="qr-card"
-                      >
-                        <a
-                          href={info.srec_url || "https://srec.ac.in/"}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title="Sri Ramakrishna Engineering College"
-                          className="qr-card-header"
-                          style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}
-                        >
-                          <img
-                            src={srecLogo}
-                            alt="SREC Logo"
-                            className="qr-card-header-logo"
-                          />
-                          <div className="qr-card-header-text" style={{ paddingLeft: '1rem', textAlign: 'left' }}>
-                            <h4 className="qr-card-header-title">Sri Ramakrishna</h4>
-                            <p className="qr-card-header-subtitle">Engineering College</p>
-                          </div>
-                        </a>
-
-                        <div className="qr-gold-container">
-                          <div className="qr-code-wrapper">
-                            <img
-                              src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(qr.url)}`}
-                              alt={`QR Code for ${qr.route}`}
-                              className="qr-code-img"
-                              loading="lazy"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="qr-card-footer">
-                          <p className="qr-card-footer-text">
-                            Scan the QR code for Route<br />
-                            <strong>{qr.route.replace('Route ', '')}</strong>
-                          </p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
               </div>
             </section>
           </motion.div>
@@ -3773,6 +3631,7 @@ function App() {
         srecUrl={info.srec_url}
         copyright={info.footer_copyright}
         sponsor={info.footer_sponsor}
+        onNavigate={scrollToSection}
       />
 
 
