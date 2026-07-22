@@ -257,7 +257,7 @@ export const renderFormattedDesc = (descText: string | undefined | null) => {
 
 const LinkedinIcon = ({ size = 16, style }: { size?: number; style?: React.CSSProperties }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={style}>
-    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
   </svg>
 );
 
@@ -494,7 +494,7 @@ const getDeptInfoFromText = (text: string, dbInfo?: Record<string, string>) => {
   if (lower.includes('electronics and communication') || lower.includes('ece')) return deptMap['electronics and communication'] || ORGANIZING_DEPARTMENTS_INFO['electronics and communication'];
   if (lower.includes('electronics and instrumentation') || lower.includes('eie')) return deptMap['electronics and instrumentation'] || ORGANIZING_DEPARTMENTS_INFO['electronics and instrumentation'];
   if (lower.includes('information technology')) return deptMap['information technology'] || ORGANIZING_DEPARTMENTS_INFO['information technology'];
-  
+
   return {
     title: text,
     subtitle: 'Organizing Department',
@@ -2454,7 +2454,7 @@ function App() {
                       </>
                     ) : info.hero_title
                   ) : (
-                    <>IEEE<br />ICAECTSD 2027</>
+                    <>IEEE<br />AECTSD 2027</>
                   )}
                 </motion.h1>
 
@@ -2527,7 +2527,7 @@ function App() {
                       alert('Brochure download starting...');
                       const link = document.createElement('a');
                       link.href = '#';
-                      link.setAttribute('download', 'ICAECTSD_2027_Brochure.pdf');
+                      link.setAttribute('download', 'AECTSD_2027_Brochure.pdf');
                       document.body.appendChild(link);
                     }}
                     className="indicon-btn-outline"
@@ -2562,7 +2562,7 @@ function App() {
                       </div>
                       <div style={{ flex: 1, paddingRight: '1rem' }}>
                         <div className="indicon-toast-title">{info.cmt_portal_badge || 'CMT PORTAL LIVE'}</div>
-                        <div className="indicon-toast-desc">{info.cmt_portal_desc || 'Paper submission for ICAECTSD 2027 is now open via Microsoft CMT.'}</div>
+                        <div className="indicon-toast-desc">{info.cmt_portal_desc || 'Paper submission for AECTSD 2027 is now open via Microsoft CMT.'}</div>
                       </div>
                     </div>
                     <a
