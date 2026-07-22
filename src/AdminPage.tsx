@@ -3800,6 +3800,33 @@ export default function AdminPage({
                 </div>
               </div>
 
+              {/* Registration Control Switch */}
+              <div className="admin-card" style={{ background: localInfo.registration_enabled === 'false' ? '#fef2f2' : '#f0fdf4', border: localInfo.registration_enabled === 'false' ? '2px solid #fca5a5' : '2px solid #86efac', padding: '1.25rem 1.5rem', borderRadius: '14px', margin: '1.5rem 0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div>
+                    <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: localInfo.registration_enabled === 'false' ? '#991b1b' : '#166534', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span>{localInfo.registration_enabled === 'false' ? '🔴' : '🟢'}</span> Registration Portal Status
+                    </h4>
+                    <p style={{ margin: '0.35rem 0 0', fontSize: '0.9rem', color: localInfo.registration_enabled === 'false' ? '#b91c1c' : '#15803d', fontWeight: 500 }}>
+                      {localInfo.registration_enabled !== 'false' 
+                        ? 'Registration is currently ONLINE & OPEN for all attendees & authors.' 
+                        : 'Registration is currently PAUSED & CLOSED. Visitors will see a Registration Closed notification.'}
+                    </p>
+                  </div>
+                  <label style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer', gap: '0.75rem', padding: '0.6rem 1.25rem', background: '#ffffff', borderRadius: '30px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', border: '1px solid #cbd5e1' }}>
+                    <input
+                      type="checkbox"
+                      checked={localInfo.registration_enabled !== 'false'}
+                      onChange={(e) => setLocalInfo(prev => ({ ...prev, registration_enabled: e.target.checked ? 'true' : 'false' }))}
+                      style={{ width: '22px', height: '22px', accentColor: '#16a34a', cursor: 'pointer' }}
+                    />
+                    <span style={{ fontWeight: 800, fontSize: '0.95rem', color: localInfo.registration_enabled !== 'false' ? '#16a34a' : '#dc2626' }}>
+                      {localInfo.registration_enabled !== 'false' ? 'REGISTRATION ON' : 'REGISTRATION OFF'}
+                    </span>
+                  </label>
+                </div>
+              </div>
+
               <div className="admin-form-group">
                 <label htmlFor="about_conf">About The Conference Description</label>
                 <textarea
