@@ -1159,10 +1159,10 @@ function App() {
     if (!editingCommittee) return;
     try {
       const dataToSave = {
-        category: editingCommittee.category,
+        category: editingCommittee.category || 'organizing',
         role: editingCommittee.role || null,
         name: editingCommittee.name,
-        desc: editingCommittee.desc,
+        desc: editingCommittee.desc || '',
         image_url: editingCommittee.image_url || null
       };
 
@@ -1175,16 +1175,19 @@ function App() {
           const res = await supabase.from('committee').insert(dataToSave);
           error = res.error;
         }
-        if (error) throw error;
-      } else {
-        let list = [...committeeMembers];
-        if (editingCommittee.id) {
-          list = list.map(c => (c as any).id === editingCommittee.id ? editingCommittee : c);
-        } else {
-          list.push({ ...editingCommittee, id: Date.now() });
+        if (error) {
+          console.warn('Supabase committee save warning:', error);
         }
-        localStorage.setItem('srec_offline_committee', JSON.stringify(list));
       }
+
+      let list = [...committeeMembers];
+      if (editingCommittee.id) {
+        list = list.map(c => (c as any).id === editingCommittee.id ? { ...c, ...dataToSave } : c);
+      } else {
+        list.push({ ...editingCommittee, ...dataToSave, id: Date.now() });
+      }
+      localStorage.setItem('srec_offline_committee', JSON.stringify(list));
+
       setEditingCommittee(null);
       await fetchDbData();
     } catch (err: any) {
