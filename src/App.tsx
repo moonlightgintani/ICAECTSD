@@ -3471,9 +3471,10 @@ function App() {
               </div>
             </section>
 
-            {/* Map & Directions Section */}
-            <section id="location" className="section" style={{ background: '#ffffff' }}>
+            {/* Map & Directions Section (Venue) */}
+            <section id="location" className="section" style={{ background: '#faf9f5', padding: '5rem 0' }}>
               <div className="container">
+                {/* Main Header */}
                 <motion.div
                   initial="hidden"
                   whileInView="visible"
@@ -3481,26 +3482,143 @@ function App() {
                   variants={fadeInUp}
                   style={{ textAlign: 'center', marginBottom: '3.5rem' }}
                 >
-                  <span style={{ color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '0.1em' }}>Venue</span>
-                  <h2 style={{ fontSize: '2.5rem', color: '#091d36', marginTop: '0.5rem' }}>Conference Venue & Reach</h2>
-                  <div style={{ height: '3px', width: '60px', background: '#3b82f6', margin: '1rem auto 0' }} />
+                  <h2 style={{ fontSize: '2.8rem', color: '#701a1e', fontWeight: 800, margin: 0 }}>
+                    Sri Ramakrishna Engineering College
+                  </h2>
+                  <div style={{ height: '3px', width: '70px', background: '#eab308', margin: '0.85rem auto 0', borderRadius: '2px' }} />
                 </motion.div>
 
-                {/* Venue Description Card */}
-                <div className="glass-card" style={{ padding: '2rem', marginBottom: '3rem', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
-                  <h3 style={{ fontSize: '1.4rem', color: '#091d36', marginBottom: '1rem', fontWeight: 700 }}>Sri Ramakrishna Engineering College (SREC)</h3>
-                  <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: '1.7', margin: '0 0 1.25rem' }}>
-                    Sri Ramakrishna Engineering College (SREC), located in Coimbatore, was established in 1994 and is managed by the SNR Sons Charitable Trust. The college offers undergraduate and postgraduate programs in engineering and technology. SREC is known for its strong academic curriculum, research initiatives, and modern facilities, fostering a practical learning environment. The college also emphasizes extracurricular activities and industry collaborations, aiming to produce skilled professionals.
-                  </p>
-                  <a
-                    href="https://srec.ac.in"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: '#0f52ba', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
+                {/* Host Institution Hero Block */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '3rem', alignItems: 'center', marginBottom: '4rem' }}>
+                  {/* Left Column: Campus Image */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    style={{
+                      borderRadius: '1.75rem',
+                      overflow: 'hidden',
+                      boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
+                      border: '1px solid rgba(0,0,0,0.06)',
+                      background: '#ffffff'
+                    }}
                   >
-                    Visit SREC Official Website <ExternalLink size={14} />
-                  </a>
+                    <img 
+                      src={heroBg} 
+                      alt="Sri Ramakrishna Engineering College Campus" 
+                      style={{ width: '100%', height: '380px', objectFit: 'cover', display: 'block' }} 
+                    />
+                  </motion.div>
+
+                  {/* Right Column: Content & Feature Pills */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}
+                  >
+                    {/* Location Badge */}
+                    <div style={{
+                      display: 'inline-block',
+                      background: '#fef3c7',
+                      color: '#701a1e',
+                      fontWeight: 700,
+                      fontSize: '0.82rem',
+                      padding: '0.35rem 1rem',
+                      borderRadius: '2rem',
+                      marginBottom: '1rem',
+                      border: '1px solid rgba(234, 179, 8, 0.3)'
+                    }}>
+                      Coimbatore, Tamil Nadu
+                    </div>
+
+                    <h3 style={{ fontSize: '2.2rem', color: '#701a1e', fontWeight: 800, margin: '0 0 1.25rem', lineHeight: '1.2' }}>
+                      Welcome to the Host Institution
+                    </h3>
+
+                    <p style={{ color: '#475569', fontSize: '0.96rem', lineHeight: '1.7', margin: '0 0 1rem' }}>
+                      Sri Ramakrishna Engineering College is one of the leading engineering institutions in India, known for academic excellence, innovation, research and industry engagement.
+                    </p>
+
+                    <p style={{ color: '#475569', fontSize: '0.96rem', lineHeight: '1.7', margin: '0 0 2rem' }}>
+                      The campus offers modern infrastructure, advanced laboratories, smart classrooms, auditoriums and a vibrant environment for researchers, professionals and students.
+                    </p>
+
+                    {/* 2x2 Feature Pills Grid */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', width: '100%', marginBottom: '2rem' }}>
+                      {[
+                        { icon: '🏛️', label: 'Modern Infrastructure' },
+                        { icon: '🌲', label: 'Green Campus' },
+                        { icon: '🎓', label: 'Research Ecosystem' },
+                        { icon: '✈️', label: 'Easy Airport Access' }
+                      ].map((item, fIdx) => (
+                        <div 
+                          key={fIdx} 
+                          style={{
+                            background: '#ffffff',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '0.85rem',
+                            padding: '0.85rem 1rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.65rem',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.02)',
+                            fontSize: '0.88rem',
+                            fontWeight: 700,
+                            color: '#1e293b'
+                          }}
+                        >
+                          <span style={{ fontSize: '1.1rem' }}>{item.icon}</span>
+                          <span>{item.label}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                      <a
+                        href="#location-map"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          document.getElementById('location-map')?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        style={{
+                          background: '#b45309',
+                          color: '#ffffff',
+                          fontWeight: 700,
+                          padding: '0.75rem 1.75rem',
+                          borderRadius: '2rem',
+                          textDecoration: 'none',
+                          fontSize: '0.9rem',
+                          boxShadow: '0 4px 14px rgba(180, 83, 9, 0.3)'
+                        }}
+                      >
+                        View Location
+                      </a>
+                      <a
+                        href="https://srec.ac.in"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          background: '#ffffff',
+                          color: '#701a1e',
+                          border: '2px solid #701a1e',
+                          fontWeight: 700,
+                          padding: '0.7rem 1.75rem',
+                          borderRadius: '2rem',
+                          textDecoration: 'none',
+                          fontSize: '0.9rem'
+                        }}
+                      >
+                        Explore Campus
+                      </a>
+                    </div>
+                  </motion.div>
                 </div>
+
+                <div id="location-map" />
 
                 <div className="grid-2-col" style={{ gap: '2rem', marginBottom: '3.5rem', alignItems: 'stretch' }}>
                   {/* Left: How to Reach & Mini Map */}
