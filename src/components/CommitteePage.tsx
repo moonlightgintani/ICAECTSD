@@ -1,6 +1,18 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
+import Tru1 from '../assets/tru2 (1).png';
+import Tru2 from '../assets/tru2 (2).png';
+import balamurgunImg from '../assets/bala.jpeg';
+import trust1Img from '../assets/trust1.png';
+import logo5 from '../assets/logo5.jpg';
+import principalImg from '../assets/principal.png';
+import kingsyImg from '../assets/Kingsy.png';
+import sakthivelImg from '../assets/Sakthivel.png';
+import radhaImg from '../assets/Screenshot 2026-07-10 142828.png';
+import brindhaImg from '../assets/Screenshot 2026-07-10 142835.png';
+import karpagamImg from '../assets/karpagam.png';
+import jansiImg from '../assets/jansi.png';
 
 interface CommitteeMember {
   id?: any;
@@ -57,7 +69,20 @@ export const renderFormattedDesc = (descText: string | undefined | null) => {
 };
 
 const getMemberImage = (name: string, imageUrl?: string): string => {
-  if (imageUrl && imageUrl !== 'no_file' && imageUrl !== '') {
+  if (name.includes('Sundar')) return logo5;
+  if (name.includes('Narendran')) return trust1Img;
+  if (name.includes('Lakshminarayanaswamy')) return Tru2;
+  if (name.includes('Ramakrishna')) return Tru1;
+  if (name.includes('Balamurugan')) return balamurgunImg;
+  if (name.includes('Soundarrajan')) return principalImg;
+  if (name.includes('Sakthivel')) return sakthivelImg;
+  if (name.includes('Radha')) return radhaImg;
+  if (name.includes('Brindha')) return brindhaImg;
+  if (name.toLowerCase().includes('kingsy')) return kingsyImg;
+  if (name.includes('Karpagam')) return karpagamImg;
+  if (name.includes('Jansi')) return jansiImg;
+  if (name.includes('Thiru')) return trust1Img;
+  if (imageUrl && imageUrl !== 'no_file' && imageUrl !== '' && imageUrl.length > 5) {
     return imageUrl;
   }
   return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=0b4f30,eab308&textColor=ffffff`;
@@ -264,7 +289,7 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                         <img 
                           src={resolveMemberImage(member.name, member.image_url)}
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0b4f30,eab308&textColor=ffffff`;
+                            (e.target as HTMLImageElement).src = resolveMemberImage(member.name);
                           }}
                           alt={member.name}
                           style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
@@ -390,10 +415,10 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                                     <img 
                                       src={resolveMemberImage(member.name, member.image_url)}
                                       onError={(e) => {
-                                        (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0b4f30,eab308&textColor=ffffff`;
+                                        (e.target as HTMLImageElement).src = resolveMemberImage(member.name);
                                       }}
                                       alt={member.name}
-                                      style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                                      style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', objectPosition: 'top', imageRendering: 'smooth', transform: 'translateZ(0)' }}
                                     />
                                   </div>
                                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
@@ -409,7 +434,6 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                               ))}
                             </div>
                           ) : (
-                            /* Other Subcommittees: 4-Column Vertical Cards */
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', justifyContent: 'center' }}>
                               {members.map((member, mIdx) => (
                                 <div 
@@ -446,10 +470,10 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                                     <img 
                                       src={resolveMemberImage(member.name, member.image_url)}
                                       onError={(e) => {
-                                        (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(member.name)}&backgroundColor=0b4f30,eab308&textColor=ffffff`;
+                                        (e.target as HTMLImageElement).src = resolveMemberImage(member.name);
                                       }}
                                       alt={member.name}
-                                      style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                                      style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', objectPosition: 'top', imageRendering: 'smooth', transform: 'translateZ(0)' }}
                                     />
                                   </div>
                                   <h4 style={{ fontSize: '1.2rem', color: '#0b4f30', fontWeight: 800, margin: '0 0 0.75rem' }}>{member.name}</h4>
