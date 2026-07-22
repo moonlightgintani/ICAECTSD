@@ -40,8 +40,7 @@ import {
   Plug,
   Sliders,
   Atom,
-  Satellite,
-  Smartphone
+  Satellite
 } from 'lucide-react';
 import Footer from './components/Footer';
 import acLogo from './assets/logo.png';
@@ -2251,29 +2250,6 @@ function App() {
 
               {/* Desktop Navigation Action Buttons */}
               <div className="header-right-container" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                {/* Download Android APK Button */}
-                <a
-                  href="/aectsd-2027.apk"
-                  download="aectsd-2027.apk"
-                  style={{
-                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                    color: '#ffffff',
-                    padding: '0.45rem 0.95rem',
-                    borderRadius: '20px',
-                    fontWeight: 800,
-                    fontSize: '0.75rem',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
-                    transition: 'all 0.2s'
-                  }}
-                  title="Download AECTSD 2027 Android APK"
-                >
-                  <Smartphone size={13} /> Download APK
-                </a>
-
                 {/* IEEE SREC SB Portal Link */}
                 <a
                   href={info.ieee_sb_url || "https://www.ieeesrec.in/"}
@@ -2348,28 +2324,6 @@ function App() {
 
               {/* Action Buttons inside Mobile Drawer */}
               <div className="mobile-action-row" style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-                <a
-                  href="/aectsd-2027.apk"
-                  download="aectsd-2027.apk"
-                  style={{
-                    width: '100%',
-                    justifyContent: 'center',
-                    padding: '0.75rem 1rem',
-                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                    color: '#ffffff',
-                    borderRadius: '12px',
-                    fontWeight: 800,
-                    fontSize: '0.85rem',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)'
-                  }}
-                  title="Download AECTSD 2027 Android APK"
-                >
-                  <Smartphone size={16} /> Download Android APK
-                </a>
                 <a
                   href={info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/"}
                   target="_blank"
