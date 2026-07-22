@@ -67,7 +67,6 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
   const resolveMemberImage = getMemberImageProp || getMemberImage;
   const [committeeTab, setCommitteeTab] = useState<'steering' | 'organizing' | 'advisory'>('organizing');
   const [activeSubcommittee, setActiveSubcommittee] = useState<string>('patrons');
-  const [] = useState(false);
 
   const SUBCOMMITTEES = [
     { id: 'patrons', label: 'Patrons' },
