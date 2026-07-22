@@ -6034,38 +6034,48 @@ function App() {
                         </div>
 
                         {editingCommittee && (
-                          <div className="glass-card" style={{ marginBottom: '2rem', background: '#f8fafc', borderColor: '#3b82f6' }}>
-                            <h5 style={{ fontSize: '1.1rem', marginBottom: '1rem', fontWeight: 700 }}>{editingCommittee.id ? 'Edit Committee Member' : 'Add New Member'}</h5>
-                            <form onSubmit={handleSaveCommittee} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                              <div className="admin-form-row">
-                                <div className="admin-form-group">
-                                  <label htmlFor="committee_name">Full Name</label>
-                                  <input
-                                    id="committee_name"
-                                    type="text"
-                                    required
-                                    className="form-input"
-                                    value={editingCommittee.name}
-                                    onChange={(e) => setEditingCommittee({ ...editingCommittee, name: e.target.value })}
-                                    placeholder="Enter Full Name"
-                                    title="Full Name" />
-                                </div>
-                                <div className="admin-form-group">
-                                  <label htmlFor="committee_category">Committee Category</label>
-                                  <select
-                                    id="committee_category"
-                                    value={editingCommittee.category}
-                                    onChange={(e) => setEditingCommittee({ ...editingCommittee, category: e.target.value })}
-                                    className="form-input"
-                                    style={{ background: '#ffffff' }}
-                                    title="Committee Category"
-                                  >
-                                    <option value="organizing">Organizing Committee</option>
-                                    <option value="advisory">Advisory Committee</option>
-                                    <option value="technical">Technical Program Committee</option>
-                                  </select>
-                                </div>
+                          <div className="admin-modal-overlay">
+                            <div className="admin-modal-card" style={{ maxWidth: '650px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.75rem' }}>
+                                <h5 style={{ fontSize: '1.2rem', margin: 0, fontWeight: 800, color: '#0f172a' }}>{editingCommittee.id ? 'Edit Committee Member' : 'Add New Member'}</h5>
+                                <button
+                                  type="button"
+                                  onClick={() => setEditingCommittee(null)}
+                                  style={{ border: 'none', background: '#f1f5f9', color: '#64748b', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                >
+                                  <X size={16} />
+                                </button>
                               </div>
+                              <form onSubmit={handleSaveCommittee} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div className="admin-form-row">
+                                  <div className="admin-form-group">
+                                    <label htmlFor="committee_name">Full Name</label>
+                                    <input
+                                      id="committee_name"
+                                      type="text"
+                                      required
+                                      className="form-input"
+                                      value={editingCommittee.name}
+                                      onChange={(e) => setEditingCommittee({ ...editingCommittee, name: e.target.value })}
+                                      placeholder="Enter Full Name"
+                                      title="Full Name" />
+                                  </div>
+                                  <div className="admin-form-group">
+                                    <label htmlFor="committee_category">Committee Category</label>
+                                    <select
+                                      id="committee_category"
+                                      value={editingCommittee.category}
+                                      onChange={(e) => setEditingCommittee({ ...editingCommittee, category: e.target.value })}
+                                      className="form-input"
+                                      style={{ background: '#ffffff', fontWeight: 600 }}
+                                      title="Committee Category"
+                                    >
+                                      <option value="steering">Steering Committee</option>
+                                      <option value="organizing">Organizing Committee</option>
+                                      <option value="advisory">Advisory Committee</option>
+                                    </select>
+                                  </div>
+                                </div>
 
                               <div className="admin-form-row">
                                 <div className="admin-form-group">
@@ -6232,7 +6242,8 @@ function App() {
                               </div>
                             </form>
                           </div>
-                        )}
+                        </div>
+                      )}
 
                         <div className="admin-card-grid">
                           {committeeMembers.map((c, idx) => (
