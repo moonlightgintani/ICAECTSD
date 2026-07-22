@@ -1682,31 +1682,7 @@ export default function AdminPage({
             </div>
           </div>
 
-          {/* Active Tab View Title Card */}
-          <div className="admin-view-title-card" style={{ background: '#ffffff', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.03)', marginBottom: '1.5rem' }}>
-            <div>
-              <h1 style={{ fontSize: '1.5rem', fontWeight: 800, margin: 0, letterSpacing: '-0.02em', color: '#0f172a' }}>
-                {tabs.find(t => t.id === activeTab)?.label}
-              </h1>
-              <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0 0' }}>
-                Database manager and configuration panel for SREC webpage.
-              </p>
-            </div>
-            
-            {/* Global Search Bar */}
-            {['registrations', 'speakers', 'tracks', 'committee', 'workshops', 'coordinators', 'milestones'].includes(activeTab) && (
-              <div className="admin-search-container">
-                <Search size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-                <input
-                  type="text"
-                  placeholder={`Search ${tabs.find(t => t.id === activeTab)?.label}...`}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="admin-search-input"
-                />
-              </div>
-            )}
-          </div>
+
 
           {/* Modal Editing Backdrop Overlay */}
           {isEditingAny && (
@@ -3734,116 +3710,296 @@ export default function AdminPage({
         {/* TAB 7: Committee Members */}
         {activeTab === 'committee' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '0.75rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.02)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0 }}>Committee Members ({committeeMembers.length})</h3>
-                <button
-                  onClick={() => setEditingCommittee({ name: '', designation: '', institution: '', category: 'steering', subgroup: 'Executive Committee', sort_order: committeeMembers.length + 1 })}
-                  style={{
-                    background: '#3b82f6',
+            <div style={{
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '1rem',
+              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02)',
+              overflow: 'hidden'
+            }}>
+              {/* Executive Toolbar Header */}
+              <div style={{
+                padding: '1.5rem 1.75rem',
+                borderBottom: '1px solid #f1f5f9',
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '1rem',
+                background: 'linear-gradient(to right, #ffffff, #f8fafc)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                  <div style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '10px',
+                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                     color: '#ffffff',
-                    border: 'none',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '0.375rem',
-                    fontSize: '0.8rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.35rem'
-                  }}
-                >
-                  <Plus size={14} /> Add Member
-                </button>
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)'
+                  }}>
+                    <Users size={22} />
+                  </div>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0, color: '#0f172a', letterSpacing: '-0.01em' }}>
+                        Committee Members
+                      </h3>
+                      <span style={{
+                        fontSize: '0.72rem',
+                        fontWeight: 800,
+                        background: 'rgba(37, 99, 235, 0.1)',
+                        color: '#2563eb',
+                        padding: '0.2rem 0.55rem',
+                        borderRadius: '20px'
+                      }}>
+                        {committeeMembers.length} Members
+                      </span>
+                    </div>
+                    <p style={{ fontSize: '0.8rem', color: '#64748b', margin: '0.15rem 0 0 0' }}>
+                      Manage conference leadership, organizing bodies, and advisory boards.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Toolbar Search & Action Buttons */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <div style={{ position: 'relative', width: '260px' }}>
+                    <Search size={15} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                    <input
+                      type="text"
+                      placeholder="Search committee..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '0.5rem 0.75rem 0.5rem 2.2rem',
+                        border: '1px solid #cbd5e1',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.825rem',
+                        outline: 'none',
+                        background: '#ffffff',
+                        transition: 'all 0.2s'
+                      }}
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => setEditingCommittee({ name: '', designation: '', institution: '', category: 'steering', role: 'Executive Committee', sort_order: committeeMembers.length + 1 })}
+                    style={{
+                      background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                      color: '#ffffff',
+                      border: 'none',
+                      padding: '0.55rem 1.15rem',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.825rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    <Plus size={16} /> Add Member
+                  </button>
+                </div>
               </div>
 
-               {/* Desktop view */}
-               <div className="admin-desktop-view" style={{ overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: '0.5rem' }}>
-                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left', background: '#ffffff' }}>
-                   <thead>
-                     <tr style={{ borderBottom: '2px solid #e2e8f0', color: '#475569' }}>
-                       <th style={{ padding: '0.75rem 1rem' }}>Name</th>
-                       <th style={{ padding: '0.75rem 1rem' }}>Group Category</th>
-                       <th style={{ padding: '0.75rem 1rem' }}>Subgroup</th>
-                       <th style={{ padding: '0.75rem 1rem' }}>Affiliation / Designation</th>
-                       <th style={{ padding: '0.75rem 1rem', textAlign: 'center' }}>Actions</th>
-                     </tr>
-                   </thead>
-                   <tbody>
-                     {committeeMembers
-                       .filter(c => c.name?.toLowerCase().includes(searchTerm.toLowerCase()))
-                       .map((item, idx) => (
-                         <tr key={item.id || idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                           <td style={{ padding: '0.75rem 1rem', fontWeight: 700 }}>{item.name}</td>
-                           <td style={{ padding: '0.75rem 1rem' }}>
-                             <span style={{
-                               display: 'inline-block',
-                               padding: '0.15rem 0.4rem',
-                               borderRadius: '0.25rem',
-                               fontSize: '0.7rem',
-                               fontWeight: 700,
-                               background: item.category === 'steering' ? 'rgba(59, 130, 246, 0.1)' : item.category === 'organizing' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(100, 116, 139, 0.1)',
-                               color: item.category === 'steering' ? '#1d4ed8' : item.category === 'organizing' ? '#047857' : '#475569'
-                             }}>
-                               {item.category}
-                             </span>
-                           </td>
-                           <td style={{ padding: '0.75rem 1rem', fontStyle: 'italic' }}>{item.role || 'N/A'}</td>
-                           <td style={{ padding: '0.75rem 1rem', color: '#475569' }}>{item.desc || 'N/A'}</td>
-                           <td style={{ padding: '0.75rem 1rem', textAlign: 'center' }}>
-                             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                               <button onClick={() => setEditingCommittee(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
-                               <button onClick={() => handleDeleteCommittee(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
-                             </div>
-                           </td>
-                         </tr>
-                       ))}
-                   </tbody>
-                 </table>
-               </div>
+              {/* High-End Desktop Table */}
+              <div className="admin-desktop-view" style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem', textAlign: 'left', background: '#ffffff' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid #f1f5f9', background: '#f8fafc', color: '#475569', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 800 }}>
+                      <th style={{ padding: '0.85rem 1.25rem' }}>Member Name</th>
+                      <th style={{ padding: '0.85rem 1rem' }}>Category Group</th>
+                      <th style={{ padding: '0.85rem 1rem' }}>Subgroup / Role</th>
+                      <th style={{ padding: '0.85rem 1.25rem' }}>Affiliation / Designation</th>
+                      <th style={{ padding: '0.85rem 1rem', textAlign: 'center', width: '100px' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {committeeMembers
+                      .filter(c => 
+                        c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        c.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        c.desc?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        c.category?.toLowerCase().includes(searchTerm.toLowerCase())
+                      )
+                      .map((item, idx) => {
+                        const initials = item.name
+                          ? item.name.replace(/^(Dr\.|Prof\.|Mr\.|Mrs\.|Ms\.|Er\.)\s+/i, '').split(' ').slice(0, 2).map((n: string) => n[0]).join('').toUpperCase()
+                          : 'CM';
 
-               {/* Mobile view */}
-               <div className="admin-mobile-view admin-mobile-card-list">
-                 {committeeMembers
-                   .filter(c => c.name?.toLowerCase().includes(searchTerm.toLowerCase()))
-                   .map((item, idx) => (
-                     <div key={item.id || idx} className="admin-mobile-card">
-                       <div className="admin-mobile-card-header">
-                         <div style={{ fontWeight: 700, color: '#0f172a' }}>{item.name}</div>
-                         <div style={{ display: 'flex', gap: '0.5rem' }}>
-                           <button onClick={() => setEditingCommittee(item)} style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer' }}><Edit size={14} /></button>
-                           <button onClick={() => handleDeleteCommittee(item.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
-                         </div>
-                       </div>
-                       <div className="admin-mobile-card-body">
-                         <div className="admin-mobile-card-row">
-                           <span className="admin-mobile-card-label">Category:</span>
-                           <span className="admin-mobile-card-value">
-                             <span style={{
-                               display: 'inline-block',
-                               padding: '0.15rem 0.4rem',
-                               borderRadius: '0.25rem',
-                               fontSize: '0.7rem',
-                               fontWeight: 700,
-                               background: item.category === 'steering' ? 'rgba(59, 130, 246, 0.1)' : item.category === 'organizing' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(100, 116, 139, 0.1)',
-                               color: item.category === 'steering' ? '#1d4ed8' : item.category === 'organizing' ? '#047857' : '#475569'
-                             }}>
-                               {item.category}
-                             </span>
-                           </span>
-                         </div>
-                         <div className="admin-mobile-card-row">
-                           <span className="admin-mobile-card-label">Role / Subgroup:</span>
-                           <span className="admin-mobile-card-value" style={{ fontStyle: 'italic' }}>{item.role || 'N/A'}</span>
-                         </div>
-                         <div className="admin-mobile-card-row">
-                           <span className="admin-mobile-card-label">Affiliation:</span>
-                           <span className="admin-mobile-card-value">{item.desc || 'N/A'}</span>
-                         </div>
-                       </div>
-                     </div>
-                   ))}
-               </div>
+                        const getBadgeStyle = (cat: string) => {
+                          if (cat === 'steering') {
+                            return { bg: '#eff6ff', color: '#1d4ed8', border: '#bfdbfe', label: 'Steering Committee' };
+                          }
+                          if (cat === 'organizing') {
+                            return { bg: '#ecfdf5', color: '#047857', border: '#a7f3d0', label: 'Organizing Committee' };
+                          }
+                          return { bg: '#f5f3ff', color: '#6d28d9', border: '#ddd6fe', label: 'Advisory Committee' };
+                        };
+
+                        const badge = getBadgeStyle(item.category);
+
+                        return (
+                          <tr 
+                            key={item.id || idx} 
+                            style={{ 
+                              borderBottom: '1px solid #f1f5f9',
+                              transition: 'background-color 0.15s ease'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                          >
+                            {/* Member Column */}
+                            <td style={{ padding: '1rem 1.25rem' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <div style={{
+                                  width: '36px',
+                                  height: '36px',
+                                  borderRadius: '50%',
+                                  background: item.category === 'steering' ? 'linear-gradient(135deg, #3b82f6, #1d4ed8)' : item.category === 'organizing' ? 'linear-gradient(135deg, #10b981, #047857)' : 'linear-gradient(135deg, #8b5cf6, #6d28d9)',
+                                  color: '#ffffff',
+                                  fontSize: '0.75rem',
+                                  fontWeight: 800,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  flexShrink: 0,
+                                  boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+                                }}>
+                                  {initials}
+                                </div>
+                                <div>
+                                  <div style={{ fontWeight: 800, color: '#0f172a', fontSize: '0.9rem' }}>{item.name}</div>
+                                </div>
+                              </div>
+                            </td>
+
+                            {/* Category Group */}
+                            <td style={{ padding: '1rem 1rem' }}>
+                              <span style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.3rem',
+                                padding: '0.25rem 0.65rem',
+                                borderRadius: '20px',
+                                fontSize: '0.72rem',
+                                fontWeight: 800,
+                                background: badge.bg,
+                                color: badge.color,
+                                border: `1px solid ${badge.border}`
+                              }}>
+                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: badge.color }} />
+                                {badge.label}
+                              </span>
+                            </td>
+
+                            {/* Subgroup / Role */}
+                            <td style={{ padding: '1rem 1rem', fontWeight: 600, color: '#334155' }}>
+                              {item.role ? (
+                                <span style={{ background: '#f1f5f9', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.78rem' }}>
+                                  {item.role}
+                                </span>
+                              ) : (
+                                <span style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '0.78rem' }}>Default Member</span>
+                              )}
+                            </td>
+
+                            {/* Affiliation / Designation */}
+                            <td style={{ padding: '1rem 1.25rem', color: '#475569', lineHeight: '1.4', fontSize: '0.825rem' }}>
+                              {item.desc || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>N/A</span>}
+                            </td>
+
+                            {/* Actions Column */}
+                            <td style={{ padding: '1rem 1rem', textAlign: 'center' }}>
+                              <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'center' }}>
+                                <button
+                                  onClick={() => setEditingCommittee(item)}
+                                  style={{
+                                    background: '#eff6ff',
+                                    border: '1px solid #bfdbfe',
+                                    color: '#2563eb',
+                                    padding: '0.4rem 0.6rem',
+                                    borderRadius: '0.375rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.25rem',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 700,
+                                    transition: 'all 0.15s'
+                                  }}
+                                  title="Edit member details"
+                                >
+                                  <Edit size={13} /> Edit
+                                </button>
+
+                                <button
+                                  onClick={() => handleDeleteCommittee(item.id)}
+                                  style={{
+                                    background: '#fef2f2',
+                                    border: '1px solid #fecaca',
+                                    color: '#ef4444',
+                                    padding: '0.4rem 0.6rem',
+                                    borderRadius: '0.375rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.25rem',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 700,
+                                    transition: 'all 0.15s'
+                                  }}
+                                  title="Delete member"
+                                >
+                                  <Trash2 size={13} /> Delete
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Card List */}
+              <div className="admin-mobile-view admin-mobile-card-list" style={{ padding: '1rem' }}>
+                {committeeMembers
+                  .filter(c => 
+                    c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    c.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    c.desc?.toLowerCase().includes(searchTerm.toLowerCase())
+                  )
+                  .map((item, idx) => (
+                    <div key={item.id || idx} className="admin-mobile-card" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '0.75rem', padding: '1rem', marginBottom: '0.75rem' }}>
+                      <div className="admin-mobile-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                        <div style={{ fontWeight: 800, color: '#0f172a', fontSize: '0.95rem' }}>{item.name}</div>
+                        <div style={{ display: 'flex', gap: '0.35rem' }}>
+                          <button onClick={() => setEditingCommittee(item)} style={{ background: '#eff6ff', border: '1px solid #bfdbfe', color: '#2563eb', padding: '0.3rem 0.5rem', borderRadius: '0.25rem', cursor: 'pointer' }}><Edit size={13} /></button>
+                          <button onClick={() => handleDeleteCommittee(item.id)} style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#ef4444', padding: '0.3rem 0.5rem', borderRadius: '0.25rem', cursor: 'pointer' }}><Trash2 size={13} /></button>
+                        </div>
+                      </div>
+                      <div className="admin-mobile-card-body" style={{ fontSize: '0.8rem', color: '#475569' }}>
+                        <div style={{ margin: '0.2rem 0' }}>
+                          <strong>Category:</strong> <span style={{ fontWeight: 700, color: '#2563eb' }}>{item.category}</span>
+                        </div>
+                        <div style={{ margin: '0.2rem 0' }}>
+                          <strong>Role:</strong> {item.role || 'N/A'}
+                        </div>
+                        <div style={{ margin: '0.2rem 0' }}>
+                          <strong>Affiliation:</strong> {item.desc || 'N/A'}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         )}
