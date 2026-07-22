@@ -2078,20 +2078,20 @@ function App() {
   };
 
   const getMemberImage = (name: string, imageUrl?: string): string => {
-    if (imageUrl && imageUrl !== 'no_file' && imageUrl !== '') return imageUrl;
-    if (name.includes('Sundar Ramakrishnan') || name.includes('R. Sundar')) return logo5;
-    if (name.includes('Thiru')) return trust1Img;
+    if (name.includes('Sundar')) return logo5;
+    if (name.includes('Narendran')) return trust1Img;
+    if (name.includes('Lakshminarayanaswamy')) return Tru2;
+    if (name.includes('Ramakrishna')) return Tru1;
     if (name.includes('Balamurugan')) return balamurgunImg;
     if (name.includes('Soundarrajan')) return principalImg;
-    if (name.includes('P. Sakthivel')) return sakthivelImg;
-    if (name.includes('S. Radha')) return radhaImg;
-    if (name.includes('S. Brindha')) return brindhaImg;
+    if (name.includes('Sakthivel')) return sakthivelImg;
+    if (name.includes('Radha')) return radhaImg;
+    if (name.includes('Brindha')) return brindhaImg;
     if (name.toLowerCase().includes('kingsy')) return kingsyImg;
-    if (name.includes('Ramakrishna')) return Tru1;
-    if (name.includes('Lakshminarayanaswamy')) return Tru2;
-    //if (name.includes('Praveen Kumar')) return praveenkumarImg;
     if (name.includes('Karpagam')) return karpagamImg;
     if (name.includes('Jansi')) return jansiImg;
+    if (name.includes('Thiru')) return trust1Img;
+    if (imageUrl && imageUrl !== 'no_file' && imageUrl !== '' && imageUrl.length > 5) return imageUrl;
     // if (name.includes('Aravindaguru'))   return aravindaguruImg;
     // if (name.includes('Sowntharya'))     return sowntharImage;
     // if (name.includes('N. Saranya'))     return saranyaImg;
@@ -2898,7 +2898,7 @@ function App() {
                           <ExternalLink size={14} /> IEEE Paper Templates
                         </a>
                         <a
-                          href="https://ieee-aectsd.srec.ac.in"
+                          href="https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText=AECTSD%202025"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="btn btn-secondary"
@@ -3692,8 +3692,9 @@ function App() {
                                   <div style={{ width: '100%', height: '140px', overflow: 'hidden', background: '#090e17' }}>
                                     <img
                                       src={getMemberImage(leadCoord.name, leadCoord.image_url)}
+                                      onError={(e) => { (e.target as HTMLImageElement).src = getMemberImage(leadCoord.name); }}
                                       alt={leadCoord.name}
-                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', imageRendering: 'smooth', transform: 'translateZ(0)' }}
                                     />
                                   </div>
                                   <div style={{ padding: '0.8rem 0.6rem', background: 'linear-gradient(180deg, #0d1520 0%, #151d2a 100%)' }}>
@@ -3748,6 +3749,7 @@ function App() {
                                   <div style={{ width: '100%', height: '135px', overflow: 'hidden', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <img
                                       src={getMemberImage(coord.name, coord.image_url)}
+                                      onError={(e) => { (e.target as HTMLImageElement).src = getMemberImage(coord.name); }}
                                       alt={coord.name}
                                       style={{
                                         width: '100%',
