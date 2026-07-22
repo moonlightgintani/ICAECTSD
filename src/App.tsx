@@ -1899,27 +1899,81 @@ function App() {
     }, ['explore', 'committee', 'guidelines', 'payment'].includes(prevPage) ? 100 : 0);
   };
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
-    const targetEmail = info.contact_email || 'aectsd2027@srec.ac.in';
+    const targetEmail = info.contact_email || info.emailjs_recipient || 'aectsd2027@srec.ac.in';
     const whatsappNumber = '919080296675';
 
-    // 1. Construct mailto URL with pre-filled content
+    // 1. Store message in Supabase database & localStorage
+    const newMsg = {
+      id: Date.now(),
+      name: formData.name,
+      email: formData.email,
+      subject: formData.subject || 'General Inquiry',
+      message: formData.message,
+      created_at: new Date().toISOString()
+    };
+
+    try {
+      if (isSupabaseConfigured && supabase) {
+        await supabase.from('contact_messages').insert({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject || 'General Inquiry',
+          message: formData.message
+        });
+      }
+      const existingMsgs = JSON.parse(localStorage.getItem('srec_offline_contact_messages') || '[]');
+      localStorage.setItem('srec_offline_contact_messages', JSON.stringify([newMsg, ...existingMsgs]));
+    } catch (dbErr) {
+      console.warn('Database log warning:', dbErr);
+    }
+
+    // 2. Automated Background Email via EmailJS (if service ID is provided)
+    const serviceId = info.emailjs_service_id;
+    const templateId = info.emailjs_template_id;
+    const publicKey = info.emailjs_public_key;
+
+    if (serviceId && templateId && publicKey) {
+      try {
+        await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            service_id: serviceId,
+            template_id: templateId,
+            user_id: publicKey,
+            template_params: {
+              to_email: targetEmail,
+              from_name: formData.name,
+              from_email: formData.email,
+              subject: formData.subject || 'General Query',
+              message: formData.message
+            }
+          })
+        });
+        console.log('Automated contact email sent via EmailJS!');
+      } catch (emailErr) {
+        console.warn('Automated background email send warning:', emailErr);
+      }
+    }
+
+    // 3. Construct mailto URL with pre-filled content
     const mailSubject = encodeURIComponent(`[AECTSD 2027 Inquiry] ${formData.subject || 'General Query'}`);
     const mailBody = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject || 'General Query'}\n\nMessage:\n${formData.message}`
     );
     const mailtoUrl = `mailto:${targetEmail}?subject=${mailSubject}&body=${mailBody}`;
 
-    // 2. Construct WhatsApp URL with pre-filled content
+    // 4. Construct WhatsApp URL with pre-filled content
     const waText = encodeURIComponent(
       `*New Inquiry for AECTSD 2027*\n\n*Name:* ${formData.name}\n*Email:* ${formData.email}\n*Subject:* ${formData.subject || 'General Query'}\n\n*Message:*\n${formData.message}`
     );
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${waText}`;
 
-    // Open WhatsApp in new tab and launch mail client
+    // Launch WhatsApp & Mailto
     window.open(whatsappUrl, '_blank');
     setTimeout(() => {
       window.location.href = mailtoUrl;
