@@ -345,7 +345,11 @@ export default function CommitteePage({ committeeMembers, info, getMemberImage: 
                             textAlign: 'center', 
                             marginBottom: '2rem' 
                           }}>
-                            {sub.label.endsWith('Committee') ? sub.label : `The ${sub.label}`}
+                            {sub.id === 'patrons' || sub.id === 'general-chairs' 
+                              ? `The ${sub.label}`
+                              : sub.label.endsWith('Committee') 
+                                ? `The ${sub.label}` 
+                                : `The ${sub.label} Committee`}
                           </h4>
 
                           {sub.id === 'general-chairs' ? (
