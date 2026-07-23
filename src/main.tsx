@@ -5,19 +5,20 @@ import App from './App.tsx'
 import './firebase.ts'
 
 
-// Capture PWA Install Prompt for Android APK installation
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  (window as any).deferredPrompt = e;
-});
-
-// Register Service Worker for PWA / APK installation readiness
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch((err) => {
-      console.log('SW registration error:', err);
-    });
+// Unregister legacy Service Workers to prevent stale cache white-screen issues
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (const registration of registrations) {
+      registration.unregister();
+    }
   });
+  if ('caches' in window) {
+    caches.keys().then((names) => {
+      for (const name of names) {
+        caches.delete(name);
+      }
+    });
+  }
 }
 
 createRoot(document.getElementById('root')!).render(

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { MapPin, Mail, MessageSquare, Shield, ChevronRight, Smartphone } from 'lucide-react';
+import { MapPin, Mail, MessageSquare, Shield, ChevronRight } from 'lucide-react';
 import logo3 from '../assets/logo.png';
 
 interface FooterProps {
@@ -395,31 +395,6 @@ export default function Footer({ copyright, onNavigate }: FooterProps) {
             >
               <Mail size={13} /> Contact Us
             </button>
-
-            {/* Android APK Download Button */}
-            <a
-              href="https://github.com/moonlightgintani/ICAECTSD/releases/download/v1.0.0-apk/aectsd-2027.apk"
-              download="aectsd-2027.apk"
-              style={{
-                textDecoration: 'none',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.3rem 0.75rem',
-                borderRadius: '20px',
-                border: 'none',
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                color: '#ffffff',
-                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              title="Download AECTSD 2027 Android APK"
-            >
-              <Smartphone size={13} /> Download APK
-            </a>
 
             <a
               href="/?page=admin"
