@@ -2812,70 +2812,6 @@ function App() {
                       );
                     })}
 
-                    <div style={{
-                      marginTop: '1rem',
-                      padding: '1.25rem',
-                      background: '#ffffff',
-                      border: '1px solid #cbd5e1',
-                      borderRadius: '0.75rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '1rem',
-                      flexWrap: 'wrap',
-                      justifyContent: 'space-between',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-                    }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '280px' }}>
-                        <Award size={24} style={{ flexShrink: 0, color: '#0f52ba' }} />
-                        <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                          The proceedings of the previous edition (<strong>AECTSD 2025</strong>) have been successfully published in <strong>IEEE Xplore</strong> and indexed in <strong>Scopus</strong>.
-                        </p>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
-                        <a
-                          href="https://www.ieee.org/conferences/publishing/templates.html"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            fontSize: '0.85rem',
-                            padding: '0.5rem 1.25rem',
-                            background: 'linear-gradient(135deg, #0f52ba 0%, #091d36 100%)',
-                            color: '#ffffff',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.35rem',
-                            textDecoration: 'none',
-                            fontWeight: 700,
-                            borderRadius: '8px',
-                            boxShadow: '0 4px 12px rgba(15, 82, 186, 0.25)',
-                            transition: 'all 0.2s'
-                          }}
-                        >
-                          <ExternalLink size={14} /> IEEE Paper Templates
-                        </a>
-                        <a
-                          href="https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText=AECTSD%202025"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn-secondary"
-                          style={{
-                            fontSize: '0.85rem',
-                            padding: '0.5rem 1.25rem',
-                            background: 'rgba(59, 130, 246, 0.08)',
-                            border: '1px solid rgba(59, 130, 246, 0.2)',
-                            color: '#0f52ba',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.35rem',
-                            textDecoration: 'none',
-                            fontWeight: 700,
-                            borderRadius: '8px'
-                          }}
-                        >
-                          Visit Previous Edition
-                        </a>
-                      </div>
-                    </div>
                   </motion.div>
 
                   {/* Right Column: 2x2 Grid of 4 Cards */}
@@ -2957,6 +2893,78 @@ function App() {
                     })}
                   </motion.div>
                 </div>
+
+                {/* Proceedings Banner Card placed below the 4 cards grid */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5 }}
+                  style={{
+                    width: '100%',
+                    padding: '1.25rem 1.5rem',
+                    background: '#ffffff',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '1rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.03)'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '280px' }}>
+                    <Award size={24} style={{ flexShrink: 0, color: '#0f52ba' }} />
+                    <p style={{ margin: 0, fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: '1.55' }}>
+                      The proceedings of the previous edition (<strong>AECTSD 2025</strong>) have been successfully published in <strong>IEEE Xplore</strong> and indexed in <strong>Scopus</strong>.
+                    </p>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+                    <a
+                      href="https://www.ieee.org/conferences/publishing/templates.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontSize: '0.85rem',
+                        padding: '0.55rem 1.25rem',
+                        background: 'linear-gradient(135deg, #0f52ba 0%, #091d36 100%)',
+                        color: '#ffffff',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        textDecoration: 'none',
+                        fontWeight: 700,
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 12px rgba(15, 82, 186, 0.25)',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      <ExternalLink size={14} /> IEEE Paper Templates
+                    </a>
+                    <a
+                      href="https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText=AECTSD%202025"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-secondary"
+                      style={{
+                        fontSize: '0.85rem',
+                        padding: '0.55rem 1.25rem',
+                        background: 'rgba(59, 130, 246, 0.08)',
+                        border: '1px solid rgba(59, 130, 246, 0.2)',
+                        color: '#0f52ba',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        textDecoration: 'none',
+                        fontWeight: 700,
+                        borderRadius: '8px'
+                      }}
+                    >
+                      Visit Previous Edition
+                    </a>
+                  </div>
+                </motion.div>
 
                 {/* Institution Details */}
                 <div style={{ width: '100%' }}>
