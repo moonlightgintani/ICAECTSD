@@ -55,9 +55,13 @@ import jansiImg from './assets/jansi.png';
 import balamurgunImg from './assets/bala.jpeg';
 import trust1Img from './assets/trust1.png';
 import logo5 from './assets/logo5.jpg';
+import saranyaImg from './assets/Saranya.png';
+import vishnuVardhanImg from './assets/Vishnu Vardhan.png';
 import principalImg from './assets/principal.jpg';
 import kingsyImg from './assets/Kingsy.png';
+import Sowntharyaimg from './assets/Sowntharya.png';
 import sakthivelImg from './assets/Sakthivel.png';
+import aravindaguruImg from './assets/Aravindaguru.jpg';
 import radhaImg from './assets/Screenshot 2026-07-10 142828.png';
 import brindhaImg from './assets/Screenshot 2026-07-10 142835.png';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
@@ -2090,11 +2094,11 @@ function App() {
     if (name.includes('Karpagam')) return karpagamImg;
     if (name.includes('Jansi')) return jansiImg;
     if (name.includes('Thiru')) return trust1Img;
+    if (name.includes('Aravindaguru'))   return aravindaguruImg;
+    if (name.includes('Sowntharya'))     return Sowntharyaimg;
+    if (name.includes('N. Saranya'))     return saranyaImg;
     if (imageUrl && imageUrl !== 'no_file' && imageUrl !== '' && imageUrl.length > 5) return imageUrl;
-    // if (name.includes('Aravindaguru'))   return aravindaguruImg;
-    // if (name.includes('Sowntharya'))     return sowntharImage;
-    // if (name.includes('N. Saranya'))     return saranyaImg;
-    // if (name.includes('Vishnu Vardhan')) return vishnuVardhanImg;
+    if (name.includes('Vishnu Vardhan')) return vishnuVardhanImg;
 
     // ── ORGANIZING: Local Arrangements ───────────────────────────────
     // if (name.includes('Deepa B Prabhu')) return deepaImg;
