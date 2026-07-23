@@ -3640,104 +3640,199 @@ function App() {
                         });
 
                         return (
-                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', position: 'relative', padding: '0.5rem 0' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', position: 'relative', padding: '0.75rem 0' }}>
                             {/* 1. TOP NODE: Dr. V. Karpagam */}
                             {leadCoord && (
                               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', zIndex: 2 }}>
-                                <div style={{
-                                  width: '215px',
-                                  borderRadius: '0.9rem',
-                                  overflow: 'hidden',
-                                  border: '2px solid #f59e0b',
-                                  background: '#090e17',
-                                  boxShadow: '0 12px 35px rgba(0,0,0,0.6), 0 0 25px rgba(245, 158, 11, 0.3)',
-                                  textAlign: 'center'
-                                }}>
-                                  <div style={{ width: '100%', height: '140px', overflow: 'hidden', background: '#090e17' }}>
+                                <motion.div
+                                  whileHover={{ y: -4, scale: 1.02 }}
+                                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                                  style={{
+                                    width: '235px',
+                                    borderRadius: '16px',
+                                    overflow: 'hidden',
+                                    border: '1px solid rgba(245, 158, 11, 0.45)',
+                                    background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)',
+                                    boxShadow: '0 16px 40px rgba(0,0,0,0.5), 0 0 25px rgba(245, 158, 11, 0.2)',
+                                    textAlign: 'center',
+                                    position: 'relative'
+                                  }}
+                                >
+                                  <div style={{ width: '100%', height: '145px', overflow: 'hidden', position: 'relative', background: '#090e17' }}>
                                     <img
                                       src={getMemberImage(leadCoord.name, leadCoord.image_url)}
                                       onError={(e) => { (e.target as HTMLImageElement).src = getMemberImage(leadCoord.name); }}
                                       alt={leadCoord.name}
-                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', imageRendering: 'smooth', transform: 'translateZ(0)' }}
+                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', transform: 'translateZ(0)' }}
                                     />
+                                    <div style={{
+                                      position: 'absolute',
+                                      bottom: 0,
+                                      left: 0,
+                                      right: 0,
+                                      height: '40px',
+                                      background: 'linear-gradient(to top, #0f172a, transparent)'
+                                    }} />
                                   </div>
-                                  <div style={{ padding: '0.8rem 0.6rem', background: 'linear-gradient(180deg, #0d1520 0%, #151d2a 100%)' }}>
-                                    <div style={{ fontSize: '0.98rem', color: '#ffffff', margin: '0 0 0.25rem 0', fontWeight: 900, textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
-                                      {leadCoord.name}
-                                    </div>
-                                    <span style={{ fontSize: '0.62rem', color: '#fbbf24', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em', display: 'block', lineHeight: 1.3 }}>
-                                      {leadCoord.role || 'Organizing Secretary'}
+                                  <div style={{ padding: '0.85rem 0.75rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem' }}>
+                                    <span style={{
+                                      fontSize: '0.62rem',
+                                      color: '#fbbf24',
+                                      background: 'rgba(245, 158, 11, 0.12)',
+                                      border: '1px solid rgba(245, 158, 11, 0.3)',
+                                      padding: '0.2rem 0.65rem',
+                                      borderRadius: '9999px',
+                                      fontWeight: 800,
+                                      textTransform: 'uppercase',
+                                      letterSpacing: '0.04em'
+                                    }}>
+                                      Organizing Secretary
                                     </span>
+                                    <h4 style={{ fontSize: '1rem', color: '#ffffff', margin: '0.2rem 0 0 0', fontWeight: 800, letterSpacing: '-0.01em' }}>
+                                      {leadCoord.name}
+                                    </h4>
+                                    <p style={{ fontSize: '0.68rem', color: '#94a3b8', margin: 0, lineHeight: 1.3, fontWeight: 500 }}>
+                                      {leadCoord.role?.replace(/Organizing Secretary,?\s*/i, '') || 'ICAECTSD 2027 Professor & Head, Dept. of AI&DS'}
+                                    </p>
                                     {leadCoord.phone && (
-                                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', fontSize: '0.76rem', color: '#ffffff', fontWeight: 700, marginTop: '0.4rem' }}>
-                                        <Phone size={11} style={{ color: '#fbbf24' }} />
+                                      <a
+                                        href={`tel:${leadCoord.phone.replace(/\s+/g, '')}`}
+                                        style={{
+                                          display: 'inline-flex',
+                                          alignItems: 'center',
+                                          gap: '0.35rem',
+                                          fontSize: '0.78rem',
+                                          color: '#fbbf24',
+                                          fontWeight: 700,
+                                          marginTop: '0.35rem',
+                                          textDecoration: 'none',
+                                          padding: '0.25rem 0.65rem',
+                                          borderRadius: '6px',
+                                          background: 'rgba(245, 158, 11, 0.08)',
+                                          transition: 'all 0.2s'
+                                        }}
+                                      >
+                                        <Phone size={12} />
                                         <span>{leadCoord.phone}</span>
-                                      </div>
+                                      </a>
                                     )}
                                   </div>
-                                </div>
-
-                                {/* Vertical Line down from top node */}
-                                {subCoords.length > 0 && (
-                                  <div style={{ width: '3px', height: '26px', background: 'linear-gradient(180deg, #f59e0b, #3b82f6)' }} />
-                                )}
+                                </motion.div>
                               </div>
                             )}
 
-                            {/* 2. CONNECTING BRANCH LINES */}
+                            {/* 2. GLOWING SVG TREE CONNECTOR */}
                             {subCoords.length > 0 && (
-                              <div style={{ width: '64%', minWidth: '190px', maxWidth: '290px', position: 'relative', height: '20px' }}>
-                                {/* Horizontal Bar connecting sub nodes */}
-                                <div style={{ position: 'absolute', top: 0, left: '22%', right: '22%', height: '3px', background: '#3b82f6', borderRadius: '2px', boxShadow: '0 0 8px rgba(59,130,246,0.5)' }} />
-                                {/* Left Vertical Drop Line */}
-                                <div style={{ position: 'absolute', top: 0, left: '22%', width: '3px', height: '100%', background: '#3b82f6' }} />
-                                {/* Right Vertical Drop Line */}
-                                <div style={{ position: 'absolute', top: 0, right: '22%', width: '3px', height: '100%', background: '#3b82f6' }} />
+                              <div style={{ width: '100%', maxWidth: '340px', height: '42px', position: 'relative', margin: '-4px 0' }}>
+                                <svg style={{ width: '100%', height: '100%', overflow: 'visible' }}>
+                                  <defs>
+                                    <linearGradient id="orgTreeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                      <stop offset="0%" stopColor="#f59e0b" />
+                                      <stop offset="100%" stopColor="#38bdf8" />
+                                    </linearGradient>
+                                    <filter id="orgGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                      <feGaussianBlur stdDeviation="3" result="blur" />
+                                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                  </defs>
+                                  {/* Top vertical stem */}
+                                  <line x1="50%" y1="0" x2="50%" y2="20" stroke="url(#orgTreeGrad)" strokeWidth="2.5" />
+                                  {/* Center glowing junction dot */}
+                                  <circle cx="50%" cy="20" r="4" fill="#38bdf8" filter="url(#orgGlow)" />
+                                  {/* Horizontal connecting bar */}
+                                  <line x1="25%" y1="20" x2="75%" y2="20" stroke="#38bdf8" strokeWidth="2" opacity="0.85" />
+                                  {/* Left vertical drop line */}
+                                  <line x1="25%" y1="20" x2="25%" y2="42" stroke="#38bdf8" strokeWidth="2" opacity="0.85" />
+                                  {/* Right vertical drop line */}
+                                  <line x1="75%" y1="20" x2="75%" y2="42" stroke="#38bdf8" strokeWidth="2" opacity="0.85" />
+                                  {/* Left endpoint dot */}
+                                  <circle cx="25%" cy="42" r="3" fill="#38bdf8" />
+                                  {/* Right endpoint dot */}
+                                  <circle cx="75%" cy="42" r="3" fill="#38bdf8" />
+                                </svg>
                               </div>
                             )}
 
                             {/* 3. SUB NODES ROW: Balamurugan (Left) & Jansi (Right) Side-by-Side */}
                             <div style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', width: '100%' }}>
                               {subCoords.map((coord, idx) => (
-                                <div key={idx} style={{
-                                  flex: '1 1 0',
-                                  maxWidth: '175px',
-                                  minWidth: '135px',
-                                  borderRadius: '0.85rem',
-                                  overflow: 'hidden',
-                                  border: '1.5px solid rgba(56, 189, 248, 0.5)',
-                                  background: '#090e17',
-                                  boxShadow: '0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(56, 189, 248, 0.15)',
-                                  textAlign: 'center'
-                                }}>
-                                  <div style={{ width: '100%', height: '135px', overflow: 'hidden', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <motion.div
+                                  key={idx}
+                                  whileHover={{ y: -4, scale: 1.02 }}
+                                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                                  style={{
+                                    flex: '1 1 0',
+                                    maxWidth: '190px',
+                                    minWidth: '140px',
+                                    borderRadius: '14px',
+                                    overflow: 'hidden',
+                                    border: '1px solid rgba(56, 189, 248, 0.35)',
+                                    background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)',
+                                    boxShadow: '0 12px 30px rgba(0,0,0,0.4), 0 0 20px rgba(56, 189, 248, 0.15)',
+                                    textAlign: 'center',
+                                    position: 'relative'
+                                  }}
+                                >
+                                  <div style={{ width: '100%', height: '135px', overflow: 'hidden', position: 'relative', background: '#090e17' }}>
                                     <img
                                       src={getMemberImage(coord.name, coord.image_url)}
                                       onError={(e) => { (e.target as HTMLImageElement).src = getMemberImage(coord.name); }}
                                       alt={coord.name}
-                                      style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover',
-                                        objectPosition: 'top center'
-                                      }}
+                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
                                     />
+                                    <div style={{
+                                      position: 'absolute',
+                                      bottom: 0,
+                                      left: 0,
+                                      right: 0,
+                                      height: '35px',
+                                      background: 'linear-gradient(to top, #0f172a, transparent)'
+                                    }} />
                                   </div>
-                                  <div style={{ padding: '0.7rem 0.55rem', background: 'linear-gradient(180deg, #0d1520 0%, #151d2a 100%)' }}>
-                                    <div style={{ fontSize: '0.88rem', color: '#ffffff', margin: '0 0 0.2rem 0', fontWeight: 900, textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
-                                      {coord.name}
-                                    </div>
-                                    <span style={{ fontSize: '0.58rem', color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.02em', display: 'block', lineHeight: 1.3 }}>
-                                      {coord.role || 'Joint-Organizing Secretary'}
+                                  <div style={{ padding: '0.75rem 0.6rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
+                                    <span style={{
+                                      fontSize: '0.58rem',
+                                      color: '#38bdf8',
+                                      background: 'rgba(56, 189, 248, 0.12)',
+                                      border: '1px solid rgba(56, 189, 248, 0.3)',
+                                      padding: '0.15rem 0.55rem',
+                                      borderRadius: '9999px',
+                                      fontWeight: 800,
+                                      textTransform: 'uppercase',
+                                      letterSpacing: '0.03em'
+                                    }}>
+                                      Joint-Organizing Sec.
                                     </span>
+                                    <h5 style={{ fontSize: '0.9rem', color: '#ffffff', margin: '0.15rem 0 0 0', fontWeight: 800, letterSpacing: '-0.01em' }}>
+                                      {coord.name}
+                                    </h5>
+                                    <p style={{ fontSize: '0.64rem', color: '#94a3b8', margin: 0, lineHeight: 1.25, fontWeight: 500 }}>
+                                      {coord.role?.replace(/Joint-Organizing Secretary,?\s*/i, '') || 'ICAECTSD 2027'}
+                                    </p>
                                     {coord.phone && (
-                                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', fontSize: '0.72rem', color: '#ffffff', fontWeight: 700, marginTop: '0.35rem' }}>
-                                        <Phone size={10} style={{ color: '#38bdf8' }} />
+                                      <a
+                                        href={`tel:${coord.phone.replace(/\s+/g, '')}`}
+                                        style={{
+                                          display: 'inline-flex',
+                                          alignItems: 'center',
+                                          gap: '0.3rem',
+                                          fontSize: '0.72rem',
+                                          color: '#38bdf8',
+                                          fontWeight: 700,
+                                          marginTop: '0.3rem',
+                                          textDecoration: 'none',
+                                          padding: '0.2rem 0.55rem',
+                                          borderRadius: '6px',
+                                          background: 'rgba(56, 189, 248, 0.08)',
+                                          transition: 'all 0.2s'
+                                        }}
+                                      >
+                                        <Phone size={11} />
                                         <span>{coord.phone}</span>
-                                      </div>
+                                      </a>
                                     )}
                                   </div>
-                                </div>
+                                </motion.div>
                               ))}
                             </div>
                           </div>
