@@ -373,6 +373,29 @@ export default function Footer({ copyright, onNavigate }: FooterProps) {
               Designed & Developed by <strong style={{ color: '#ffffff', fontWeight: 800 }}>Surya Narayanan K S</strong>
             </span>
 
+            {/* Contact Us Button */}
+            <button
+              onClick={() => handleNav('contact-us')}
+              style={{
+                border: 'none',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.3rem 0.75rem',
+                borderRadius: '20px',
+                background: 'linear-gradient(135deg, #fbbf24 0%, #d97706 100%)',
+                color: '#0b4f30',
+                boxShadow: '0 4px 12px rgba(251, 191, 36, 0.3)',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              title="Contact Us"
+            >
+              <Mail size={13} /> Contact Us
+            </button>
+
             {/* Android APK Download Button */}
             <a
               href="https://github.com/moonlightgintani/ICAECTSD/releases/download/v1.0.0-apk/aectsd-2027.apk"

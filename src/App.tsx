@@ -2251,28 +2251,13 @@ function App() {
               {/* Desktop Navigation Action Buttons */}
               <div className="header-right-container" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
 
-                {/* Download Android APK Button */}
-                <a
-                  href="https://github.com/moonlightgintani/ICAECTSD/releases/download/v1.0.0-apk/aectsd-2027.apk"
-                  download="aectsd-2027.apk"
-                  style={{
-                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                    color: '#ffffff',
-                    padding: '0.45rem 0.95rem',
-                    borderRadius: '20px',
-                    fontWeight: 800,
-                    fontSize: '0.75rem',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
-                    transition: 'all 0.2s'
-                  }}
-                  title="Download AECTSD 2027 Android APK"
+                {/* Contact Us Button */}
+                <button
+                  onClick={() => scrollToSection('contact-us')}
+                  className="contact-btn-nav desktop-btn"
                 >
-                  📱 Download APK
-                </a>
+                  CONTACT US
+                </button>
 
                 {/* IEEE SREC SB Portal Link */}
                 <a
@@ -2283,14 +2268,6 @@ function App() {
                 >
                   IEEE SREC SB
                 </a>
-
-                {/* Contact Us Button */}
-                <button
-                  onClick={() => scrollToSection('contact-us')}
-                  className="contact-btn-nav desktop-btn"
-                >
-                  CONTACT US
-                </button>
               </div>
             </div>
           </div>
@@ -2348,39 +2325,6 @@ function App() {
 
               {/* Action Buttons inside Mobile Drawer */}
               <div className="mobile-action-row" style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-                {/* Download APK Button */}
-                <a
-                  href="https://github.com/moonlightgintani/ICAECTSD/releases/download/v1.0.0-apk/aectsd-2027.apk"
-                  download="aectsd-2027.apk"
-                  style={{
-                    width: '100%',
-                    justifyContent: 'center',
-                    padding: '0.75rem 1rem',
-                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                    color: '#ffffff',
-                    borderRadius: '12px',
-                    fontWeight: 800,
-                    fontSize: '0.85rem',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)'
-                  }}
-                  title="Download AECTSD 2027 Android APK"
-                >
-                  📱 Download Android APK
-                </a>
-                <a
-
-                  href={info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ieee-sb-btn-nav"
-                  style={{ width: '100%', justifyContent: 'center', padding: '0.75rem 1rem' }}
-                >
-                  IEEE SREC SB
-                </a>
                 <button
                   onClick={() => {
                     scrollToSection('contact-us');
@@ -2391,6 +2335,16 @@ function App() {
                 >
                   CONTACT US
                 </button>
+                <a
+
+                  href={info.ieee_sb_url || "https://ieeesrecsbs.vercel.app/"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ieee-sb-btn-nav"
+                  style={{ width: '100%', justifyContent: 'center', padding: '0.75rem 1rem' }}
+                >
+                  IEEE SREC SB
+                </a>
               </div>
             </motion.div>
           )}
