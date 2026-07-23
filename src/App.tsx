@@ -3658,21 +3658,13 @@ function App() {
                                     position: 'relative'
                                   }}
                                 >
-                                  <div style={{ width: '100%', height: '145px', overflow: 'hidden', position: 'relative', background: '#090e17' }}>
+                                  <div style={{ width: '100%', height: '185px', overflow: 'hidden', position: 'relative', background: '#090e17' }}>
                                     <img
                                       src={getMemberImage(leadCoord.name, leadCoord.image_url)}
                                       onError={(e) => { (e.target as HTMLImageElement).src = getMemberImage(leadCoord.name); }}
                                       alt={leadCoord.name}
-                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', transform: 'translateZ(0)' }}
+                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', transform: 'translateZ(0)' }}
                                     />
-                                    <div style={{
-                                      position: 'absolute',
-                                      bottom: 0,
-                                      left: 0,
-                                      right: 0,
-                                      height: '40px',
-                                      background: 'linear-gradient(to top, #0f172a, transparent)'
-                                    }} />
                                   </div>
                                   <div style={{ padding: '0.85rem 0.75rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem' }}>
                                     <span style={{
@@ -3773,21 +3765,13 @@ function App() {
                                     position: 'relative'
                                   }}
                                 >
-                                  <div style={{ width: '100%', height: '135px', overflow: 'hidden', position: 'relative', background: '#090e17' }}>
+                                  <div style={{ width: '100%', height: '160px', overflow: 'hidden', position: 'relative', background: '#090e17' }}>
                                     <img
                                       src={getMemberImage(coord.name, coord.image_url)}
                                       onError={(e) => { (e.target as HTMLImageElement).src = getMemberImage(coord.name); }}
                                       alt={coord.name}
-                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+                                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
                                     />
-                                    <div style={{
-                                      position: 'absolute',
-                                      bottom: 0,
-                                      left: 0,
-                                      right: 0,
-                                      height: '35px',
-                                      background: 'linear-gradient(to top, #0f172a, transparent)'
-                                    }} />
                                   </div>
                                   <div style={{ padding: '0.75rem 0.6rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
                                     <span style={{
