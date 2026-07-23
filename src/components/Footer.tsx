@@ -369,9 +369,31 @@ export default function Footer({ copyright, onNavigate }: FooterProps) {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <span>
-              Designed & Developed by <strong style={{ color: '#ffffff', fontWeight: 800 }}>Surya Narayanan K S</strong>
-            </span>
+            <a
+              href={import.meta.env.VITE_DEVELOPER_GITHUB_URL || info?.developer_github_url || "https://github.com/moonlightgintani"}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: 'rgba(255, 255, 255, 0.9)',
+                textDecoration: 'none',
+                transition: 'all 0.2s ease',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.3rem'
+              }}
+              className="developer-github-link"
+              title="Visit Developer GitHub Profile"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#fbbf24';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
+              }}
+            >
+              <span>
+                Designed & Developed by <strong style={{ color: '#ffffff', fontWeight: 800, textDecoration: 'underline', textUnderlineOffset: '3px' }}>Surya Narayanan K S</strong> ↗
+              </span>
+            </a>
 
             {/* Contact Us Button */}
             <button
