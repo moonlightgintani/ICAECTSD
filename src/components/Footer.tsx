@@ -10,7 +10,7 @@ interface FooterProps {
   onNavigate?: (id: string) => void;
 }
 
-export default function Footer({ copyright, onNavigate }: FooterProps) {
+export default function Footer({ copyright, info, onNavigate }: FooterProps) {
   const handleNav = (id: string) => {
     if (onNavigate) {
       onNavigate(id);
