@@ -3652,13 +3652,13 @@ function App() {
                                     borderRadius: '16px',
                                     overflow: 'hidden',
                                     border: '1px solid rgba(245, 158, 11, 0.45)',
-                                    background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)',
-                                    boxShadow: '0 16px 40px rgba(0,0,0,0.5), 0 0 25px rgba(245, 158, 11, 0.2)',
+                                    background: '#ffffff',
+                                    boxShadow: '0 12px 30px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(245, 158, 11, 0.15)',
                                     textAlign: 'center',
                                     position: 'relative'
                                   }}
                                 >
-                                  <div style={{ width: '100%', height: '185px', overflow: 'hidden', position: 'relative', background: '#090e17' }}>
+                                  <div style={{ width: '100%', height: '185px', overflow: 'hidden', position: 'relative', background: '#ffffff' }}>
                                     <img
                                       src={getMemberImage(leadCoord.name, leadCoord.image_url)}
                                       onError={(e) => { (e.target as HTMLImageElement).src = getMemberImage(leadCoord.name); }}
@@ -3666,12 +3666,12 @@ function App() {
                                       style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', transform: 'translateZ(0)' }}
                                     />
                                   </div>
-                                  <div style={{ padding: '0.85rem 0.75rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem' }}>
+                                  <div style={{ padding: '0.85rem 0.75rem', background: '#ffffff', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem' }}>
                                     <span style={{
                                       fontSize: '0.62rem',
-                                      color: '#fbbf24',
-                                      background: 'rgba(245, 158, 11, 0.12)',
-                                      border: '1px solid rgba(245, 158, 11, 0.3)',
+                                      color: '#b45309',
+                                      background: '#fef3c7',
+                                      border: '1px solid #fde68a',
                                       padding: '0.2rem 0.65rem',
                                       borderRadius: '9999px',
                                       fontWeight: 800,
@@ -3680,10 +3680,10 @@ function App() {
                                     }}>
                                       Organizing Secretary
                                     </span>
-                                    <h4 style={{ fontSize: '1rem', color: '#ffffff', margin: '0.2rem 0 0 0', fontWeight: 800, letterSpacing: '-0.01em' }}>
+                                    <h4 style={{ fontSize: '1.02rem', color: '#091d36', margin: '0.2rem 0 0 0', fontWeight: 900, letterSpacing: '-0.01em' }}>
                                       {leadCoord.name}
                                     </h4>
-                                    <p style={{ fontSize: '0.68rem', color: '#94a3b8', margin: 0, lineHeight: 1.3, fontWeight: 500 }}>
+                                    <p style={{ fontSize: '0.7rem', color: '#475569', margin: 0, lineHeight: 1.35, fontWeight: 600 }}>
                                       {leadCoord.role?.replace(/Organizing Secretary,?\s*/i, '') || 'ICAECTSD 2027 Professor & Head, Dept. of AI&DS'}
                                     </p>
                                     {leadCoord.phone && (
@@ -3694,13 +3694,14 @@ function App() {
                                           alignItems: 'center',
                                           gap: '0.35rem',
                                           fontSize: '0.78rem',
-                                          color: '#fbbf24',
-                                          fontWeight: 700,
+                                          color: '#d97706',
+                                          fontWeight: 800,
                                           marginTop: '0.35rem',
                                           textDecoration: 'none',
                                           padding: '0.25rem 0.65rem',
                                           borderRadius: '6px',
-                                          background: 'rgba(245, 158, 11, 0.08)',
+                                          background: '#fffbeb',
+                                          border: '1px solid #fde68a',
                                           transition: 'all 0.2s'
                                         }}
                                       >
@@ -3720,27 +3721,23 @@ function App() {
                                   <defs>
                                     <linearGradient id="orgTreeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                                       <stop offset="0%" stopColor="#f59e0b" />
-                                      <stop offset="100%" stopColor="#38bdf8" />
+                                      <stop offset="100%" stopColor="#0284c7" />
                                     </linearGradient>
-                                    <filter id="orgGlow" x="-20%" y="-20%" width="140%" height="140%">
-                                      <feGaussianBlur stdDeviation="3" result="blur" />
-                                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                                    </filter>
                                   </defs>
                                   {/* Top vertical stem */}
                                   <line x1="50%" y1="0" x2="50%" y2="20" stroke="url(#orgTreeGrad)" strokeWidth="2.5" />
-                                  {/* Center glowing junction dot */}
-                                  <circle cx="50%" cy="20" r="4" fill="#38bdf8" filter="url(#orgGlow)" />
+                                  {/* Center junction dot */}
+                                  <circle cx="50%" cy="20" r="4" fill="#0284c7" />
                                   {/* Horizontal connecting bar */}
-                                  <line x1="25%" y1="20" x2="75%" y2="20" stroke="#38bdf8" strokeWidth="2" opacity="0.85" />
+                                  <line x1="25%" y1="20" x2="75%" y2="20" stroke="#0284c7" strokeWidth="2" opacity="0.85" />
                                   {/* Left vertical drop line */}
-                                  <line x1="25%" y1="20" x2="25%" y2="42" stroke="#38bdf8" strokeWidth="2" opacity="0.85" />
+                                  <line x1="25%" y1="20" x2="25%" y2="42" stroke="#0284c7" strokeWidth="2" opacity="0.85" />
                                   {/* Right vertical drop line */}
-                                  <line x1="75%" y1="20" x2="75%" y2="42" stroke="#38bdf8" strokeWidth="2" opacity="0.85" />
+                                  <line x1="75%" y1="20" x2="75%" y2="42" stroke="#0284c7" strokeWidth="2" opacity="0.85" />
                                   {/* Left endpoint dot */}
-                                  <circle cx="25%" cy="42" r="3" fill="#38bdf8" />
+                                  <circle cx="25%" cy="42" r="3" fill="#0284c7" />
                                   {/* Right endpoint dot */}
-                                  <circle cx="75%" cy="42" r="3" fill="#38bdf8" />
+                                  <circle cx="75%" cy="42" r="3" fill="#0284c7" />
                                 </svg>
                               </div>
                             )}
@@ -3758,14 +3755,14 @@ function App() {
                                     minWidth: '140px',
                                     borderRadius: '14px',
                                     overflow: 'hidden',
-                                    border: '1px solid rgba(56, 189, 248, 0.35)',
-                                    background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)',
-                                    boxShadow: '0 12px 30px rgba(0,0,0,0.4), 0 0 20px rgba(56, 189, 248, 0.15)',
+                                    border: '1px solid rgba(56, 189, 248, 0.45)',
+                                    background: '#ffffff',
+                                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(56, 189, 248, 0.12)',
                                     textAlign: 'center',
                                     position: 'relative'
                                   }}
                                 >
-                                  <div style={{ width: '100%', height: '160px', overflow: 'hidden', position: 'relative', background: '#090e17' }}>
+                                  <div style={{ width: '100%', height: '160px', overflow: 'hidden', position: 'relative', background: '#ffffff' }}>
                                     <img
                                       src={getMemberImage(coord.name, coord.image_url)}
                                       onError={(e) => { (e.target as HTMLImageElement).src = getMemberImage(coord.name); }}
@@ -3773,12 +3770,12 @@ function App() {
                                       style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
                                     />
                                   </div>
-                                  <div style={{ padding: '0.75rem 0.6rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
+                                  <div style={{ padding: '0.75rem 0.6rem', background: '#ffffff', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
                                     <span style={{
                                       fontSize: '0.58rem',
-                                      color: '#38bdf8',
-                                      background: 'rgba(56, 189, 248, 0.12)',
-                                      border: '1px solid rgba(56, 189, 248, 0.3)',
+                                      color: '#0369a1',
+                                      background: '#e0f2fe',
+                                      border: '1px solid #bae6fd',
                                       padding: '0.15rem 0.55rem',
                                       borderRadius: '9999px',
                                       fontWeight: 800,
@@ -3787,10 +3784,10 @@ function App() {
                                     }}>
                                       Joint-Organizing Sec.
                                     </span>
-                                    <h5 style={{ fontSize: '0.9rem', color: '#ffffff', margin: '0.15rem 0 0 0', fontWeight: 800, letterSpacing: '-0.01em' }}>
+                                    <h5 style={{ fontSize: '0.92rem', color: '#091d36', margin: '0.15rem 0 0 0', fontWeight: 900, letterSpacing: '-0.01em' }}>
                                       {coord.name}
                                     </h5>
-                                    <p style={{ fontSize: '0.64rem', color: '#94a3b8', margin: 0, lineHeight: 1.25, fontWeight: 500 }}>
+                                    <p style={{ fontSize: '0.66rem', color: '#475569', margin: 0, lineHeight: 1.3, fontWeight: 600 }}>
                                       {coord.role?.replace(/Joint-Organizing Secretary,?\s*/i, '') || 'ICAECTSD 2027'}
                                     </p>
                                     {coord.phone && (
@@ -3801,13 +3798,14 @@ function App() {
                                           alignItems: 'center',
                                           gap: '0.3rem',
                                           fontSize: '0.72rem',
-                                          color: '#38bdf8',
-                                          fontWeight: 700,
+                                          color: '#0284c7',
+                                          fontWeight: 800,
                                           marginTop: '0.3rem',
                                           textDecoration: 'none',
                                           padding: '0.2rem 0.55rem',
                                           borderRadius: '6px',
-                                          background: 'rgba(56, 189, 248, 0.08)',
+                                          background: '#f0f9ff',
+                                          border: '1px solid #bae6fd',
                                           transition: 'all 0.2s'
                                         }}
                                       >
